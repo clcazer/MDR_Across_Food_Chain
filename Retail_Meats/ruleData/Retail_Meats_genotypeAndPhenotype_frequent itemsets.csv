@@ -1,0 +1,216 @@
+items,support,count,Year,Resistance_Indicator
+{Quinolones},0.018450185,5,2017,Phenotype
+{Phenicols},0.025830258,7,2017,Phenotype
+{Beta-Lactam},0.062730627,17,2017,Phenotype
+{Folate Pathway Inhibitors},0.062730627,17,2017,Phenotype
+{Tetracyclines},0.217712177,59,2017,Phenotype
+"{Phenicols,Quinolones}",0.003690037,1,2017,Phenotype
+"{Quinolones,Tetracyclines}",0.003690037,1,2017,Phenotype
+"{Beta-Lactam,Phenicols}",0.014760148,4,2017,Phenotype
+"{Folate Pathway Inhibitors,Phenicols}",0.022140221,6,2017,Phenotype
+"{Phenicols,Tetracyclines}",0.025830258,7,2017,Phenotype
+"{Beta-Lactam,Folate Pathway Inhibitors}",0.033210332,9,2017,Phenotype
+"{Beta-Lactam,Tetracyclines}",0.055350554,15,2017,Phenotype
+"{Folate Pathway Inhibitors,Tetracyclines}",0.062730627,17,2017,Phenotype
+"{Phenicols,Quinolones,Tetracyclines}",0.003690037,1,2017,Phenotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Phenicols}",0.014760148,4,2017,Phenotype
+"{Beta-Lactam,Phenicols,Tetracyclines}",0.014760148,4,2017,Phenotype
+"{Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.022140221,6,2017,Phenotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Tetracyclines}",0.033210332,9,2017,Phenotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.014760148,4,2017,Phenotype
+{Quinolones},0.013513514,2,2017,Genotype
+{Phenicols},0.027027027,4,2017,Genotype
+{Beta-Lactam},0.054054054,8,2017,Genotype
+{Folate Pathway Inhibitors},0.054054054,8,2017,Genotype
+{Aminoglycosides},0.087837838,13,2017,Genotype
+{Tetracyclines},0.25,37,2017,Genotype
+"{Beta-Lactam,Phenicols}",0.02027027,3,2017,Genotype
+"{Folate Pathway Inhibitors,Phenicols}",0.027027027,4,2017,Genotype
+"{Aminoglycosides,Phenicols}",0.027027027,4,2017,Genotype
+"{Phenicols,Tetracyclines}",0.027027027,4,2017,Genotype
+"{Beta-Lactam,Folate Pathway Inhibitors}",0.027027027,4,2017,Genotype
+"{Aminoglycosides,Beta-Lactam}",0.033783784,5,2017,Genotype
+"{Beta-Lactam,Tetracyclines}",0.047297297,7,2017,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors}",0.047297297,7,2017,Genotype
+"{Folate Pathway Inhibitors,Tetracyclines}",0.054054054,8,2017,Genotype
+"{Aminoglycosides,Tetracyclines}",0.081081081,12,2017,Genotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Phenicols}",0.02027027,3,2017,Genotype
+"{Aminoglycosides,Beta-Lactam,Phenicols}",0.02027027,3,2017,Genotype
+"{Beta-Lactam,Phenicols,Tetracyclines}",0.02027027,3,2017,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Phenicols}",0.027027027,4,2017,Genotype
+"{Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.027027027,4,2017,Genotype
+"{Aminoglycosides,Phenicols,Tetracyclines}",0.027027027,4,2017,Genotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors}",0.027027027,4,2017,Genotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Tetracyclines}",0.027027027,4,2017,Genotype
+"{Aminoglycosides,Beta-Lactam,Tetracyclines}",0.033783784,5,2017,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Tetracyclines}",0.047297297,7,2017,Genotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors,Phenicols}",0.02027027,3,2017,Genotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.02027027,3,2017,Genotype
+"{Aminoglycosides,Beta-Lactam,Phenicols,Tetracyclines}",0.02027027,3,2017,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.027027027,4,2017,Genotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors,Tetracyclines}",0.027027027,4,2017,Genotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.02027027,3,2017,Genotype
+{Quinolones},0.015037594,2,2018,Phenotype
+{Beta-Lactam},0.037593985,5,2018,Phenotype
+{Phenicols},0.037593985,5,2018,Phenotype
+{Folate Pathway Inhibitors},0.105263158,14,2018,Phenotype
+{Tetracyclines},0.203007519,27,2018,Phenotype
+"{Phenicols,Quinolones}",0.015037594,2,2018,Phenotype
+"{Folate Pathway Inhibitors,Quinolones}",0.015037594,2,2018,Phenotype
+"{Quinolones,Tetracyclines}",0.015037594,2,2018,Phenotype
+"{Beta-Lactam,Phenicols}",0.015037594,2,2018,Phenotype
+"{Beta-Lactam,Folate Pathway Inhibitors}",0.022556391,3,2018,Phenotype
+"{Beta-Lactam,Tetracyclines}",0.037593985,5,2018,Phenotype
+"{Folate Pathway Inhibitors,Phenicols}",0.037593985,5,2018,Phenotype
+"{Phenicols,Tetracyclines}",0.037593985,5,2018,Phenotype
+"{Folate Pathway Inhibitors,Tetracyclines}",0.097744361,13,2018,Phenotype
+"{Folate Pathway Inhibitors,Phenicols,Quinolones}",0.015037594,2,2018,Phenotype
+"{Phenicols,Quinolones,Tetracyclines}",0.015037594,2,2018,Phenotype
+"{Folate Pathway Inhibitors,Quinolones,Tetracyclines}",0.015037594,2,2018,Phenotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Phenicols}",0.015037594,2,2018,Phenotype
+"{Beta-Lactam,Phenicols,Tetracyclines}",0.015037594,2,2018,Phenotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Tetracyclines}",0.022556391,3,2018,Phenotype
+"{Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.037593985,5,2018,Phenotype
+"{Folate Pathway Inhibitors,Phenicols,Quinolones,Tetracyclines}",0.015037594,2,2018,Phenotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.015037594,2,2018,Phenotype
+{Quinolones},0.022556391,3,2018,Genotype
+{Beta-Lactam},0.030075188,4,2018,Genotype
+{Phenicols},0.037593985,5,2018,Genotype
+{Folate Pathway Inhibitors},0.105263158,14,2018,Genotype
+{Aminoglycosides},0.172932331,23,2018,Genotype
+{Tetracyclines},0.233082707,31,2018,Genotype
+"{Phenicols,Quinolones}",0.015037594,2,2018,Genotype
+"{Folate Pathway Inhibitors,Quinolones}",0.015037594,2,2018,Genotype
+"{Aminoglycosides,Quinolones}",0.015037594,2,2018,Genotype
+"{Quinolones,Tetracyclines}",0.022556391,3,2018,Genotype
+"{Beta-Lactam,Phenicols}",0.015037594,2,2018,Genotype
+"{Beta-Lactam,Folate Pathway Inhibitors}",0.015037594,2,2018,Genotype
+"{Aminoglycosides,Beta-Lactam}",0.030075188,4,2018,Genotype
+"{Beta-Lactam,Tetracyclines}",0.030075188,4,2018,Genotype
+"{Folate Pathway Inhibitors,Phenicols}",0.037593985,5,2018,Genotype
+"{Aminoglycosides,Phenicols}",0.037593985,5,2018,Genotype
+"{Phenicols,Tetracyclines}",0.037593985,5,2018,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors}",0.105263158,14,2018,Genotype
+"{Folate Pathway Inhibitors,Tetracyclines}",0.105263158,14,2018,Genotype
+"{Aminoglycosides,Tetracyclines}",0.15037594,20,2018,Genotype
+"{Folate Pathway Inhibitors,Phenicols,Quinolones}",0.015037594,2,2018,Genotype
+"{Aminoglycosides,Phenicols,Quinolones}",0.015037594,2,2018,Genotype
+"{Phenicols,Quinolones,Tetracyclines}",0.015037594,2,2018,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Quinolones}",0.015037594,2,2018,Genotype
+"{Folate Pathway Inhibitors,Quinolones,Tetracyclines}",0.015037594,2,2018,Genotype
+"{Aminoglycosides,Quinolones,Tetracyclines}",0.015037594,2,2018,Genotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Phenicols}",0.015037594,2,2018,Genotype
+"{Aminoglycosides,Beta-Lactam,Phenicols}",0.015037594,2,2018,Genotype
+"{Beta-Lactam,Phenicols,Tetracyclines}",0.015037594,2,2018,Genotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors}",0.015037594,2,2018,Genotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Tetracyclines}",0.015037594,2,2018,Genotype
+"{Aminoglycosides,Beta-Lactam,Tetracyclines}",0.030075188,4,2018,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Phenicols}",0.037593985,5,2018,Genotype
+"{Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.037593985,5,2018,Genotype
+"{Aminoglycosides,Phenicols,Tetracyclines}",0.037593985,5,2018,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Tetracyclines}",0.105263158,14,2018,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Phenicols,Quinolones}",0.015037594,2,2018,Genotype
+"{Folate Pathway Inhibitors,Phenicols,Quinolones,Tetracyclines}",0.015037594,2,2018,Genotype
+"{Aminoglycosides,Phenicols,Quinolones,Tetracyclines}",0.015037594,2,2018,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Quinolones,Tetracyclines}",0.015037594,2,2018,Genotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors,Phenicols}",0.015037594,2,2018,Genotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.015037594,2,2018,Genotype
+"{Aminoglycosides,Beta-Lactam,Phenicols,Tetracyclines}",0.015037594,2,2018,Genotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors,Tetracyclines}",0.015037594,2,2018,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.037593985,5,2018,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Phenicols,Quinolones,Tetracyclines}",0.015037594,2,2018,Genotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.015037594,2,2018,Genotype
+{Quinolones},0.006993007,2,2019,Phenotype
+{Aminoglycosides},0.006993007,2,2019,Phenotype
+{Beta-Lactam},0.020979021,6,2019,Phenotype
+{Phenicols},0.024475524,7,2019,Phenotype
+{Folate Pathway Inhibitors},0.066433566,19,2019,Phenotype
+{Tetracyclines},0.195804196,56,2019,Phenotype
+"{Phenicols,Quinolones}",0.003496503,1,2019,Phenotype
+"{Folate Pathway Inhibitors,Quinolones}",0.003496503,1,2019,Phenotype
+"{Quinolones,Tetracyclines}",0.003496503,1,2019,Phenotype
+"{Aminoglycosides,Beta-Lactam}",0.003496503,1,2019,Phenotype
+"{Aminoglycosides,Folate Pathway Inhibitors}",0.006993007,2,2019,Phenotype
+"{Aminoglycosides,Tetracyclines}",0.006993007,2,2019,Phenotype
+"{Beta-Lactam,Phenicols}",0.013986014,4,2019,Phenotype
+"{Beta-Lactam,Folate Pathway Inhibitors}",0.017482517,5,2019,Phenotype
+"{Beta-Lactam,Tetracyclines}",0.020979021,6,2019,Phenotype
+"{Folate Pathway Inhibitors,Phenicols}",0.020979021,6,2019,Phenotype
+"{Phenicols,Tetracyclines}",0.024475524,7,2019,Phenotype
+"{Folate Pathway Inhibitors,Tetracyclines}",0.066433566,19,2019,Phenotype
+"{Folate Pathway Inhibitors,Phenicols,Quinolones}",0.003496503,1,2019,Phenotype
+"{Phenicols,Quinolones,Tetracyclines}",0.003496503,1,2019,Phenotype
+"{Folate Pathway Inhibitors,Quinolones,Tetracyclines}",0.003496503,1,2019,Phenotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors}",0.003496503,1,2019,Phenotype
+"{Aminoglycosides,Beta-Lactam,Tetracyclines}",0.003496503,1,2019,Phenotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Tetracyclines}",0.006993007,2,2019,Phenotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Phenicols}",0.013986014,4,2019,Phenotype
+"{Beta-Lactam,Phenicols,Tetracyclines}",0.013986014,4,2019,Phenotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Tetracyclines}",0.017482517,5,2019,Phenotype
+"{Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.020979021,6,2019,Phenotype
+"{Folate Pathway Inhibitors,Phenicols,Quinolones,Tetracyclines}",0.003496503,1,2019,Phenotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors,Tetracyclines}",0.003496503,1,2019,Phenotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.013986014,4,2019,Phenotype
+{Macrolides},0.003521127,1,2019,Genotype
+{Beta-Lactam},0.024647887,7,2019,Genotype
+{Phenicols},0.024647887,7,2019,Genotype
+{Folate Pathway Inhibitors},0.070422535,20,2019,Genotype
+{Aminoglycosides},0.116197183,33,2019,Genotype
+{Tetracyclines},0.228873239,65,2019,Genotype
+"{Beta-Lactam,Macrolides}",0.003521127,1,2019,Genotype
+"{Macrolides,Phenicols}",0.003521127,1,2019,Genotype
+"{Folate Pathway Inhibitors,Macrolides}",0.003521127,1,2019,Genotype
+"{Aminoglycosides,Macrolides}",0.003521127,1,2019,Genotype
+"{Macrolides,Tetracyclines}",0.003521127,1,2019,Genotype
+"{Beta-Lactam,Phenicols}",0.014084507,4,2019,Genotype
+"{Beta-Lactam,Folate Pathway Inhibitors}",0.017605634,5,2019,Genotype
+"{Aminoglycosides,Beta-Lactam}",0.024647887,7,2019,Genotype
+"{Beta-Lactam,Tetracyclines}",0.024647887,7,2019,Genotype
+"{Folate Pathway Inhibitors,Phenicols}",0.021126761,6,2019,Genotype
+"{Aminoglycosides,Phenicols}",0.021126761,6,2019,Genotype
+"{Phenicols,Tetracyclines}",0.024647887,7,2019,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors}",0.063380282,18,2019,Genotype
+"{Folate Pathway Inhibitors,Tetracyclines}",0.066901408,19,2019,Genotype
+"{Aminoglycosides,Tetracyclines}",0.112676056,32,2019,Genotype
+"{Beta-Lactam,Macrolides,Phenicols}",0.003521127,1,2019,Genotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Macrolides}",0.003521127,1,2019,Genotype
+"{Aminoglycosides,Beta-Lactam,Macrolides}",0.003521127,1,2019,Genotype
+"{Beta-Lactam,Macrolides,Tetracyclines}",0.003521127,1,2019,Genotype
+"{Folate Pathway Inhibitors,Macrolides,Phenicols}",0.003521127,1,2019,Genotype
+"{Aminoglycosides,Macrolides,Phenicols}",0.003521127,1,2019,Genotype
+"{Macrolides,Phenicols,Tetracyclines}",0.003521127,1,2019,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Macrolides}",0.003521127,1,2019,Genotype
+"{Folate Pathway Inhibitors,Macrolides,Tetracyclines}",0.003521127,1,2019,Genotype
+"{Aminoglycosides,Macrolides,Tetracyclines}",0.003521127,1,2019,Genotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Phenicols}",0.014084507,4,2019,Genotype
+"{Aminoglycosides,Beta-Lactam,Phenicols}",0.014084507,4,2019,Genotype
+"{Beta-Lactam,Phenicols,Tetracyclines}",0.014084507,4,2019,Genotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors}",0.017605634,5,2019,Genotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Tetracyclines}",0.017605634,5,2019,Genotype
+"{Aminoglycosides,Beta-Lactam,Tetracyclines}",0.024647887,7,2019,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Phenicols}",0.021126761,6,2019,Genotype
+"{Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.021126761,6,2019,Genotype
+"{Aminoglycosides,Phenicols,Tetracyclines}",0.021126761,6,2019,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Tetracyclines}",0.063380282,18,2019,Genotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Macrolides,Phenicols}",0.003521127,1,2019,Genotype
+"{Aminoglycosides,Beta-Lactam,Macrolides,Phenicols}",0.003521127,1,2019,Genotype
+"{Beta-Lactam,Macrolides,Phenicols,Tetracyclines}",0.003521127,1,2019,Genotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors,Macrolides}",0.003521127,1,2019,Genotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Macrolides,Tetracyclines}",0.003521127,1,2019,Genotype
+"{Aminoglycosides,Beta-Lactam,Macrolides,Tetracyclines}",0.003521127,1,2019,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Macrolides,Phenicols}",0.003521127,1,2019,Genotype
+"{Folate Pathway Inhibitors,Macrolides,Phenicols,Tetracyclines}",0.003521127,1,2019,Genotype
+"{Aminoglycosides,Macrolides,Phenicols,Tetracyclines}",0.003521127,1,2019,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Macrolides,Tetracyclines}",0.003521127,1,2019,Genotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors,Phenicols}",0.014084507,4,2019,Genotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.014084507,4,2019,Genotype
+"{Aminoglycosides,Beta-Lactam,Phenicols,Tetracyclines}",0.014084507,4,2019,Genotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors,Tetracyclines}",0.017605634,5,2019,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.021126761,6,2019,Genotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors,Macrolides,Phenicols}",0.003521127,1,2019,Genotype
+"{Beta-Lactam,Folate Pathway Inhibitors,Macrolides,Phenicols,Tetracyclines}",0.003521127,1,2019,Genotype
+"{Aminoglycosides,Beta-Lactam,Macrolides,Phenicols,Tetracyclines}",0.003521127,1,2019,Genotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors,Macrolides,Tetracyclines}",0.003521127,1,2019,Genotype
+"{Aminoglycosides,Folate Pathway Inhibitors,Macrolides,Phenicols,Tetracyclines}",0.003521127,1,2019,Genotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors,Phenicols,Tetracyclines}",0.014084507,4,2019,Genotype
+"{Aminoglycosides,Beta-Lactam,Folate Pathway Inhibitors,Macrolides,Phenicols,Tetracyclines}",0.003521127,1,2019,Genotype
