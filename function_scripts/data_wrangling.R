@@ -1,5 +1,3 @@
-
-
 library(stringr)
 library(rlist)
 library(ggplot2)
@@ -12,7 +10,7 @@ library(dplyr)
 library(reshape2)
 library(gridExtra)
 library(grid)
-
+library(lubridate)
 
 
 #function to get a data frame that has genes in one column and corresponding gene classes in another column
@@ -40,7 +38,6 @@ col_df <- data.frame(Class = c(replicate(length(col_string), col)),
 
 
 
-
 class_list <- list.append(class_list, col_df)
 }
 class_df <- bind_rows(class_list)
@@ -54,7 +51,6 @@ combined_class_df <- combined_class_df[!duplicated(combined_class_df), ]
 
 #check Other_Classes_Resist_Genes rows, and only keep Genes that do not occur elsewhere in the df
 #combined_class_df <- combined_class_df[!(combined_class_df$Class == "Other_Classes_Resist_Genes" & duplicated(combined_class_df$Genes)), ]
-
 
 
 
@@ -1066,10 +1062,10 @@ for (row in 1:nrow(narms_df)) {
   for (original in names(non_exact_matches)) {
     cat(sprintf("%s -> %s\n", original, non_exact_matches[[original]]))
   }
-  write.csv(narms_df, file = "gene_class_mappings.csv", row.names = FALSE)
+  write.csv(narms_df, file = "wNAHLN_gene_class_mappings.csv", row.names = FALSE)
   #return(result_df)
 }
-#narms_df <- read.csv("gene_class_mappings.csv")
+#narms_df <- read.csv("wNAHLN_gene_class_mappings.csv")
 #refgenes_df <- read.csv("refgenes.csv")
 
 #match_to_refgenes(narms_df, refgenes_df)
@@ -1184,6 +1180,10 @@ convert_gene_to_gene_family <- function(df, genotype_class_mappings, data_source
 
 
 
+
+
+
+
 convert_gene_to_class <- function(df, genotype_class_mappings, data_source) {
   # Function to merge case-insensitive duplicate columns
   merge_case_insensitive_columns <- function(df) {
@@ -1221,11 +1221,11 @@ print("original column names:")
 print(colnames(df))
 
  #genotype_class_mappings <- read.csv("gene_class_mappings.csv")
-        genotype_class_mappings$Genes <- gsub(pattern = "[^A-Za-z0-9]", replacement = ".", genotype_class_mappings$Genes)
+        genotype_class_mappings$Gene_family <- gsub(pattern = "[^A-Za-z0-9]", replacement = ".", genotype_class_mappings$Gene_family)
         #get rid of duplicate duplicates in Genes column
-        genotype_class_mappings <- genotype_class_mappings[!duplicated(genotype_class_mappings$Genes), ]
+        genotype_class_mappings <- genotype_class_mappings[!duplicated(genotype_class_mappings$Gene_family), ]
 
-        genotype_class_names <- setNames(make.unique(genotype_class_mappings$corrected_class), genotype_class_mappings$Genes)
+        genotype_class_names <- setNames(make.unique(genotype_class_mappings$corrected_class), genotype_class_mappings$Gene_family)
         print("Gene class mappings:")
         print(genotype_class_names)
         genotype_duplicated_classes <- names(which(table(genotype_class_mappings$corrected_class) > 1))
@@ -1303,6 +1303,11 @@ print(colnames(df))
   return(df)
 }
 
+
+
+# df <- read.csv("NAHLN/NAHLN_wide_Family_level_genotype.csv")
+# genotype_class_mappings <- read.csv("wNAHLN_gene_class_mappings.csv")
+# convert_gene_to_class(df, genotype_class_mappings, data_source = "NAHLN")
 
 
 # cecal_df <- read.csv("cecal_2017Onward/cecal_2017Onward_wide_corrected_genotype.csv")
@@ -1442,3 +1447,118 @@ print(colnames(df))
   # phenotype_class_mappings <- read_excel("EcoliBreakPoints.xlsx")
   # convert_phenotype_to_class(cecal_phenotype_df, phenotype_class_mappings, data_source = "cecal_2017Onward")
 # convert_phenotype_to_class(retail_meats_phenotype_df, phenotype_class_mappings, data_source = "Retail_Meats_2017Onward")
+
+
+
+
+
+
+
+#######################################################
+##########NAHLN DATA WRANGLING#########################
+#######################################################
+
+wrangle_NAHLN_phenotype <- function() {
+df <- read_excel("NAHLN_CattleEcoli_PPY1-PPY5_10-12-2023.xlsx")
+#replace spaces in colnames with periods
+colnames(df) <- gsub(" ", ".", colnames(df))
+
+new_df <- df[, c("UniqueID", "TestDate",
+"Ampicillin.MIC",
+"Gentamicin.MIC",
+"Tetracycline.MIC",
+"Trimethoprim/sulfamethoxazole.MIC"
+
+
+)]
+
+
+print(colnames(df))
+  
+}
+wrangle_NAHLN_phenotype()
+
+
+wrangle_NAHLN_genotype <- function() {
+    df <- read_excel("Isolate+BioSample.xlsx")
+    df_time <- read_excel("NAHLN_CattleEcoli_PPY1-PPY5_10-12-2023.xlsx")
+    #replace spaces in colnames with periods
+    colnames(df) <- gsub(" ", ".", colnames(df))
+
+    # Convert TestDate to Date type and extract year
+    df_time$Year <- lubridate::year(as.Date(df_time$TestDate))
+    
+    # Print sample of data for debugging
+    cat("Sample of df$Isolate.identifiers:\n")
+    print(head(df$Isolate.identifiers))
+    cat("\nSample of df_time$UniqueID:\n")
+    print(head(df_time$UniqueID))
+    
+    # Create a mapping of IDs to years
+    id_to_year <- numeric(length = nrow(df))
+    for (i in 1:nrow(df)) {
+        # Find which UniqueID from df_time appears in this Isolate.identifiers
+        matching_row <- which(sapply(df_time$UniqueID, function(id) {
+            # Ensure both strings are character type and use fixed=TRUE for exact matching
+            grepl(as.character(id), as.character(df$Isolate.identifiers[i]), fixed=TRUE)
+        }))
+        
+        if (length(matching_row) > 0) {
+            id_to_year[i] <- df_time$Year[matching_row[1]]
+            cat(sprintf("Matched: %s with %s\n", df$Isolate.identifiers[i], df_time$UniqueID[matching_row[1]]))
+        } else {
+            warning(paste("No matching UniqueID found for Isolate.identifiers:", df$Isolate.identifiers[i]))
+        }
+    }
+    
+    # Add Year to df
+    df$Year <- id_to_year
+    
+    # Print summary of year assignments
+    cat("\nYear distribution:\n")
+    print(table(df$Year))
+    
+    #replace spaces in colnames with periods
+    colnames(df) <- gsub(" ", ".", colnames(df))
+    
+    df <- df[, c("Isolate.identifiers", "AMR.genotypes", "Year")]
+    
+    # Create new column with clean gene names, excluding MISTRANSLATION genes
+    df$clean_genotypes <- sapply(df$AMR.genotypes, function(x) {
+        # Split by comma
+        genes <- unlist(strsplit(x, ","))
+        # Remove genes with MISTRANSLATION status
+        genes <- genes[!grepl("=MISTRANSLATION", genes)]
+        # Clean remaining genes and join with spaces
+        clean_genes <- gsub("=.*$", "", genes)
+        paste(clean_genes, collapse = " ")
+    })
+    
+    # Get all unique genes
+    all_genes <- unique(unlist(strsplit(df$clean_genotypes, " ")))
+    
+    # Create incidence matrix
+    incidence_matrix <- matrix(0, 
+                             nrow = nrow(df), 
+                             ncol = length(all_genes),
+                             dimnames = list(df$Isolate.identifiers, all_genes))
+    
+    # Fill matrix with 1s where genes are present
+    for(i in 1:nrow(df)) {
+        sample_genes <- unlist(strsplit(df$clean_genotypes[i], " "))
+        incidence_matrix[i, sample_genes] <- 1
+    }
+    
+    # Convert to dataframe and add year
+    incidence_df <- as.data.frame(incidence_matrix)
+    incidence_df$Year <- df$Year
+    
+    # Reorder columns to put Year at the beginning
+    incidence_df <- incidence_df[, c("Year", setdiff(names(incidence_df), "Year"))]
+    
+    # Write to CSV
+    write.csv(incidence_df, "NAHLN/NAHLN_genotype_wide.csv")
+    
+    return(incidence_df)
+}
+

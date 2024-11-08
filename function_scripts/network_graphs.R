@@ -12,6 +12,12 @@ source(here("function_scripts", "rule_analysis.R"))
 
 
 graph_rules <- function(df, target, cut_off, resistance_indicator, measures_used, data_source, rules_selected, agg = FALSE){
+    #gsub BETA.LACTAM with BETA-LACTAM in df colnames
+    colnames(df) <- gsub("BETA.LACTAM", "BETA-LACTAM", colnames(df))
+    #gsub FOLATE.PATHWAY.INHIBITOR with FOLATE-PATHWAY-INHIBITOR in df colnames
+    colnames(df) <- gsub("FOLATE.PATHWAY.INHIBITOR", "FOLATE-PATHWAY-INHIBITOR", colnames(df))
+
+
     # Create a custom layout function
     custom_circular_layout <- function(graph) {
         node_colors <- V(graph)$color
@@ -179,28 +185,25 @@ graph_rules <- function(df, target, cut_off, resistance_indicator, measures_used
         }
 
         # Set edge attributes
-        if (max(decomposed_rules$count) <= 5000) {
-        E(rules_graph)$width <- ((decomposed_rules$count-1)/(5000-1) + 0.1)* 10  # Edge thickness proportional to rule count (normalized)    
-        } else {E(rules_graph)$width <- 1}
-        E(rules_graph)$color <- "black"
+       
+        E(rules_graph)$width <- log(decomposed_rules$count) *2 + 1  # Edge thickness proportional to rule count (normalized)    
+        E(rules_graph)$color <- "lightblue"
 
         # Set vertex attributes
         if (agg) {
             # When agg is TRUE, use node labels (which are class names) for coloring
-            V(rules_graph)$color <- fixed_class_colors[V(rules_graph)$name]
+            V(rules_graph)$color <- ifelse(V(rules_graph)$name %in% names(fixed_class_colors), 
+                               fixed_class_colors[V(rules_graph)$name], 
+                               "gray")
         } else {
             # When agg is FALSE, use the previous method
-            V(rules_graph)$color <- fixed_class_colors[item_classes$class[match(V(rules_graph)$name, item_classes$item)]]
+            V(rules_graph)$color <- ifelse(!is.na(match(V(rules_graph)$name, item_classes$item)), 
+                               fixed_class_colors[item_classes$class[match(V(rules_graph)$name, item_classes$item)]], 
+                               "gray")
         }
         # Node size proportional to degree (normalized, but avoids dividing by zero in the case of min=max)
         node_degrees <- degree(rules_graph)
-        min_degree <- min(node_degrees)
-        max_degree <- max(node_degrees)
-        if (max_degree <= 50) {
-           V(rules_graph)$size <- 30 * ( 1 +(node_degrees - 1) / (50 - 1))
-        } else {
-             V(rules_graph)$size <- 70  # Default size if all degrees are the same
-        }
+        V(rules_graph)$size <- (log(node_degrees) * 2 + 1) * 10
 
         if (agg == FALSE){
         # Before plotting, define legend_classes and legend_colors

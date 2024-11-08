@@ -1,0 +1,12 @@
+﻿Retail Meats,,,Cecal,,
+Resistance Pattern,Frequency,Recovered Resistance Pattern,Resistance Pattern,Frequency,Recovered Resistance Pattern
+TET,838,_,TET,1337,_
+CHL; TET,67,Yes,FIS; TET,506,Yes
+COT; TET,18,Yes,AMP; CHL; FIS; TET,177,Yes
+GEN; TET,16,Yes,CHL; FIS; TET,139,Yes
+NAL,12,_,AMP; TET,100,Yes
+AMC,10,_,AMP,33,_
+COT,8,_,AMP; FIS; TET,29,Yes
+AMC; AXO; FOX,7,Yes,AMP; CHL; COT; FIS; TET,27,Yes
+AMC; TET,7,Yes,CHL; FIS; NAL; TET,19,Yes
+NAL; TET,7,Yes,AMC; AMP; AXO; FOX,17,Yes

@@ -1,0 +1,21 @@
+Resistance Pattern,Frequency,Recovered Resistance Pattern
+TET,838,_
+CHL; TET,67,Yes
+COT; TET,18,Yes
+GEN; TET,16,Yes
+_L,12,_
+AMC,10,_
+COT,8,_
+AMC; AXO; FOX,7,Yes
+AMC; TET,7,Yes
+_L; TET,7,Yes
+AMC; CHL; TET,6,Yes
+AMC; AXO; CHL; FOX; TET,5,Yes
+AMC; AXO; COT; FOX; TET,4,Yes
+AMC; AXO; FOX; TET,4,Yes
+CHL; COT; TET,4,Yes
+CHL; _L; TET,4,Yes
+AMC; FOX,3,Yes
+AMC; FOX; TET,3,Yes
+AXO,3,_
+CHL,3,_
