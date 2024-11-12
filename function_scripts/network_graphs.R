@@ -1,6 +1,8 @@
 library(igraph)
 library(stringr)
 library(here)
+library(RColorBrewer)
+library(pals)
 
 source(here("function_scripts", "data_wrangling.R"))
 source(here("function_scripts", "rule_mining_and_selection.R"))
@@ -104,8 +106,15 @@ graph_rules <- function(df, target, cut_off, resistance_indicator, measures_used
         #load in the phenotype class mappings
         phenotype_class_mappings <- read_excel("EcoliBreakPoints.xlsx")
         genotype_class_mappings <- read.csv("gene_class_mappings.csv")
-        genotype_class_mappings$Gene_family <- gsub(pattern = "[^A-Za-z0-9]", replacement = ".", genotype_class_mappings$Genes)
+        genotype_class_mappings$Gene_family_original <- genotype_class_mappings$Gene_family
+        genotype_class_mappings$Gene_family <- gsub(pattern = "[^A-Za-z0-9]", replacement = ".", genotype_class_mappings$Gene_family)
 
+
+        # Before the main loop, create a fixed color palette for all possible classes
+        all_possible_classes <- unique(c(phenotype_class_mappings$class, genotype_class_mappings$corrected_class))
+        fixed_class_colors <- setNames(cols25(length(all_possible_classes)), all_possible_classes)
+        #fixed_class_colors <- setNames(brewer.pal(length(all_possible_classes), "Dark2"), all_possible_classes)
+        #fixed_class_colors <- setNames(rainbow(length(all_possible_classes)), all_possible_classes)
 
         #add a column that indicates the class of the item in the LHS and another column that indicates the class of the item in the RHS
         #only do this if agg is false
@@ -165,6 +174,31 @@ graph_rules <- function(df, target, cut_off, resistance_indicator, measures_used
 
 
 
+
+
+
+        # Before creating the graph, convert gene names back to original format if needed
+        if (resistance_indicator == "genotype" && !agg) {
+            # Create a lookup table for gene name conversion
+            gene_lookup <- setNames(
+                genotype_class_mappings$Gene_family_original,
+                genotype_class_mappings$Gene_family
+            )
+            print("here's the gene lookup")
+            print(gene_lookup)
+            # Convert names in decomposed_rules
+            decomposed_rules$LHS <- sapply(decomposed_rules$LHS, function(x) {
+                if (x %in% names(gene_lookup)) return(gene_lookup[x])
+                return(x)
+            })
+            decomposed_rules$RHS <- sapply(decomposed_rules$RHS, function(x) {
+                if (x %in% names(gene_lookup)) return(gene_lookup[x])
+                return(x)
+            })
+        }
+
+
+
         # Create a mapping of items to their classes
         item_classes <- unique(rbind(
             data.frame(item = decomposed_rules$LHS, class = decomposed_rules$LHS_class),
@@ -172,9 +206,6 @@ graph_rules <- function(df, target, cut_off, resistance_indicator, measures_used
         ))
         item_classes <- item_classes[!duplicated(item_classes$item), ]
         }
-        # Before the main loop, create a fixed color palette for all possible classes
-        all_possible_classes <- unique(c(phenotype_class_mappings$class, genotype_class_mappings$corrected_class))
-        fixed_class_colors <- setNames(rainbow(length(all_possible_classes)), all_possible_classes)
 
         rules_graph <- graph_from_data_frame(decomposed_rules, directed = FALSE)
         
@@ -186,7 +217,7 @@ graph_rules <- function(df, target, cut_off, resistance_indicator, measures_used
 
         # Set edge attributes
        
-        E(rules_graph)$width <- log(decomposed_rules$count) *2 + 1  # Edge thickness proportional to rule count (normalized)    
+        E(rules_graph)$width <- log(decomposed_rules$count) * 1.5 + 1  # Edge thickness proportional to rule count (normalized)    
         E(rules_graph)$color <- "lightblue"
 
         # Set vertex attributes
@@ -201,16 +232,16 @@ graph_rules <- function(df, target, cut_off, resistance_indicator, measures_used
                                fixed_class_colors[item_classes$class[match(V(rules_graph)$name, item_classes$item)]], 
                                "gray")
         }
-        # Node size proportional to degree (normalized, but avoids dividing by zero in the case of min=max)
+        # Node size proportional to degree (log normalized)
         node_degrees <- degree(rules_graph)
-        V(rules_graph)$size <- (log(node_degrees) * 2 + 1) * 10
+        V(rules_graph)$size <- (log(node_degrees) * 2 + 1) * 5
 
-        if (agg == FALSE){
-        # Before plotting, define legend_classes and legend_colors
-        legend_classes <- unique(c(decomposed_rules$LHS_class, decomposed_rules$RHS_class))
-        legend_classes <- legend_classes[!is.na(legend_classes)]
-        legend_colors <- fixed_class_colors[legend_classes]
-        }
+        # if (agg == FALSE){
+        # # Before plotting, define legend_classes and legend_colors
+        # legend_classes <- unique(c(decomposed_rules$LHS_class, decomposed_rules$RHS_class))
+        # legend_classes <- legend_classes[!is.na(legend_classes)]
+        # legend_colors <- fixed_class_colors[legend_classes]
+        # }
 
         # Open a PNG device
         png(filename = str_glue("{data_source}/figures/network_graphs/{resistance_indicator}/{rules_selected}/agg{agg}/{data_source}_{resistance_indicator}_{target}_network_{year}_agg{agg}.png"), 
@@ -238,40 +269,7 @@ graph_rules <- function(df, target, cut_off, resistance_indicator, measures_used
                      edge.arrow.size = 0.5,
                      vertex.label.dist = 0,
                      edge.curved = 0.1,
-                     main = str_glue("{data_source} Decomposed Association Rules Network - {year}"))
-
-                # Legend
-                legend_items <- c("Edge thickness: Normalized Rule count", 
-                                  "Node size: Normalized Degree")
-                legend_colors <- c("lightblue", "black")  # lightblue for edges, black for nodes
-                legend_pch <- c(NA, 19)  # Line for edge thickness, point for node size
-                legend_lty <- c(1, NA)   # Solid line for edge thickness, no line for node size
-
-                if (!agg) {
-                    # Only add class information to legend if there are classes
-                    legend_classes <- unique(c(decomposed_rules$LHS_class, decomposed_rules$RHS_class))
-                    legend_classes <- legend_classes[!is.na(legend_classes)]
-                    if (length(legend_classes) > 0) {
-                        legend_items <- c(legend_items, legend_classes)
-                        class_colors <- fixed_class_colors[legend_classes]
-                        legend_colors <- c(legend_colors, class_colors)
-                        legend_pch <- c(legend_pch, rep(19, length(legend_classes)))
-                        legend_lty <- c(legend_lty, rep(NA, length(legend_classes)))
-                    }
-                }
-
-                legend("bottomright", 
-                       legend = legend_items,
-                       col = legend_colors,
-                       pch = legend_pch,
-                       lty = legend_lty,
-                       pt.cex = 2,  # Increase point size in legend
-                       cex = 0.9,
-                       bty = "o",
-                       bg = "white",
-                       box.lwd = 2,
-                       xpd = TRUE,
-                       inset = c(-0.08, 0))
+                     main = str_to_title(str_glue("{data_source} ({year})")))
             } else {
                 plot.new()
                 text(0.5, 0.5, "No valid rules to plot", cex = 1.5)
@@ -290,6 +288,65 @@ graph_rules <- function(df, target, cut_off, resistance_indicator, measures_used
 
       
     }
+
+
+
+    #SAVE THE LEGEND SEPARATELY
+save_legend_image <- function(filename, 
+                              all_possible_classes, 
+                              fixed_class_colors, 
+                              width = 650, 
+                              height = 575, 
+                              resolution = 150) {
+  # Create a blank plot
+  png(filename = filename, 
+      width = width, 
+      height = height, 
+      res = resolution)
+
+
+
+    # Legend
+    legend_items <- c("Edge thickness: Normalized Rule count", 
+                       "Node size: Normalized Degree")
+    legend_colors <- c("lightblue", "black")  # lightblue for edges, black for nodes
+    legend_pch <- c(NA, NA)  # Line for edge thickness, point for node size
+    legend_lty <- c(NA, NA)   # Solid line for edge thickness, no line for node size
+
+    legend_items <- c(legend_items, all_possible_classes)
+    class_colors <- fixed_class_colors[all_possible_classes]
+    legend_colors <- c(legend_colors, class_colors)
+    legend_pch <- c(NA, NA, rep(19, length(all_possible_classes)))
+    legend_lty <- c(NA, NA, rep(NA, length(all_possible_classes)))
+  
+  # Plot the legend
+  plot.new()
+  legend("center", 
+         legend = legend_items, 
+         col = legend_colors, 
+        pch = legend_pch,  # Use the legend_pch values 
+         pt.cex = 2, 
+         cex = 0.9, 
+         bty = "o", 
+         bg = "white", 
+         box.lwd = 2, 
+         xpd = TRUE)
+  
+
+  # Draw a line in the legend
+#segments(x0 = 0.0, x1 = 0.1, y0 = 1.02, y1 = 1.1, lty = 1, col = "lightblue", lwd = 2)
+
+  # Close the PNG device
+  dev.off()
 }
+
+save_legend_image(filename = "legend.png", 
+                  all_possible_classes = all_possible_classes, 
+                  fixed_class_colors = fixed_class_colors)
+
+}
+
+
+
 
 

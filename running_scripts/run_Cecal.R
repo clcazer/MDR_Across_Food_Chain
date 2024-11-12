@@ -89,14 +89,14 @@ print("RULE MINING AND SELECTION DONE")
 
 
 #phenotype (not class level)
- graph_rules(df = cecal_phenotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "phenotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", rules_selected = "best", agg = FALSE)
+graph_rules(df = cecal_phenotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "phenotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", rules_selected = "best", agg = FALSE)
 #genotype (not class level)
- graph_rules(df = cecal_Family_genotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "genotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", rules_selected = "best", agg = FALSE)
+graph_rules(df = cecal_Family_genotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "genotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", rules_selected = "best", agg = FALSE)
 
 #phenotype (class level)
- graph_rules(df = cecal_Class_level_phenotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "phenotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", rules_selected = "best", agg = TRUE)
+graph_rules(df = cecal_Class_level_phenotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "phenotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", rules_selected = "best", agg = TRUE)
 #genotype (class level)
- graph_rules(df = cecal_Class_level_genotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "genotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", rules_selected = "best", agg = TRUE)
+graph_rules(df = cecal_Class_level_genotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "genotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", rules_selected = "best", agg = TRUE)
 
 print("DONE")
 

@@ -1,0 +1,131 @@
+Just some temp notes
+
+FOR METHODS:
+WRITING-
+describe data sources
+describe data cleaning--
+        anitmicrobials looked at
+        interpretation of MIC values
+        explain availability of genetic info
+        explain classification of genes
+describe association rule mining
+describe measure selection--
+        the need to prune/choose measures to do so
+        
+
+Figures FROM CODE-
+fig of Rarefaction rule v class |
+                                |put these into panel somehow (provisionally use ppt, later set up method detailed below)
+fig of rule v cutoff            |
+
+
+
+
+
+
+
+
+
+
+
+ON CREATING PLOTS FROM SAVED IMAGES:
+##################################################################################################################
+##################################################################################################################
+Yes, it is possible to construct a panel of graphs from images that are already saved. This is often referred to as "arranging" or "composing" multiple images into a single panel.
+
+In R, you can use the grid.arrange() function from the gridExtra package to arrange multiple images into a single panel. Here's an example:
+
+r
+CopyInsert
+library(gridExtra)
+
+# Load the images
+img1 <- readPNG("image1.png")
+img2 <- readPNG("image2.png")
+img3 <- readPNG("image3.png")
+
+# Arrange the images into a panel
+grid.arrange(img1, img2, img3, ncol = 3)
+This will create a panel with three images, arranged horizontally.
+
+Alternatively, you can use the par() function to set up a multi-panel plot, and then use the readPNG() function to load each image into the corresponding panel. Here's an example:
+
+r
+CopyInsert
+# Set up a multi-panel plot
+par(mfrow = c(1, 3))
+
+# Load and plot each image
+plot(readPNG("image1.png"))
+plot(readPNG("image2.png"))
+plot(readPNG("image3.png"))
+This will also create a panel with three images, arranged horizontally.
+
+Note that in both cases, you'll need to make sure that the images are in the correct format (e.g. PNG, JPEG, etc.) and are located in the correct directory.
+
+Also, you can use ggarrange() function from ggpubr package, which is a wrapper around grid.arrange() and provides a more convenient interface for arranging multiple plots.
+
+r
+CopyInsert
+library(ggpubr)
+
+ggarrange(img1, img2, img3, ncol = 3)
+It's worth noting that, if you want to add some customization to your panel, such as adding titles, labels, or legends, you may want to use a more advanced package like patchwork or cowplot.
+
+
+
+
+
+Yes, you can use already saved images with patchwork or cowplot by using readPNG() or other image reading functions.
+
+In patchwork, you can use the insert_plot() function to insert an image into a patchwork layout. Here's an example:
+
+r
+CopyInsert
+library(patchwork)
+library(png)
+
+# Load the image
+img <- readPNG("image.png")
+
+# Create a patchwork layout
+p <- plot.new()
+p + insert_plot(img, 1, 1, 1, 1)
+This will create a patchwork layout with the image inserted into the first row and column.
+
+In cowplot, you can use the ggdraw() function to draw an image onto a plot. Here's an example:
+
+r
+CopyInsert
+library(cowplot)
+library(png)
+
+# Load the image
+img <- readPNG("image.png")
+
+# Create a plot
+p <- ggdraw() + 
+  draw_image(img, x = 0, y = 0, width = 1, height = 1)
+This will create a plot with the image drawn onto it.
+
+Note that in both cases, you'll need to make sure that the image is in the correct format (e.g. PNG, JPEG, etc.) and is located in the correct directory.
+
+Also, you can use ggdraw() function with patchwork package, it will give you more flexibility to arrange your plots.
+
+r
+CopyInsert
+library(patchwork)
+library(cowplot)
+library(png)
+
+# Load the image
+img <- readPNG("image.png")
+
+# Create a patchwork layout
+p <- ggdraw() + 
+  draw_image(img, x = 0, y = 0, width = 1, height = 1)
+
+p + plot.new() + 
+  plot.new() + 
+  plot.new()
+This will create a patchwork layout with the image in the first row and column, and two empty plots in the second and third row and column.
