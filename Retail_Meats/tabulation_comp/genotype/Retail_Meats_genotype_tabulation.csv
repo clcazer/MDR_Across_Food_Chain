@@ -1,54 +1,54 @@
-"Resistance_Pattern","Frequency","recovered_resistance_pattern"
-"mef(A)",312,NA
-"",107,"No"
-"mef(A), tet(B)",16,"Yes"
-"mef(A), tet(C)",15,"Yes"
-"aph(3'')-Ib, aph(6)-Id, mef(A), sul2, tet(B)",12,"Yes"
-"tet(B)",11,NA
-"mef(A), tet(A)",10,"Yes"
-"aph(3'')-Ib, aph(6)-Id, floR, mef(A), sul2, tet(A)",7,"Yes"
-"tet(C)",7,NA
-"aph(3'')-Ib, aph(6)-Id, mef(A), tet(B)",5,"Yes"
-"fosA7, mef(A)",5,"Yes"
-"tet(A)",5,NA
-"ant(3'')-Ia, mef(A), tet(C)",4,"Yes"
-"aph(3'')-Ib, aph(6)-Id, floR, sul2, tet(A)",4,"Yes"
-"aph(3'')-Ib, aph(6)-Id, mef(A), tet(A)",4,"Yes"
-"ant(3'')-Ia, mef(A)",3,"Yes"
-"fosA7",3,NA
-"ant(3'')-Ia, aph(3'')-Ib, aph(6)-Id, mef(A), sul2, tet(A)",2,"Yes"
-"aac(3)-VIa, ant(3'')-Ia, aph(3'')-Ib, aph(3')-Ia, aph(6)-Id, mef(A), sul1, sul2, tet(B)",1,"Yes"
-"aac(3)-VIa, ant(3'')-Ia, mef(A), sul1, tet(A)",1,"Yes"
-"aadA13, ant(3'')-Ia, cmlA1, dfrA12, floR, lnu(F), mef(A), sul2, sul3, tet(A), tet(M)",1,"Yes"
-"aadA2, aph(3'')-Ib, aph(6)-Id, dfrA12, floR, mef(A), sul1, sul2, tet(A)",1,"Yes"
-"ant(3'')-Ia",1,NA
-"ant(3'')-Ia, catA1, mef(A), sul1, tet(B)",1,"Yes"
-"ant(3'')-Ia, fosA7, mef(A)",1,"Yes"
-"ant(3'')-Ia, fosA7, mef(A), tet(C)",1,"Yes"
-"ant(3'')-Ia, mef(A), sul1, tet(B)",1,"Yes"
-"ant(3'')-Ia, mef(A), tet(A)",1,"Yes"
-"ant(3'')-Ia, mef(A), tet(A), tet(M)",1,"Yes"
-"ant(3'')-Ia, mef(A), tet(B)",1,"Yes"
-"ant(3'')-Ia, mef(A), tet(M)",1,"Yes"
-"ant(3'')-Ia, sul1, tet(A)",1,"Yes"
-"ant(3'')-Ia, tet(B)",1,"No"
-"ant(3'')-Ia, tet(C)",1,"No"
-"aph(3'')-Ib, aph(3')-Ia, aph(6)-Id, dfrA14, mef(A), sul2, tet(B)",1,"Yes"
-"aph(3'')-Ib, aph(3')-Ia, aph(6)-Id, mef(A), sul2, tet(B)",1,"Yes"
-"aph(3'')-Ib, aph(3')-Ia, aph(6)-Id, mef(A), tet(B)",1,"Yes"
-"aph(3'')-Ib, aph(3')-IIa, aph(6)-Ic, aph(6)-Id, mef(A), sul1, tet(C)",1,"Yes"
-"aph(3'')-Ib, aph(6)-Id, floR, mef(A), sul2, tet(C)",1,"Yes"
-"aph(3'')-Ib, aph(6)-Id, mef(A), sul2, tet(A), tet(B)",1,"Yes"
-"aph(3')-Ia, aph(3')-IIa, aph(6)-Ic, aph(6)-Id, str, sul2, tet(B)",1,"Yes"
-"aph(3')-Ia, aph(6)-Id, blaC, str, tet(B)",1,"Yes"
-"aph(3')-Ia, mef(A), tet(A)",1,"Yes"
-"aph(6)-Id, str, sul2, tet(B)",1,"Yes"
-"aph(6)-Id, str, tet(A)",1,"Yes"
-"aph(6)-Id, str, tet(B)",1,"Yes"
-"catA1, mef(A), tet(A)",1,"Yes"
-"mcr-9, mef(A)",1,"Yes"
-"mef(A), qnrB, tet(A)",1,"Yes"
-"mef(A), sul2",1,"Yes"
-"mef(A), sul2, tet(B)",1,"Yes"
-"sul2, tet(B)",1,"No"
-"tet(A), tet(C), tet(M)",1,"Yes"
+"Resistance_Pattern","Frequency","recovered_resistance_pattern","avg_cosine","avg_jaccard","avg_kulczynski","avg_support"
+"mef(A)",312,NA,NA,NA,NA,NA
+"",107,"No",NA,NA,NA,NA
+"mef(A), tet(B)",16,"Yes",NA,NA,NA,NA
+"mef(A), tet(C)",15,"Yes",NA,NA,NA,NA
+"aph(3'')-Ib, aph(6)-Id, mef(A), sul2, tet(B)",12,"Yes",NA,NA,NA,NA
+"tet(B)",11,NA,NA,NA,NA,NA
+"mef(A), tet(A)",10,"Yes",NA,NA,NA,NA
+"aph(3'')-Ib, aph(6)-Id, floR, mef(A), sul2, tet(A)",7,"Yes",0.640301040707666,0.416951469583049,0.708475734791524,0.0260270786586576
+"tet(C)",7,NA,NA,NA,NA,NA
+"aph(3'')-Ib, aph(6)-Id, mef(A), tet(B)",5,"Yes",NA,NA,NA,NA
+"fosA7, mef(A)",5,"Yes",NA,NA,NA,NA
+"tet(A)",5,NA,NA,NA,NA,NA
+"ant(3'')-Ia, mef(A), tet(C)",4,"Yes",NA,NA,NA,NA
+"aph(3'')-Ib, aph(6)-Id, floR, sul2, tet(A)",4,"Yes",0.640301040707666,0.416951469583049,0.708475734791524,0.0260270786586576
+"aph(3'')-Ib, aph(6)-Id, mef(A), tet(A)",4,"Yes",NA,NA,NA,NA
+"ant(3'')-Ia, mef(A)",3,"Yes",NA,NA,NA,NA
+"fosA7",3,NA,NA,NA,NA,NA
+"ant(3'')-Ia, aph(3'')-Ib, aph(6)-Id, mef(A), sul2, tet(A)",2,"Yes",NA,NA,NA,NA
+"aac(3)-VIa, ant(3'')-Ia, aph(3'')-Ib, aph(3')-Ia, aph(6)-Id, mef(A), sul1, sul2, tet(B)",1,"Yes",NA,NA,NA,NA
+"aac(3)-VIa, ant(3'')-Ia, mef(A), sul1, tet(A)",1,"Yes",NA,NA,NA,NA
+"aadA13, ant(3'')-Ia, cmlA1, dfrA12, floR, lnu(F), mef(A), sul2, sul3, tet(A), tet(M)",1,"Yes",0.981710222408864,0.97035346455507,0.985176732277535,0.00464212596237574
+"aadA2, aph(3'')-Ib, aph(6)-Id, dfrA12, floR, mef(A), sul1, sul2, tet(A)",1,"Yes",0.922921651580214,0.875061029196368,0.937530514598184,0.011484857349519
+"ant(3'')-Ia",1,NA,NA,NA,NA,NA
+"ant(3'')-Ia, catA1, mef(A), sul1, tet(B)",1,"Yes",NA,NA,NA,NA
+"ant(3'')-Ia, fosA7, mef(A)",1,"Yes",NA,NA,NA,NA
+"ant(3'')-Ia, fosA7, mef(A), tet(C)",1,"Yes",NA,NA,NA,NA
+"ant(3'')-Ia, mef(A), sul1, tet(B)",1,"Yes",NA,NA,NA,NA
+"ant(3'')-Ia, mef(A), tet(A)",1,"Yes",NA,NA,NA,NA
+"ant(3'')-Ia, mef(A), tet(A), tet(M)",1,"Yes",NA,NA,NA,NA
+"ant(3'')-Ia, mef(A), tet(B)",1,"Yes",NA,NA,NA,NA
+"ant(3'')-Ia, mef(A), tet(M)",1,"Yes",NA,NA,NA,NA
+"ant(3'')-Ia, sul1, tet(A)",1,"Yes",NA,NA,NA,NA
+"ant(3'')-Ia, tet(B)",1,"No",NA,NA,NA,NA
+"ant(3'')-Ia, tet(C)",1,"No",NA,NA,NA,NA
+"aph(3'')-Ib, aph(3')-Ia, aph(6)-Id, dfrA14, mef(A), sul2, tet(B)",1,"Yes",NA,NA,NA,NA
+"aph(3'')-Ib, aph(3')-Ia, aph(6)-Id, mef(A), sul2, tet(B)",1,"Yes",NA,NA,NA,NA
+"aph(3'')-Ib, aph(3')-Ia, aph(6)-Id, mef(A), tet(B)",1,"Yes",NA,NA,NA,NA
+"aph(3'')-Ib, aph(3')-IIa, aph(6)-Ic, aph(6)-Id, mef(A), sul1, tet(C)",1,"Yes",NA,NA,NA,NA
+"aph(3'')-Ib, aph(6)-Id, floR, mef(A), sul2, tet(C)",1,"Yes",0.640301040707666,0.416951469583049,0.708475734791524,0.0260270786586576
+"aph(3'')-Ib, aph(6)-Id, mef(A), sul2, tet(A), tet(B)",1,"Yes",NA,NA,NA,NA
+"aph(3')-Ia, aph(3')-IIa, aph(6)-Ic, aph(6)-Id, str, sul2, tet(B)",1,"Yes",NA,NA,NA,NA
+"aph(3')-Ia, aph(6)-Id, blaC, str, tet(B)",1,"Yes",NA,NA,NA,NA
+"aph(3')-Ia, mef(A), tet(A)",1,"Yes",NA,NA,NA,NA
+"aph(6)-Id, str, sul2, tet(B)",1,"Yes",NA,NA,NA,NA
+"aph(6)-Id, str, tet(A)",1,"Yes",NA,NA,NA,NA
+"aph(6)-Id, str, tet(B)",1,"Yes",NA,NA,NA,NA
+"catA1, mef(A), tet(A)",1,"Yes",NA,NA,NA,NA
+"mcr-9, mef(A)",1,"Yes",NA,NA,NA,NA
+"mef(A), qnrB, tet(A)",1,"Yes",NA,NA,NA,NA
+"mef(A), sul2",1,"Yes",NA,NA,NA,NA
+"mef(A), sul2, tet(B)",1,"Yes",NA,NA,NA,NA
+"sul2, tet(B)",1,"No",NA,NA,NA,NA
+"tet(A), tet(C), tet(M)",1,"Yes",NA,NA,NA,NA

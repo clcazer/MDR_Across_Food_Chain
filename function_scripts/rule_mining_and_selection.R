@@ -680,7 +680,13 @@ for (measure in measures) {
   colour = year, fill=year)) +
     geom_line(linewidth = 2) +
     geom_point(size = 3) +
-    geom_vline(xintercept = 0.0, color = "red", linewidth = 1) + #plot BOLD red vertical line at 0.5
+    geom_vline(xintercept = case_when(
+      measure == "cosine" ~ 0.5,
+      measure == "jaccard" ~ 0.0,
+      measure == "kulczynski" ~ 0.5,
+      measure == "support" ~ 0.0,
+      TRUE ~ 0.0
+    ), color = "red", linewidth = 1) +
     theme(text = element_text(size = 15), plot.title = element_text(hjust = 0.5),
     panel.background = element_rect(fill = 'white', colour = 'black')) +
     labs(y = str_glue("number of {target}"), x = "Cut-off Value", title = str_glue("{measure} ({resistance_indicator})"))
@@ -742,6 +748,7 @@ implement_cuts <- function(df, resistance_indicator, target, cut_off, year, agg 
     return(rules)
 
 }
+
 
 save_item_or_ruleset_aggregated <- function(genotype_df, phenotype_df, target, data_source) {
 

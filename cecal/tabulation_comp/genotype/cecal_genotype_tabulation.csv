@@ -1,233 +1,223 @@
-"Resistance_Pattern","Frequency","recovered_resistance_pattern"
-"",505,"No"
-"sul2, tet(B)",171,"Yes"
-"floR, sul2, tet(A)",154,"Yes"
-"tet(A)",102,NA
-"tet(B)",80,NA
-"tet(C)",48,NA
-"mef(A)",47,NA
-"glpT",23,NA
-"sul2, tet(A)",19,"Yes"
-"floR, sul2, tet(A), tet(B)",13,"Yes"
-"gyrA",13,NA
-"aadA1, tet(A)",11,"Yes"
-"mef(A), tet(B)",10,"Yes"
-"aadA1",9,NA
-"uhpT",9,NA
-"aadA1, tet(C)",7,"No"
-"emrD",7,NA
-"aadA1, sul2, tet(A)",6,"Yes"
-"tet(B), uhpT",6,"Yes"
-"dfrA14, sul2, tet(A)",5,"Yes"
-"floR, sul2, tet(A), tet(C)",5,"Yes"
-"mef(A), tet(A)",5,"Yes"
-"mef(A), tet(C)",5,"Yes"
-"ampC, sul2, tet(B)",4,"Yes"
-"floR, gyrA, sul2, tet(A)",4,"Yes"
-"floR, mef(A), sul2, tet(A)",4,"Yes"
-"floR, tet(A)",4,"Yes"
-"sul2",4,NA
-"aadA1, aadA2, cmlA1, dfrA12, floR, lnu(F), sul2, sul3, tet(A)",3,"Yes"
-"aadA1, aadA2, cmlA1, dfrA12, sul3, tet(A)",3,"Yes"
-"aadA1, dfrA1, floR, sul1, sul2, tet(A)",3,"Yes"
-"cyaA.S352T., emrD, tet(B)",3,"Yes"
-"emrD, floR, sul2, tet(A)",3,"Yes"
-"floR, sul1, sul2, tet(A)",3,"Yes"
-"floR, sul2, tet(B)",3,"Yes"
-"glpT, tet(A)",3,"Yes"
-"glpT, tet(C)",3,"No"
-"gyrA, sul2, tet(B)",3,"Yes"
-"soxS.A12S.",3,NA
-"sul2, tet(A), tet(B)",3,"Yes"
-"tet(C), uhpT",3,"No"
-"aadA1, aadA2, cmlA1, sul3, tet(A)",2,"Yes"
-"aadA1, catA1, sul1, tet(A)",2,"Yes"
-"aadA1, dfrA1, sul2, tet(B)",2,"Yes"
-"aadA1, glpT, tet(A)",2,"Yes"
-"aadA1, mef(A)",2,"Yes"
-"aadA1, sul1",2,"No"
-"aadA1, sul1, tet(A)",2,"Yes"
-"aadA1, tet(B)",2,"Yes"
-"aadA2, dfrA12, floR, gyrA, sul1, sul2, tet(A)",2,"Yes"
-"aadA2, dfrA12, floR, sul1, sul2, tet(A)",2,"Yes"
-"aadA6, floR, sul1, sul2, tet(A)",2,"Yes"
-"bla, sul1, tet(C)",2,"Yes"
-"bla, sul2, tet(A)",2,"Yes"
-"cyaA.S352T.",2,NA
-"cyaA.S352T., sul2, tet(B)",2,"Yes"
-"cyaA.S352T., uhpT",2,"No"
-"dfrA14, tet(A)",2,"Yes"
-"dfrA5",2,NA
-"dfrA5, floR, sul2, tet(A)",2,"Yes"
-"dfrA5, sul2",2,"Yes"
-"dfrA5, sul2, tet(A)",2,"Yes"
-"dfrA5, tet(A)",2,"Yes"
-"emrD, tet(A), uhpT",2,"Yes"
-"floR, soxS.A12S., sul2, tet(A)",2,"Yes"
-"floR, sul2, tet(A), tet(B), tet(C)",2,"Yes"
-"glpT, sul2, tet(A)",2,"Yes"
-"glpT, tet(B)",2,"Yes"
-"gyrA, sul2, tet(A)",2,"Yes"
-"gyrA, tet(B)",2,"Yes"
-"sul1, sul2, tet(B)",2,"Yes"
-"tet(A), tet(B)",2,"Yes"
-"tet(A), uhpT",2,"Yes"
-"aac(3)-IId",1,NA
-"aac(3)-IId, aadA1, aadA2, cmlA1, dfrA12, glpT, lnu(F), sul3, tet(B)",1,"Yes"
-"aac(3)-IId, aadA2, aph(3')-Ia, dfrA12, sul1, sul2, tet(B)",1,"Yes"
-"aac(3)-IId, bleO, floR, sul2, tet(A), uhpT",1,"Yes"
-"aac(3)-IId, cyaA.S352T., sul1, sul2, tet(B)",1,"Yes"
-"aac(3)-IId, sul1, tet(B)",1,"Yes"
-"aac(3)-IId, sul2, tet(A)",1,"Yes"
-"aac(3)-IVa, aadA1, aadA2, aph(4)-Ia, cmlA1, sul3, tet(B)",1,"Yes"
-"aac(3)-IVa, aph(4)-Ia, glpT, tet(A)",1,"Yes"
-"aac(3)-VIa, aadA1, ampC, floR, sul2, tet(A)",1,"Yes"
-"aac(3)-VIa, aadA1, bla",1,"Yes"
-"aac(3)-VIa, aadA1, cyaA.S352T., sul1, sul2, tet(A)",1,"Yes"
-"aac(3)-VIa, aadA1, dfrA5, floR, sul1, sul2, tet(A)",1,"Yes"
-"aac(3)-VIa, aadA1, floR, sul1, sul2, tet(A)",1,"Yes"
-"aac(3)-VIa, aadA1, sul1, tet(A)",1,"Yes"
-"aac(3)-VIa, aadA25, cyaA.S352T., sul1, tet(B)",1,"Yes"
-"aac(3)-VIa, aadA25, cyaA.S352T., tet(B)",1,"Yes"
-"aac(3)-VIa, aadA25, dfrA14, sul1, sul2, tet(B)",1,"Yes"
-"aac(3)-VIa, aadA25, dfrA5, sul2",1,"Yes"
-"aac(3)-VIa, aadA25, floR, sul1, sul2, tet(A), tet(B)",1,"Yes"
-"aac(3)-VIa, aadA25, tet(A)",1,"Yes"
-"aac(3)-VIa, aadA6, cyaA.S352T., emrD, sul1, tet(B)",1,"Yes"
-"aac(3)-VIa, aadA6, floR, sul2, tet(A)",1,"Yes"
-"aac(3)-VIa, aadA6, floR, sul2, tet(A), tet(B)",1,"Yes"
-"aac(3)-VIa, bla",1,"Yes"
-"aac(3)-VIa, floR, sul1, sul2, tet(A)",1,"Yes"
-"aac(6')-Ib-cr, catA1, catB3, dfrA1, floR, gyrA, sul1, sul2, tet(B)",1,"Yes"
-"aadA1, aadA2, ampC, cmlA1, sul3, tet(A)",1,"Yes"
-"aadA1, aadA2, aph(3')-Ia, cmlA1, dfrA12, erm(B), floR, sul2, sul3, tet(A)",1,"Yes"
-"aadA1, aadA2, aph(3')-Ia, cmlA1, floR, sul3, tet(A)",1,"Yes"
-"aadA1, aadA2, cmlA1, cyaA.S352T., dfrA12, emrD, floR, lnu(F), sul2, sul3, tet(A)",1,"Yes"
-"aadA1, aadA2, cmlA1, dfrA1, dfrA12, floR, lnu(F), sul2, sul3, tet(A)",1,"Yes"
-"aadA1, aadA2, cmlA1, dfrA12, floR, gyrA, sul2, sul3, tet(A)",1,"Yes"
-"aadA1, aadA2, cmlA1, dfrA12, floR, lnu(F), sul2, tet(A)",1,"Yes"
-"aadA1, aadA2, cmlA1, dfrA12, floR, sul2, tet(A)",1,"Yes"
-"aadA1, aadA2, cmlA1, dfrA12, sul2, sul3, tet(A)",1,"Yes"
-"aadA1, aadA2, cmlA1, dfrA16, floR, sul3, tet(A)",1,"Yes"
-"aadA1, aadA2, cmlA1, glpT, sul3, tet(A)",1,"Yes"
-"aadA1, aadA2, cmlA1, sul3, tet(B)",1,"Yes"
-"aadA1, aadA2, dfrA1, dfrA23, floR, sul1, sul2, tet(A)",1,"Yes"
-"aadA1, aadA22, cyaA.S352T., dfrA14, emrD, floR, lnu(F), sul3, tet(A), uhpT",1,"Yes"
-"aadA1, ampC, sul2, tet(B)",1,"Yes"
-"aadA1, aph(3')-Ia, dfrA1, sul1, tet(A)",1,"Yes"
-"aadA1, aph(6)-Ic, tet(A), tet(B)",1,"Yes"
-"aadA1, arr.2.mdtM, bla, cmlA5, dfrA14, floR, sul2, tet(A), tet(B)",1,"Yes"
-"aadA1, bla, catA1, cyaA.S352T., sul1",1,"Yes"
-"aadA1, bla, catA1, floR, sul1, sul2, tet(A), tet(B)",1,"Yes"
-"aadA1, bla, catA1, sul1, sul2, tet(B)",1,"Yes"
-"aadA1, bla, glpT, sul2",1,"Yes"
-"aadA1, bla, sul1, tet(A)",1,"Yes"
-"aadA1, catA1, dfrA1, emrD, sul1, uhpT",1,"Yes"
-"aadA1, catA1, dfrA5, sul1, sul2, tet(A)",1,"Yes"
-"aadA1, catA1, sul1, tet(B)",1,"Yes"
-"aadA1, cyaA.S352T., dfrA1, emrD, floR, sul2, tet(A)",1,"Yes"
-"aadA1, cyaA.S352T., emrD, floR, sul1, sul2, tet(A)",1,"Yes"
-"aadA1, cyaA.S352T., emrD, sul1, sul2, tet(A), tet(B)",1,"Yes"
-"aadA1, cyaA.S352T., emrD, sul1, tet(A)",1,"Yes"
-"aadA1, dfrA1",1,"No"
-"aadA1, dfrA1, dfrA5, floR, sul2, tet(A)",1,"Yes"
-"aadA1, dfrA1, dfrA7, floR, glpT, sul1, sul2, tet(A), tet(B)",1,"Yes"
-"aadA1, dfrA1, floR, sul2, tet(A)",1,"Yes"
-"aadA1, dfrA1, floR, sul2, tet(A), uhpT",1,"Yes"
-"aadA1, dfrA1, floR, sul2, tet(B)",1,"Yes"
-"aadA1, dfrA1, floR, tet(A)",1,"Yes"
-"aadA1, dfrA1, gyrA, sul1, sul2, tet(A), uhpT",1,"Yes"
-"aadA1, dfrA1, sul1, sul2, tet(A)",1,"Yes"
-"aadA1, dfrA1, sul1, tet(B)",1,"Yes"
-"aadA1, dfrA1, tet(A)",1,"Yes"
-"aadA1, dfrA14, floR, gyrA, sul3, tet(A)",1,"Yes"
-"aadA1, floR, gyrA, sul2, tet(A)",1,"Yes"
-"aadA1, floR, sul2, tet(A)",1,"Yes"
-"aadA1, floR, sul3, tet(A)",1,"Yes"
-"aadA1, mef(A), tet(A)",1,"Yes"
-"aadA1, mef(A), tet(B)",1,"Yes"
-"aadA1, uhpT",1,"No"
-"aadA12, catA1, dfrA5, sul1, sul2, tet(A)",1,"Yes"
-"aadA12, catA1, sul1, tet(A)",1,"Yes"
-"aadA12, dfrA1, floR, sul1, sul2, tet(A)",1,"Yes"
-"aadA12, dfrA1, sul1, sul2, tet(A)",1,"Yes"
-"aadA12, sul1, tet(A)",1,"Yes"
-"aadA13, sul1, tet(C)",1,"Yes"
-"aadA2, ampC, dfrA12, sul1, sul2, tet(B)",1,"Yes"
-"aadA2, blaS, dfrA19, floR, mcr-9, sul1, sul2, tet(D)",1,"Yes"
-"aadA2, catA1, dfrA12, floR, qnrA, sul1, tet(A)",1,"Yes"
-"aadA2, cmlA1, dfrA16, floR, tet(A)",1,"Yes"
-"aadA2, cmlA1, mef(A), sul3, tet(A)",1,"Yes"
-"aadA2, dfrA1, floR, mph(A), qnrA, sul1, tet(A)",1,"Yes"
-"aadA2, dfrA12, emrD, sul1",1,"Yes"
-"aadA2, dfrA12, floR, mph(A), sul1, sul2, tet(A)",1,"Yes"
-"aadA2, dfrA12, floR, sul1, sul2, tet(A), uhpT",1,"Yes"
-"aadA2, dfrA12, mph(A), sul1, sul2, tet(B)",1,"Yes"
-"aadA2, dfrA12, sul1, sul2, tet(A)",1,"Yes"
-"aadA2, dfrA18, ere(A), floR, sul1, sul2, tet(B)",1,"Yes"
-"aadA2, dfrA23, dfrA5, floR, sul1, sul2, tet(A)",1,"Yes"
-"aadA2, dfrA23, floR, sul1, sul2, tet(A)",1,"Yes"
-"aadA25, cyaA.S352T., emrD, floR, sul1, sul2, tet(A), tet(B)",1,"Yes"
-"aadA25, floR, mph(A), sul1, sul2, tet(A)",1,"Yes"
-"aadA7, cyaA.S352T., emrD, sul1, tet(A)",1,"Yes"
-"aadA7, cyaA.S352T., sul1, tet(A)",1,"Yes"
-"aph(3')-Ia, floR, sul2, tet(B)",1,"Yes"
-"aph(3')-Ia, gyrA, sul2, tet(B)",1,"Yes"
-"aph(3')-Ia, tet(B)",1,"Yes"
-"aph(6)-Ic, floR, sul1, tet(A)",1,"Yes"
-"aph(6)-Ic, sul1, tet(A)",1,"Yes"
-"aph(6)-Ic, sul1, tet(B)",1,"Yes"
-"aph(6)-Ic, sul1, tet(B), tet(C)",1,"Yes"
-"bla, glpT, sul2, tet(B)",1,"Yes"
-"catA1, sul2, tet(A)",1,"Yes"
-"cyaA.S352T., emrD",1,"Yes"
-"cyaA.S352T., emrD, floR, sul2, tet(A)",1,"Yes"
-"cyaA.S352T., emrD, glpT",1,"Yes"
-"cyaA.S352T., emrD, mph(A), sul1, sul2, tet(A)",1,"Yes"
-"cyaA.S352T., emrD, mph(A), sul1, sul2, tet(B)",1,"Yes"
-"cyaA.S352T., emrD, sul2",1,"Yes"
-"cyaA.S352T., emrD, sul2, tet(A)",1,"Yes"
-"cyaA.S352T., emrD, tet(C)",1,"Yes"
-"cyaA.S352T., emrD, uhpT",1,"Yes"
-"cyaA.S352T., glpT",1,"No"
-"dfrA1, erm(B), floR, mph(A), sul1, tet(A)",1,"Yes"
-"dfrA1, floR, sul1, sul2, tet(A)",1,"Yes"
-"dfrA1, sul2, tet(B)",1,"Yes"
-"dfrA14, floR, sul2, tet(A)",1,"Yes"
-"dfrA14, sul2, tet(A), tet(B)",1,"Yes"
-"dfrA23, floR, sul2, tet(A)",1,"Yes"
-"dfrA5, floR, sul2",1,"Yes"
-"dfrA5, mef(A), sul2, tet(A)",1,"Yes"
-"dfrA5, sul1",1,"No"
-"dfrA7, sul1, tet(A)",1,"Yes"
-"emrD, floR, glpT, sul2, tet(A)",1,"Yes"
-"emrD, floR, tet(A), uhpT",1,"Yes"
-"emrD, sul2, tet(B)",1,"Yes"
-"emrD, tet(C)",1,"No"
-"emrD, uhpT",1,"No"
-"floR, glpT, sul2, tet(A), uhpT",1,"Yes"
-"floR, gyrA, mph(A), sul1, sul2, tet(A), tet(B)",1,"Yes"
-"floR, gyrA, mph(A), sul1, tet(B)",1,"Yes"
-"floR, gyrA, sul1, sul2, tet(A)",1,"Yes"
-"floR, gyrA, sul2, tet(B)",1,"Yes"
-"floR, mph(A), tet(A)",1,"Yes"
-"floR, sul2",1,"Yes"
-"floR, sul2, tet(C)",1,"Yes"
-"floR, sul2, uhpT",1,"Yes"
-"floR, tet(A), tet(C)",1,"Yes"
-"glpT, sul2, tet(B)",1,"Yes"
-"glpT, tet(A), tet(C)",1,"Yes"
-"glpT, tet(A), uhpT",1,"Yes"
-"glpT, tet(C), uhpT",1,"No"
-"gyrA, tet(A)",1,"Yes"
-"mef(A), sul1, tet(A)",1,"Yes"
-"mef(A), sul2, tet(B)",1,"Yes"
-"mph(A), sul1, tet(B)",1,"Yes"
-"mph(A), tet(B)",1,"Yes"
-"sul1",1,NA
-"sul1, tet(A), uhpT",1,"Yes"
-"sul1, tet(B)",1,"Yes"
-"sul2, tet(B), tet(C)",1,"Yes"
-"tet(A), tet.A..1, uhpT",1,"Yes"
-"tet(A), tet(C)",1,"Yes"
-"tet(B), tet(C)",1,"Yes"
+"Resistance_Pattern","Frequency","recovered_resistance_pattern","avg_cosine","avg_jaccard","avg_kulczynski","avg_support"
+"",510,"No",NA,NA,NA,NA
+"sul2, tet(B)",173,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"floR, sul2, tet(A)",156,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"tet(A)",102,NA,NA,NA,NA,NA
+"tet(B)",80,NA,NA,NA,NA,NA
+"tet(C)",48,NA,NA,NA,NA,NA
+"mef(A)",47,NA,NA,NA,NA,NA
+"glpT",24,NA,NA,NA,NA,NA
+"sul2, tet(A)",19,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"floR, sul2, tet(A), tet(B)",13,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"gyrA",13,NA,NA,NA,NA,NA
+"aadA1, tet(A)",11,"Yes",NA,NA,NA,NA
+"uhpT",11,NA,NA,NA,NA,NA
+"mef(A), tet(B)",10,"Yes",NA,NA,NA,NA
+"aadA1",9,NA,NA,NA,NA,NA
+"emrD",8,NA,NA,NA,NA,NA
+"aadA1, tet(C)",7,"No",NA,NA,NA,NA
+"aadA1, sul2, tet(A)",6,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"tet(B), uhpT",6,"Yes",NA,NA,NA,NA
+"dfrA14, sul2, tet(A)",5,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"floR, sul2, tet(A), tet(C)",5,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"mef(A), tet(A)",5,"Yes",NA,NA,NA,NA
+"mef(A), tet(C)",5,"Yes",NA,NA,NA,NA
+"ampC, sul2, tet(B)",4,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"emrD, floR, sul2, tet(A)",4,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"floR, gyrA, sul2, tet(A)",4,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"floR, mef(A), sul2, tet(A)",4,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"floR, tet(A)",4,"Yes",0.575125404385192,0.330769230769231,0.665384615384615,0.330769230769231
+"sul2",4,NA,NA,NA,NA,NA
+"aadA1, aadA2, cmlA1, dfrA12, floR, lnu(F), sul2, sul3, tet(A)",3,"Yes",0.690990341666982,0.501952473992115,0.736313737433245,0.0205549378299215
+"aadA1, aadA2, cmlA1, dfrA12, sul3, tet(A)",3,"Yes",0.748470476320498,0.589708620878519,0.780649024041646,0.0158400721419356
+"aadA1, dfrA1, floR, sul1, sul2, tet(A)",3,"Yes",0.647970450192724,0.440832873771378,0.69422896582997,0.142106078852872
+"emrD, tet(B)",3,"Yes",NA,NA,NA,NA
+"floR, sul1, sul2, tet(A)",3,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"floR, sul2, tet(B)",3,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"glpT, tet(A)",3,"Yes",NA,NA,NA,NA
+"glpT, tet(C)",3,"No",NA,NA,NA,NA
+"gyrA, sul2, tet(B)",3,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"sul2, tet(A), tet(B)",3,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"tet(C), uhpT",3,"No",NA,NA,NA,NA
+"aadA1, aadA2, cmlA1, sul3, tet(A)",2,"Yes",0.841104844556627,0.728369275060452,0.855516950369892,0.0165638276817067
+"aadA1, catA1, sul1, tet(A)",2,"Yes",0.577350269189626,0.333333333333333,0.666666666666667,0.00373134328358209
+"aadA1, dfrA1, sul2, tet(B)",2,"Yes",0.621461952907321,0.414650434329044,0.678598509089988,0.356593093745752
+"aadA1, glpT, tet(A)",2,"Yes",NA,NA,NA,NA
+"aadA1, mef(A)",2,"Yes",NA,NA,NA,NA
+"aadA1, sul1",2,"No",NA,NA,NA,NA
+"aadA1, sul1, tet(A)",2,"Yes",NA,NA,NA,NA
+"aadA1, tet(B)",2,"Yes",NA,NA,NA,NA
+"aadA2, dfrA12, floR, gyrA, sul1, sul2, tet(A)",2,"Yes",0.684513390124082,0.490009385658041,0.731000616152523,0.0746958150867313
+"aadA2, dfrA12, floR, sul1, sul2, tet(A)",2,"Yes",0.691903950188527,0.500814630645951,0.735437440254996,0.079614651900877
+"aadA6, floR, sul1, sul2, tet(A)",2,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"bla, sul1, tet(C)",2,"Yes",NA,NA,NA,NA
+"bla, sul2, tet(A)",2,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"dfrA14, tet(A)",2,"Yes",NA,NA,NA,NA
+"dfrA5",2,NA,NA,NA,NA,NA
+"dfrA5, floR, sul2, tet(A)",2,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"dfrA5, sul2",2,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"dfrA5, sul2, tet(A)",2,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"dfrA5, tet(A)",2,"Yes",NA,NA,NA,NA
+"emrD, tet(A), uhpT",2,"Yes",NA,NA,NA,NA
+"emrD, tet(C)",2,"No",NA,NA,NA,NA
+"emrD, uhpT",2,"No",NA,NA,NA,NA
+"floR, sul2, tet(A), tet(B), tet(C)",2,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"glpT, sul2, tet(A)",2,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"glpT, tet(B)",2,"Yes",NA,NA,NA,NA
+"gyrA, sul2, tet(A)",2,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"gyrA, tet(B)",2,"Yes",NA,NA,NA,NA
+"sul1, sul2, tet(B)",2,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"tet(A), tet(B)",2,"Yes",NA,NA,NA,NA
+"tet(A), uhpT",2,"Yes",NA,NA,NA,NA
+"aac(3)-IId",1,NA,NA,NA,NA,NA
+"aac(3)-IId, aadA1, aadA2, cmlA1, dfrA12, glpT, lnu(F), sul3, tet(B)",1,"Yes",0.735482702876017,0.569909283510358,0.772047300307602,0.0150902410840566
+"aac(3)-IId, aadA2, aph(3')-Ia, dfrA12, sul1, sul2, tet(B)",1,"Yes",0.706457678427392,0.522946690636789,0.75302258908538,0.0708887603183046
+"aac(3)-IId, bleO, floR, sul2, tet(A), uhpT",1,"Yes",0.653477867317919,0.442982797996336,0.703725430173446,0.247939336751126
+"aac(3)-IId, sul1, sul2, tet(B)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"aac(3)-IId, sul1, tet(B)",1,"Yes",NA,NA,NA,NA
+"aac(3)-IId, sul2, tet(A)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"aac(3)-IVa, aadA1, aadA2, aph(4)-Ia, cmlA1, sul3, tet(B)",1,"Yes",0.841104844556627,0.728369275060452,0.855516950369892,0.0165638276817067
+"aac(3)-IVa, aph(4)-Ia, glpT, tet(A)",1,"Yes",NA,NA,NA,NA
+"aac(3)-VIa, aadA1, ampC, floR, sul2, tet(A)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"aac(3)-VIa, aadA1, bla",1,"Yes",NA,NA,NA,NA
+"aac(3)-VIa, aadA1, dfrA5, floR, sul1, sul2, tet(A)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"aac(3)-VIa, aadA1, floR, sul1, sul2, tet(A)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"aac(3)-VIa, aadA1, sul1, sul2, tet(A)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"aac(3)-VIa, aadA1, sul1, tet(A)",1,"Yes",NA,NA,NA,NA
+"aac(3)-VIa, aadA25, dfrA14, sul1, sul2, tet(B)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"aac(3)-VIa, aadA25, dfrA5, sul2",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"aac(3)-VIa, aadA25, floR, sul1, sul2, tet(A), tet(B)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"aac(3)-VIa, aadA25, sul1, tet(B)",1,"Yes",NA,NA,NA,NA
+"aac(3)-VIa, aadA25, tet(A)",1,"Yes",NA,NA,NA,NA
+"aac(3)-VIa, aadA25, tet(B)",1,"Yes",NA,NA,NA,NA
+"aac(3)-VIa, aadA6, emrD, sul1, tet(B)",1,"Yes",NA,NA,NA,NA
+"aac(3)-VIa, aadA6, floR, sul2, tet(A)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"aac(3)-VIa, aadA6, floR, sul2, tet(A), tet(B)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"aac(3)-VIa, bla",1,"Yes",NA,NA,NA,NA
+"aac(3)-VIa, floR, sul1, sul2, tet(A)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"aac(6')-Ib-cr, catA1, catB3, dfrA1, floR, gyrA, sul1, sul2, tet(B)",1,"Yes",0.846534971127983,0.751150600501566,0.870032259860785,0.0594720176813662
+"aadA1, aadA2, ampC, cmlA1, sul3, tet(A)",1,"Yes",0.841104844556627,0.728369275060452,0.855516950369892,0.0165638276817067
+"aadA1, aadA2, aph(3')-Ia, cmlA1, dfrA12, erm(B), floR, sul2, sul3, tet(A)",1,"Yes",0.690990341666982,0.501952473992115,0.736313737433245,0.0205549378299215
+"aadA1, aadA2, aph(3')-Ia, cmlA1, floR, sul3, tet(A)",1,"Yes",0.816911769827931,0.69799835827346,0.834955463175544,0.0186513380483753
+"aadA1, aadA2, cmlA1, dfrA1, dfrA12, floR, lnu(F), sul2, sul3, tet(A)",1,"Yes",0.690635585205654,0.501614414249486,0.735903188758916,0.0205747635428095
+"aadA1, aadA2, cmlA1, dfrA12, emrD, floR, lnu(F), sul2, sul3, tet(A)",1,"Yes",0.679492189308396,0.484891515409438,0.729266816276424,0.0188613650875817
+"aadA1, aadA2, cmlA1, dfrA12, floR, gyrA, sul2, sul3, tet(A)",1,"Yes",0.690143860680186,0.500696465495587,0.73579495105882,0.0204269508165263
+"aadA1, aadA2, cmlA1, dfrA12, floR, lnu(F), sul2, tet(A)",1,"Yes",0.693800156070398,0.500860250821714,0.73874821072926,0.0356101556333467
+"aadA1, aadA2, cmlA1, dfrA12, floR, sul2, tet(A)",1,"Yes",0.693800156070398,0.500860250821714,0.73874821072926,0.0356101556333467
+"aadA1, aadA2, cmlA1, dfrA12, sul2, sul3, tet(A)",1,"Yes",0.712496811289705,0.533203921494398,0.753238236166611,0.0203042190284154
+"aadA1, aadA2, cmlA1, dfrA16, floR, sul3, tet(A)",1,"Yes",0.814531772653112,0.694007203182932,0.833313928889806,0.0182661618273646
+"aadA1, aadA2, cmlA1, glpT, sul3, tet(A)",1,"Yes",0.797083907089823,0.661740512177093,0.823827760270775,0.0148894077013103
+"aadA1, aadA2, cmlA1, sul3, tet(B)",1,"Yes",0.841104844556627,0.728369275060452,0.855516950369892,0.0165638276817067
+"aadA1, aadA2, dfrA1, dfrA23, floR, sul1, sul2, tet(A)",1,"Yes",0.668550035642488,0.464822983282051,0.719527619180989,0.0639735494137232
+"aadA1, aadA22, dfrA14, emrD, floR, lnu(F), sul3, tet(A), uhpT",1,"Yes",0.928661542181782,0.882115094558533,0.941057547279267,0.010731641120564
+"aadA1, ampC, sul2, tet(B)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"aadA1, aph(3')-Ia, dfrA1, sul1, tet(A)",1,"Yes",0.579313152341204,0.358333333333333,0.65,0.0133881385789783
+"aadA1, aph(6)-Ic, tet(A), tet(B)",1,"Yes",NA,NA,NA,NA
+"aadA1, bla, catA1, floR, sul1, sul2, tet(A), tet(B)",1,"Yes",0.629198146756201,0.429229494236263,0.66540438175339,0.128303400880857
+"aadA1, bla, catA1, sul1",1,"Yes",0.628959093576597,0.44973544973545,0.640740740740741,0.00964181399806045
+"aadA1, bla, catA1, sul1, sul2, tet(B)",1,"Yes",0.612466879120007,0.415846475293763,0.646471990481349,0.0901887260951666
+"aadA1, bla, cmlA5, dfrA14, floR, sul2, tet(A), tet(B)",1,"Yes",0.770935531845205,0.626315945750706,0.805036387126909,0.115222095218706
+"aadA1, bla, glpT, sul2",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"aadA1, bla, sul1, tet(A)",1,"Yes",NA,NA,NA,NA
+"aadA1, catA1, dfrA1, emrD, sul1, uhpT",1,"Yes",0.578920575710889,0.353333333333333,0.653333333333333,0.011456779519899
+"aadA1, catA1, dfrA5, sul1, sul2, tet(A)",1,"Yes",0.636621928481683,0.417031386709996,0.708515693354998,0.351110988700046
+"aadA1, catA1, sul1, tet(B)",1,"Yes",0.577350269189626,0.333333333333333,0.666666666666667,0.00373134328358209
+"aadA1, dfrA1",1,"No",NA,NA,NA,NA
+"aadA1, dfrA1, dfrA5, floR, sul2, tet(A)",1,"Yes",0.648740374950931,0.442238750377288,0.69437631009063,0.249669440557355
+"aadA1, dfrA1, dfrA7, floR, glpT, sul1, sul2, tet(A), tet(B)",1,"Yes",0.675925806662532,0.468802787988545,0.720593454710348,0.0767329623264485
+"aadA1, dfrA1, emrD, floR, sul2, tet(A)",1,"Yes",0.648740374950931,0.442238750377288,0.69437631009063,0.249669440557355
+"aadA1, dfrA1, floR, sul2, tet(A)",1,"Yes",0.648740374950931,0.442238750377288,0.69437631009063,0.249669440557355
+"aadA1, dfrA1, floR, sul2, tet(A), uhpT",1,"Yes",0.648740374950931,0.442238750377288,0.69437631009063,0.249669440557355
+"aadA1, dfrA1, floR, sul2, tet(B)",1,"Yes",0.648740374950931,0.442238750377288,0.69437631009063,0.249669440557355
+"aadA1, dfrA1, floR, tet(A)",1,"Yes",0.575125404385192,0.330769230769231,0.665384615384615,0.330769230769231
+"aadA1, dfrA1, gyrA, sul1, sul2, tet(A), uhpT",1,"Yes",0.609910856752509,0.400598682270777,0.666029625343934,0.168349447138476
+"aadA1, dfrA1, sul1, sul2, tet(A)",1,"Yes",0.609910856752509,0.400598682270777,0.666029625343934,0.168349447138476
+"aadA1, dfrA1, sul1, tet(B)",1,"Yes",0.579313152341204,0.358333333333333,0.65,0.0133881385789783
+"aadA1, dfrA1, tet(A)",1,"Yes",NA,NA,NA,NA
+"aadA1, dfrA14, floR, gyrA, sul3, tet(A)",1,"Yes",0.686046905445227,0.472744210806495,0.736372105403247,0.0259749231460053
+"aadA1, emrD, floR, sul1, sul2, tet(A)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"aadA1, emrD, sul1, sul2, tet(A), tet(B)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"aadA1, emrD, sul1, tet(A)",1,"Yes",NA,NA,NA,NA
+"aadA1, floR, gyrA, sul2, tet(A)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"aadA1, floR, sul2, tet(A)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"aadA1, floR, sul3, tet(A)",1,"Yes",0.617602309285937,0.384162895927602,0.692081447963801,0.0979888432178509
+"aadA1, mef(A), tet(A)",1,"Yes",NA,NA,NA,NA
+"aadA1, mef(A), tet(B)",1,"Yes",NA,NA,NA,NA
+"aadA1, uhpT",1,"No",NA,NA,NA,NA
+"aadA12, catA1, dfrA5, sul1, sul2, tet(A)",1,"Yes",0.64529896456029,0.423763077795832,0.711881538897916,0.148410967186583
+"aadA12, catA1, sul1, tet(A)",1,"Yes",0.707106781186547,0.5,0.75,0.00381679389312977
+"aadA12, dfrA1, floR, sul1, sul2, tet(A)",1,"Yes",0.644612571938633,0.433136238397069,0.697444629853042,0.20104692643073
+"aadA12, dfrA1, sul1, sul2, tet(A)",1,"Yes",0.606425822034572,0.380859488924997,0.690429744462498,0.297059658560281
+"aadA12, sul1, tet(A)",1,"Yes",NA,NA,NA,NA
+"aadA13, sul1, tet(C)",1,"Yes",NA,NA,NA,NA
+"aadA2, ampC, dfrA12, sul1, sul2, tet(B)",1,"Yes",0.706457678427392,0.522946690636789,0.75302258908538,0.0708887603183046
+"aadA2, blaS, dfrA19, floR, mcr-9, sul1, sul2, tet(D)",1,"Yes",0.89102756612547,0.824561519885277,0.906232770555499,0.0866871451915783
+"aadA2, catA1, dfrA12, floR, qnrA, sul1, tet(A)",1,"Yes",0.785758414400519,0.649489468864469,0.819439674908425,0.0180189427614411
+"aadA2, cmlA1, dfrA16, floR, tet(A)",1,"Yes",0.755113113404406,0.586721611721612,0.787271062271062,0.035234235370265
+"aadA2, cmlA1, mef(A), sul3, tet(A)",1,"Yes",0.836394755349124,0.719591211484594,0.850384424603175,0.0158059385858939
+"aadA2, dfrA1, floR, mph(A), qnrA, sul1, tet(A)",1,"Yes",0.774268350776207,0.649273504273504,0.818089133089133,0.0278506469414525
+"aadA2, dfrA12, emrD, sul1",1,"Yes",0.716438159193085,0.532142857142857,0.762142857142857,0.0167951290630085
+"aadA2, dfrA12, floR, mph(A), sul1, sul2, tet(A)",1,"Yes",0.691903950188527,0.500814630645951,0.735437440254996,0.079614651900877
+"aadA2, dfrA12, floR, sul1, sul2, tet(A), uhpT",1,"Yes",0.691903950188527,0.500814630645951,0.735437440254996,0.079614651900877
+"aadA2, dfrA12, mph(A), sul1, sul2, tet(B)",1,"Yes",0.706457678427392,0.522946690636789,0.75302258908538,0.0708887603183046
+"aadA2, dfrA12, sul1, sul2, tet(A)",1,"Yes",0.706457678427392,0.522946690636789,0.75302258908538,0.0708887603183046
+"aadA2, dfrA18, ere(A), floR, sul1, sul2, tet(B)",1,"Yes",0.656307888191461,0.44338142884582,0.708770009823112,0.181349481063211
+"aadA2, dfrA23, dfrA5, floR, sul1, sul2, tet(A)",1,"Yes",0.655199444914642,0.443698321329111,0.717031270813783,0.0711523506090063
+"aadA2, dfrA23, floR, sul1, sul2, tet(A)",1,"Yes",0.661486941911415,0.459945483588411,0.721358938727674,0.124271932138128
+"aadA25, emrD, floR, sul1, sul2, tet(A), tet(B)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"aadA25, floR, mph(A), sul1, sul2, tet(A)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"aadA7, emrD, sul1, tet(A)",1,"Yes",NA,NA,NA,NA
+"aadA7, sul1, tet(A)",1,"Yes",NA,NA,NA,NA
+"aph(3')-Ia, floR, sul2, tet(B)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"aph(3')-Ia, gyrA, sul2, tet(B)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"aph(3')-Ia, tet(B)",1,"Yes",NA,NA,NA,NA
+"aph(6)-Ic, floR, sul1, tet(A)",1,"Yes",0.575125404385192,0.330769230769231,0.665384615384615,0.330769230769231
+"aph(6)-Ic, sul1, tet(A)",1,"Yes",NA,NA,NA,NA
+"aph(6)-Ic, sul1, tet(B)",1,"Yes",NA,NA,NA,NA
+"aph(6)-Ic, sul1, tet(B), tet(C)",1,"Yes",NA,NA,NA,NA
+"bla, glpT, sul2, tet(B)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"catA1, sul2, tet(A)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"dfrA1, erm(B), floR, mph(A), sul1, tet(A)",1,"Yes",0.576394890814845,0.347820512820513,0.654267399267399,0.0760892542571932
+"dfrA1, floR, sul1, sul2, tet(A)",1,"Yes",0.644612571938633,0.433136238397069,0.697444629853042,0.20104692643073
+"dfrA1, sul2, tet(B)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"dfrA14, floR, sul2, tet(A)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"dfrA14, sul2, tet(A), tet(B)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"dfrA23, floR, sul2, tet(A)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"dfrA5, floR, sul2",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"dfrA5, mef(A), sul2, tet(A)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"dfrA5, sul1",1,"No",NA,NA,NA,NA
+"dfrA7, sul1, tet(A)",1,"Yes",NA,NA,NA,NA
+"emrD, floR, glpT, sul2, tet(A)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"emrD, floR, tet(A), uhpT",1,"Yes",0.575125404385192,0.330769230769231,0.665384615384615,0.330769230769231
+"emrD, glpT",1,"No",NA,NA,NA,NA
+"emrD, mph(A), sul1, sul2, tet(A)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"emrD, mph(A), sul1, sul2, tet(B)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"emrD, sul2",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"emrD, sul2, tet(A)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"emrD, sul2, tet(B)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"floR, glpT, sul2, tet(A), uhpT",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"floR, gyrA, mph(A), sul1, sul2, tet(A), tet(B)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"floR, gyrA, mph(A), sul1, tet(B)",1,"Yes",0.575125404385192,0.330769230769231,0.665384615384615,0.330769230769231
+"floR, gyrA, sul1, sul2, tet(A)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"floR, gyrA, sul2, tet(B)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"floR, mph(A), tet(A)",1,"Yes",0.575125404385192,0.330769230769231,0.665384615384615,0.330769230769231
+"floR, sul2",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"floR, sul2, tet(C)",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"floR, sul2, uhpT",1,"Yes",0.658553040526472,0.450292762307203,0.706196014407231,0.264237945360371
+"floR, tet(A), tet(C)",1,"Yes",0.575125404385192,0.330769230769231,0.665384615384615,0.330769230769231
+"glpT, sul2, tet(B)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"glpT, tet(A), tet(C)",1,"Yes",NA,NA,NA,NA
+"glpT, tet(A), uhpT",1,"Yes",NA,NA,NA,NA
+"glpT, tet(C), uhpT",1,"No",NA,NA,NA,NA
+"gyrA, tet(A)",1,"Yes",NA,NA,NA,NA
+"mef(A), sul1, tet(A)",1,"Yes",NA,NA,NA,NA
+"mef(A), sul2, tet(B)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"mph(A), sul1, tet(B)",1,"Yes",NA,NA,NA,NA
+"mph(A), tet(B)",1,"Yes",NA,NA,NA,NA
+"sul1",1,NA,NA,NA,NA,NA
+"sul1, tet(A), uhpT",1,"Yes",NA,NA,NA,NA
+"sul1, tet(B)",1,"Yes",NA,NA,NA,NA
+"sul2, tet(B), tet(C)",1,"Yes",0.651439843304697,0.437955900054162,0.718977950027081,0.437955900054162
+"tet(A), tet.A..1, uhpT",1,"Yes",NA,NA,NA,NA
+"tet(A), tet(C)",1,"Yes",NA,NA,NA,NA
+"tet(B), tet(C)",1,"Yes",NA,NA,NA,NA

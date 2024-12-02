@@ -36,27 +36,27 @@ run_rule_mining_and_selection <- function(df, class_df = NULL, data_source, resi
 
 print("RULE MINING AND SELECTION STARTED")
 
-    #get histogram of top pc1, pc2, pc3, and pc4 loadings
-     select_quality_measures(plothist = TRUE, resistance_indicator = resistance_indicator, 
-     df = df, target = "rules", data_source = data_source)
-print("1")
-     select_measure_cutoffs(selected_measures = c("cosine", "jaccard", "kulczynski", "support"), 
-     df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
+#     #get histogram of top pc1, pc2, pc3, and pc4 loadings
+#      select_quality_measures(plothist = TRUE, resistance_indicator = resistance_indicator, 
+#      df = df, target = "rules", data_source = data_source)
+# print("1")
+#      select_measure_cutoffs(selected_measures = c("cosine", "jaccard", "kulczynski", "support"), 
+#      df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
 
-print("2")
-     rarefaction_by_sample_size(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
+# print("2")
+#      rarefaction_by_sample_size(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
 
-print("3")
+# print("3")
 
-    rarefaction_rule_v_class(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
+#     rarefaction_rule_v_class(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
 
-print("4")
+# print("4")
 
-    unique_classes_represented(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
+#     unique_classes_represented(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
 
-print("5")
+# print("5")
 
-    rules_v_cutoffs(df = df, resistance_indicator = resistance_indicator, target = "rules", measures = c("cosine", "jaccard", "kulczynski", "support"), low = 0, high = 1, data_source = data_source)
+#     rules_v_cutoffs(df = df, resistance_indicator = resistance_indicator, target = "rules", measures = c("cosine", "jaccard", "kulczynski", "support"), low = 0, high = 1, data_source = data_source)
 
 print("6")
 
@@ -99,10 +99,3 @@ graph_rules(df = cecal_Class_level_phenotype_df, target = "rules", cut_off = c(0
 graph_rules(df = cecal_Class_level_genotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "genotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", rules_selected = "best", agg = TRUE)
 
 print("DONE")
-
-#plot all vs best rules
-# plot_all_vs_best_rules(df = cecal_phenotype_df, resistance_indicator = "phenotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal")
-# plot_all_vs_best_rules(df = cecal_Family_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal")
-
-# plot_all_vs_best_rules(df = cecal_Class_level_phenotype_df, resistance_indicator = "phenotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", class_level = TRUE)
-# plot_all_vs_best_rules(df = cecal_Class_level_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", class_level = TRUE)

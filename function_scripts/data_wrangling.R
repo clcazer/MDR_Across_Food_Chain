@@ -634,39 +634,38 @@ MIC_to_interval <- function(df, data_source) {
 
 
 prevalence_descriptives <- function(df, data_source, resistance_indicator, class_level = FALSE) {
-
     year_list <- list()
     sample_size_list <- list()
     df_list <- list()
     for (year in c(min(df[, "Year"]):(max(df[, "Year"])))){
-
         year_df <- df[df$Year == year,]
         year_list <- list.append(year_list, unique(year_df$Year))
         sample_size_list <- list.append(sample_size_list, length(unique(year_df$ID)))
         year_df <- subset(year_df, select = -c(ID, Year))
         
-         
         means_df <- round(x = colMeans(year_df, na.rm = TRUE), digits = 4)
-
         df_list <- list.append(df_list, means_df)
     }
 
-    print("here1")
     prevalence_df <- bind_rows(df_list)
-    print("here2")
-
     prevalence_df <- prevalence_df * 100
-    prevalence_df <- cbind(N = unlist(sample_size_list), prevalence_df)
-    print("here3")
+    
+    # Sort the drug columns alphabetically
+    drug_cols <- sort(colnames(prevalence_df))
+    prevalence_df <- prevalence_df[, drug_cols]
+    
+    # Add back the Year and N columns at the beginning
+    prevalence_df <- cbind(
+        Year = unlist(year_list),
+        N = unlist(sample_size_list),
+        prevalence_df
+    )
 
-    prevalence_df <- cbind(Year = unlist(year_list), prevalence_df)
-    print("here4")
     if (class_level == FALSE) {
         write.csv(prevalence_df, str_glue("{data_source}/prevalence_descriptives/{data_source}_{resistance_indicator}_prevalence_descriptives.csv"), row.names = FALSE)
     } else if (class_level == TRUE) {
         write.csv(prevalence_df, str_glue("{data_source}/prevalence_descriptives/{data_source}_{resistance_indicator}_class_level_prevalence_descriptives.csv"), row.names = FALSE)
     }
-
 }
 
 
@@ -946,7 +945,11 @@ compare_dataframes <- function(df1, df2) {
   # Sort column names
   df1 <- df1[, sort(names(df1))]
   df2 <- df2[, sort(names(df2))]
-  
+  print("df1 col names")
+  print(colnames(df1))
+  print("df2 col names")
+  print(colnames(df2))
+
   # Check if column names are the same
   if (!all(names(df1) == names(df2))) {
     print("FALSE")
@@ -973,8 +976,16 @@ if (!are_equivalent) {
 
 }
 
+dfcecal1 <- read.csv("C:/Users/jg2527/Downloads/NARMS_PROJ-master/NARMS_PROJ-master/cecal/cecal_wide_class_level_genotype.csv")
+dfcecal2 <- read.csv("C:/Users/jg2527/NARMS_PROJ/cecal/cecal_wide_class_level_genotype.csv")
+dfcecal3 <- read.csv("C:/Users/jg2527/NARMS_PROJ/cecal/wrongcecal_wide_class_level_genotype.csv")
 
+dfretail1 <- read.csv("C:/Users/jg2527/Downloads/NARMS_PROJ-master/NARMS_PROJ-master/Retail_Meats/Retail_Meats_wide_family_level_genotype.csv")
+dfretail2 <- read.csv("C:/Users/jg2527/NARMS_PROJ/Retail_Meats/Retail_Meats_wide_family_level_genotype.csv")
 
+gene1 <- read.csv("C:/Users/jg2527/Downloads/NARMS_PROJ-master/NARMS_PROJ-master/gene_class_mappings.csv")
+gene2 <- read.csv("C:/Users/jg2527/NARMS_PROJ/gene_class_mappings.csv")
+# compare_dataframes(df1 = dfcecal3, df2 = dfcecal2)
 
 #function to match the gene family from refgenes with genes from NARMS data
 match_to_refgenes <- function(narms_df, refgenes_df) {
@@ -1069,7 +1080,6 @@ for (row in 1:nrow(narms_df)) {
 #refgenes_df <- read.csv("refgenes.csv")
 
 #match_to_refgenes(narms_df, refgenes_df)
-
 
 
 
@@ -1183,7 +1193,6 @@ convert_gene_to_gene_family <- function(df, genotype_class_mappings, data_source
 
 
 
-
 convert_gene_to_class <- function(df, genotype_class_mappings, data_source) {
   # Function to merge case-insensitive duplicate columns
   merge_case_insensitive_columns <- function(df) {
@@ -1221,11 +1230,11 @@ print("original column names:")
 print(colnames(df))
 
  #genotype_class_mappings <- read.csv("gene_class_mappings.csv")
-        genotype_class_mappings$Gene_family <- gsub(pattern = "[^A-Za-z0-9]", replacement = ".", genotype_class_mappings$Gene_family)
+        genotype_class_mappings$Genes <- gsub(pattern = "[^A-Za-z0-9]", replacement = ".", genotype_class_mappings$Genes)
         #get rid of duplicate duplicates in Genes column
-        genotype_class_mappings <- genotype_class_mappings[!duplicated(genotype_class_mappings$Gene_family), ]
+        genotype_class_mappings <- genotype_class_mappings[!duplicated(genotype_class_mappings$Genes), ]
 
-        genotype_class_names <- setNames(make.unique(genotype_class_mappings$corrected_class), genotype_class_mappings$Gene_family)
+        genotype_class_names <- setNames(make.unique(genotype_class_mappings$corrected_class), genotype_class_mappings$Genes)
         print("Gene class mappings:")
         print(genotype_class_names)
         genotype_duplicated_classes <- names(which(table(genotype_class_mappings$corrected_class) > 1))
@@ -1267,41 +1276,45 @@ print(colnames(df))
         # Remove trailing dot and number from column names in genotype_df
         colnames(df) <- gsub("\\.\\d+$", "", colnames(df))
 
-        # Check for unmapped genes
+        #Check for unmapped genes and remove them from the dataframe
         unmapped_genes <- setdiff(names(df), c("ID", "Year", unique(genotype_class_mappings$corrected_class)))
         if (length(unmapped_genes) > 0) {
             warning("The following genes were not mapped to any class: ", paste(unmapped_genes, collapse = ", "))
+            # Remove unmapped genes from the dataframe
+            df <- df[, !(names(df) %in% unmapped_genes)]
         }
-
-
 
         # Function to split columns with "/"
-  split_slash_columns <- function(df) {
-    slash_cols <- grep("/", names(df), value = TRUE)
-    for (col in slash_cols) {
-      parts <- strsplit(col, "/")[[1]]
-      for (part in parts) {
-        if (!part %in% names(df)) {
-          df[[part]] <- df[[col]]
-        } else {
-          df[[part]] <- pmax(df[[part]], df[[col]], na.rm = TRUE)
+        split_slash_columns <- function(df) {
+            slash_cols <- grep("/", names(df), value = TRUE)
+            for (col in slash_cols) {
+                parts <- strsplit(col, "/")[[1]]
+                for (part in parts) {
+                    if (!part %in% names(df)) {
+                        df[[part]] <- df[[col]]
+                    } else {
+                        df[[part]] <- pmax(df[[part]], df[[col]], na.rm = TRUE)
+                    }
+                }
+                df[[col]] <- NULL
+            }
+            return(df)
         }
-      }
-      df[[col]] <- NULL
+
+        # Apply the split_slash_columns function
+        df <- split_slash_columns(df)
+
+        # Debugging: Print the final column names
+        print("Final column names:")
+        print(colnames(df))
+        write.csv(df, file = str_glue("{data_source}/{data_source}_wide_class_level_genotype.csv"), row.names = FALSE)
+        
+        return(df)
     }
-    return(df)
-  }
 
-  # Apply the split_slash_columns function
-  df <- split_slash_columns(df)
 
- # Debugging: Print the final column names
-    print("Final column names:")
-    print(colnames(df))
-  write.csv(df, file = str_glue("{data_source}/{data_source}_wide_class_level_genotype.csv"), row.names = FALSE)
-  
-  return(df)
-}
+
+
 
 
 
@@ -1315,6 +1328,7 @@ print(colnames(df))
 # genotype_class_mappings <- read.csv("gene_class_mappings.csv")
 # convert_gene_to_class(cecal_df, genotype_class_mappings, data_source = "cecal_2017Onward")
 # convert_gene_to_class(retail_meats_df, genotype_class_mappings, data_source = "Retail_Meats_2017Onward")
+
 
 
 
@@ -1409,35 +1423,33 @@ print(colnames(df))
             warning("The following drugs were not mapped to any class: ", paste(unmapped_drugs, collapse = ", "))
         }
 
-
-
         # Function to split columns with "/"
-  split_slash_columns <- function(df) {
-    slash_cols <- grep("/", names(df), value = TRUE)
-    for (col in slash_cols) {
-      parts <- strsplit(col, "/")[[1]]
-      for (part in parts) {
-        if (!part %in% names(df)) {
-          df[[part]] <- df[[col]]
-        } else {
-          df[[part]] <- pmax(df[[part]], df[[col]], na.rm = TRUE)
+        split_slash_columns <- function(df) {
+            slash_cols <- grep("/", names(df), value = TRUE)
+            for (col in slash_cols) {
+                parts <- strsplit(col, "/")[[1]]
+                for (part in parts) {
+                    if (!part %in% names(df)) {
+                        df[[part]] <- df[[col]]
+                    } else {
+                        df[[part]] <- pmax(df[[part]], df[[col]], na.rm = TRUE)
+                    }
+                }
+                df[[col]] <- NULL
+            }
+            return(df)
         }
-      }
-      df[[col]] <- NULL
+
+        # Apply the split_slash_columns function
+        df <- split_slash_columns(df)
+
+        # Debugging: Print the final column names
+        print("Final column names:")
+        print(colnames(df))
+        write.csv(df, file = str_glue("{data_source}/{data_source}_wide_class_level_phenotype.csv"), row.names = FALSE)
+        
+        return(df)
     }
-    return(df)
-  }
-
-  # Apply the split_slash_columns function
-  df <- split_slash_columns(df)
-
- # Debugging: Print the final column names
-    print("Final column names:")
-    print(colnames(df))
-  write.csv(df, file = str_glue("{data_source}/{data_source}_wide_class_level_phenotype.csv"), row.names = FALSE)
-  
-  return(df)
-}
 
 
   # cecal_phenotype_df <- read.csv("cecal_2017Onward/cecal_2017Onward_wide_resStatus_phenotype.csv")
@@ -1452,113 +1464,4 @@ print(colnames(df))
 
 
 
-
-
-#######################################################
-##########NAHLN DATA WRANGLING#########################
-#######################################################
-
-wrangle_NAHLN_phenotype <- function() {
-df <- read_excel("NAHLN_CattleEcoli_PPY1-PPY5_10-12-2023.xlsx")
-#replace spaces in colnames with periods
-colnames(df) <- gsub(" ", ".", colnames(df))
-
-new_df <- df[, c("UniqueID", "TestDate",
-"Ampicillin.MIC",
-"Gentamicin.MIC",
-"Tetracycline.MIC",
-"Trimethoprim/sulfamethoxazole.MIC"
-
-
-)]
-
-
-print(colnames(df))
-  
-}
-# wrangle_NAHLN_phenotype()
-
-
-wrangle_NAHLN_genotype <- function() {
-    df <- read_excel("Isolate+BioSample.xlsx")
-    df_time <- read_excel("NAHLN_CattleEcoli_PPY1-PPY5_10-12-2023.xlsx")
-    #replace spaces in colnames with periods
-    colnames(df) <- gsub(" ", ".", colnames(df))
-
-    # Convert TestDate to Date type and extract year
-    df_time$Year <- lubridate::year(as.Date(df_time$TestDate))
-    
-    # Print sample of data for debugging
-    cat("Sample of df$Isolate.identifiers:\n")
-    print(head(df$Isolate.identifiers))
-    cat("\nSample of df_time$UniqueID:\n")
-    print(head(df_time$UniqueID))
-    
-    # Create a mapping of IDs to years
-    id_to_year <- numeric(length = nrow(df))
-    for (i in 1:nrow(df)) {
-        # Find which UniqueID from df_time appears in this Isolate.identifiers
-        matching_row <- which(sapply(df_time$UniqueID, function(id) {
-            # Ensure both strings are character type and use fixed=TRUE for exact matching
-            grepl(as.character(id), as.character(df$Isolate.identifiers[i]), fixed=TRUE)
-        }))
-        
-        if (length(matching_row) > 0) {
-            id_to_year[i] <- df_time$Year[matching_row[1]]
-            cat(sprintf("Matched: %s with %s\n", df$Isolate.identifiers[i], df_time$UniqueID[matching_row[1]]))
-        } else {
-            warning(paste("No matching UniqueID found for Isolate.identifiers:", df$Isolate.identifiers[i]))
-        }
-    }
-    
-    # Add Year to df
-    df$Year <- id_to_year
-    
-    # Print summary of year assignments
-    cat("\nYear distribution:\n")
-    print(table(df$Year))
-    
-    #replace spaces in colnames with periods
-    colnames(df) <- gsub(" ", ".", colnames(df))
-    
-    df <- df[, c("Isolate.identifiers", "AMR.genotypes", "Year")]
-    
-    # Create new column with clean gene names, excluding MISTRANSLATION genes
-    df$clean_genotypes <- sapply(df$AMR.genotypes, function(x) {
-        # Split by comma
-        genes <- unlist(strsplit(x, ","))
-        # Remove genes with MISTRANSLATION status
-        genes <- genes[!grepl("=MISTRANSLATION", genes)]
-        # Clean remaining genes and join with spaces
-        clean_genes <- gsub("=.*$", "", genes)
-        paste(clean_genes, collapse = " ")
-    })
-    
-    # Get all unique genes
-    all_genes <- unique(unlist(strsplit(df$clean_genotypes, " ")))
-    
-    # Create incidence matrix
-    incidence_matrix <- matrix(0, 
-                             nrow = nrow(df), 
-                             ncol = length(all_genes),
-                             dimnames = list(df$Isolate.identifiers, all_genes))
-    
-    # Fill matrix with 1s where genes are present
-    for(i in 1:nrow(df)) {
-        sample_genes <- unlist(strsplit(df$clean_genotypes[i], " "))
-        incidence_matrix[i, sample_genes] <- 1
-    }
-    
-    # Convert to dataframe and add year
-    incidence_df <- as.data.frame(incidence_matrix)
-    incidence_df$Year <- df$Year
-    
-    # Reorder columns to put Year at the beginning
-    incidence_df <- incidence_df[, c("Year", setdiff(names(incidence_df), "Year"))]
-    
-    # Write to CSV
-    write.csv(incidence_df, "NAHLN/NAHLN_genotype_wide.csv")
-    
-    return(incidence_df)
-}
 

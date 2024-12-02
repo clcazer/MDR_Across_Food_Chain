@@ -70,8 +70,8 @@ print("RULE MINING AND SELECTION DONE")
 
 
 # RUN THE FOLLOWING TWO LINES TO GET THE RULE MINING AND SELECTION DONE
-# run_rule_mining_and_selection(df = cecal_2017Onward_phenotype_df, class_df = cecal_2017Onward_Class_level_phenotype_df, data_source = "cecal_2017Onward", resistance_indicator = "phenotype")
-# run_rule_mining_and_selection(df = cecal_2017Onward_Family_genotype_df, class_df = cecal_2017Onward_Class_level_genotype_df, data_source = "cecal_2017Onward", resistance_indicator = "genotype")
+run_rule_mining_and_selection(df = cecal_2017Onward_phenotype_df, class_df = cecal_2017Onward_Class_level_phenotype_df, data_source = "cecal_2017Onward", resistance_indicator = "phenotype")
+run_rule_mining_and_selection(df = cecal_2017Onward_Family_genotype_df, class_df = cecal_2017Onward_Class_level_genotype_df, data_source = "cecal_2017Onward", resistance_indicator = "genotype")
 
 
 
@@ -93,8 +93,11 @@ print("RULE MINING AND SELECTION DONE")
 
 
 #plot all vs best rules
-# plot_all_vs_best_rules(df = cecal_2017Onward_phenotype_df, resistance_indicator = "phenotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal_2017Onward")
-# plot_all_vs_best_rules(df = cecal_2017Onward_Family_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal_2017Onward")
+plot_all_vs_best_rules(df = cecal_2017Onward_phenotype_df, resistance_indicator = "phenotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal_2017Onward")
+plot_all_vs_best_rules(df = cecal_2017Onward_Family_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal_2017Onward")
 
-# plot_all_vs_best_rules(df = cecal_2017Onward_Class_level_phenotype_df, resistance_indicator = "phenotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal_2017Onward", class_level = TRUE)
-# plot_all_vs_best_rules(df = cecal_2017Onward_Class_level_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal_2017Onward", class_level = TRUE)
+plot_all_vs_best_rules(df = cecal_2017Onward_Class_level_phenotype_df, resistance_indicator = "phenotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal_2017Onward", class_level = TRUE)
+plot_all_vs_best_rules(df = cecal_2017Onward_Class_level_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal_2017Onward", class_level = TRUE)
+
+
+print("DONE")

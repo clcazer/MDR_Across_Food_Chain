@@ -24,16 +24,20 @@ tabulate_and_compare <- function(df, rules_selected, cut_off, measures_used, res
 
 
     
-    # Create a new column for resistance patterns
-    df$resistance_pattern <- apply(df, 1, function(row) {
+    # Create a copy of df for tabulation purposes only
+    df_tabulation <- df
+    df_tabulation[is.na(df_tabulation)] <- 0
+    
+    # Create a new column for resistance patterns using df_tabulation
+    df_tabulation$resistance_pattern <- apply(df_tabulation, 1, function(row) {
         # Get the names of the drugs the isolate is resistant to
-        resistant_drugs <- names(df)[which(row == 1)]
+        resistant_drugs <- names(df_tabulation)[which(row == 1)]
         # Sort drug names for consistency and combine them into a single string
         paste(sort(resistant_drugs), collapse = ", ")
     })
     
     # Count the frequency of each unique resistance pattern
-    resistance_summary <- as.data.frame(table(df$resistance_pattern), stringsAsFactors = FALSE)
+    resistance_summary <- as.data.frame(table(df_tabulation$resistance_pattern), stringsAsFactors = FALSE)
     colnames(resistance_summary) <- c("Resistance_Pattern", "Frequency")
     
     # Order by frequency (descending)
@@ -48,8 +52,8 @@ tabulate_and_compare <- function(df, rules_selected, cut_off, measures_used, res
     
     # Add data validation
     # Get only numeric columns, excluding ID and Year
-    numeric_cols <- names(df)[!names(df) %in% c("ID", "Year", "resistance_pattern")]
-    numeric_data <- as.matrix(df[, numeric_cols])
+    numeric_cols <- names(df_tabulation)[!names(df_tabulation) %in% c("ID", "Year", "resistance_pattern")]
+    numeric_data <- as.matrix(df_tabulation[, numeric_cols])
 
     # Add more detailed debugging
     print("Dimensions of numeric data:")
@@ -72,28 +76,7 @@ tabulate_and_compare <- function(df, rules_selected, cut_off, measures_used, res
         stop("Data contains values other than 0 and 1")
     }
 
-    # Add these before the data validation check
-    print("Column types:")
-    print(sapply(df, class))
 
-    print("Range of values in numeric columns:")
-    print(sapply(df[numeric_cols], range))
-
-    print("Any NA values?")
-    print(colSums(is.na(df[numeric_cols])))
-
-    if (any(!is.finite(numeric_data))) {
-        stop("Data contains infinite or NA values in numeric columns")
-    }
-
-    # Optional: Add more detailed debugging
-    if (any(!is.finite(numeric_data))) {
-        # Find which columns have issues
-        problem_cols <- colnames(numeric_data)[colSums(!is.finite(numeric_data)) > 0]
-        print("Columns with non-finite values:")
-        print(problem_cols)
-        stop("Data contains infinite or NA values in numeric columns")
-    }
     
     # Process rules year by year
     for (year in c(min(df$Year):max(df$Year))) {
@@ -113,9 +96,16 @@ tabulate_and_compare <- function(df, rules_selected, cut_off, measures_used, res
                 lhs_items <- labels(lhs(rules))
                 rhs_items <- labels(rhs(rules))
                 
+                # Get quality measures for all rules at once
+                quality_measures <- quality(rules)
+                
                 year_df <- data.frame(
                     lhs = lhs_items,
                     rhs = rhs_items,
+                    cosine = quality_measures$cosine,
+                    jaccard = quality_measures$jaccard,
+                    kulczynski = quality_measures$kulczynski,
+                    support = quality_measures$support,
                     stringsAsFactors = FALSE
                 )
                 
@@ -212,6 +202,47 @@ tabulate_and_compare <- function(df, rules_selected, cut_off, measures_used, res
         combined_rules_df$complete_pattern <- sapply(combined_rules_df$complete_pattern, replace_gene_names)
     }
     
+    # Add columns for quality measures
+    resistance_summary$avg_cosine <- NA
+    resistance_summary$avg_jaccard <- NA
+    resistance_summary$avg_kulczynski <- NA
+    resistance_summary$avg_support <- NA
+    
+    # Calculate average quality measures
+    for (i in 1:nrow(resistance_summary)) {
+        if (!is.na(resistance_summary$recovered_resistance_pattern[i]) && 
+            resistance_summary$recovered_resistance_pattern[i] == "Yes") {
+            pattern <- resistance_summary$Resistance_Pattern[i]
+            pattern_drugs <- strsplit(pattern, ", ")[[1]]
+            
+            # Find all matching rules across all years
+            matching_measures <- list(cosine = numeric(), 
+                                    jaccard = numeric(),
+                                    kulczynski = numeric(),
+                                    support = numeric())
+            
+            for (year_df in all_rules_df) {
+                if (!is.null(year_df)) {
+                    for (j in 1:nrow(year_df)) {
+                        rule_drugs <- strsplit(year_df$complete_pattern[j], ", ")[[1]]
+                        if (all(rule_drugs %in% pattern_drugs)) {
+                            matching_measures$cosine <- c(matching_measures$cosine, year_df$cosine[j])
+                            matching_measures$jaccard <- c(matching_measures$jaccard, year_df$jaccard[j])
+                            matching_measures$kulczynski <- c(matching_measures$kulczynski, year_df$kulczynski[j])
+                            matching_measures$support <- c(matching_measures$support, year_df$support[j])
+                        }
+                    }
+                }
+            }
+            
+            # Calculate averages
+            resistance_summary$avg_cosine[i] <- mean(matching_measures$cosine, na.rm = TRUE)
+            resistance_summary$avg_jaccard[i] <- mean(matching_measures$jaccard, na.rm = TRUE)
+            resistance_summary$avg_kulczynski[i] <- mean(matching_measures$kulczynski, na.rm = TRUE)
+            resistance_summary$avg_support[i] <- mean(matching_measures$support, na.rm = TRUE)
+        }
+    }
+
     print(head(resistance_summary, 20))
 
     filename_suffix <- ifelse(class_level == TRUE, "_CLASS", "")
@@ -249,74 +280,74 @@ NAHLN_Class_level_genotype_df <- read.csv("NAHLN/NAHLN_wide_class_level_genotype
 NAHLN_Family_genotype_df <- NAHLN_Family_genotype_df[NAHLN_Family_genotype_df$Year != 0, ]
 NAHLN_Class_level_genotype_df <- NAHLN_Class_level_genotype_df[NAHLN_Class_level_genotype_df$Year != 0, ]
 
-print("structure of input data")
-print(str(NAHLN_Family_genotype_df))
+# print("structure of input data")
+# print(str(NAHLN_Family_genotype_df))
 
 
 #run tabulation function for each df
-# tabulate_and_compare(df = Retail_Meats_phenotype_df, 
-# rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
-# measures_used = c("cosine", "jaccard", "kulczynski", "support"),
-# resistance_indicator = "phenotype",
-# data_source = "Retail_Meats",
-# class_level = FALSE)
+tabulate_and_compare(df = Retail_Meats_phenotype_df, 
+rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
+measures_used = c("cosine", "jaccard", "kulczynski", "support"),
+resistance_indicator = "phenotype",
+data_source = "Retail_Meats",
+class_level = FALSE)
 
-# tabulate_and_compare(df = Retail_Meats_Class_level_phenotype_df, 
-# rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
-# measures_used = c("cosine", "jaccard", "kulczynski", "support"),
-# resistance_indicator = "phenotype",
-# data_source = "Retail_Meats",
-# class_level = TRUE)
-
-
-# tabulate_and_compare(df = Retail_Meats_Family_genotype_df, 
-# rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
-# measures_used = c("cosine", "jaccard", "kulczynski", "support"),
-# resistance_indicator = "genotype",
-# data_source = "Retail_Meats",
-# class_level = FALSE)
+tabulate_and_compare(df = Retail_Meats_Class_level_phenotype_df, 
+rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
+measures_used = c("cosine", "jaccard", "kulczynski", "support"),
+resistance_indicator = "phenotype",
+data_source = "Retail_Meats",
+class_level = TRUE)
 
 
-# tabulate_and_compare(df = Retail_Meats_Class_level_genotype_df, 
-# rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
-# measures_used = c("cosine", "jaccard", "kulczynski", "support"),
-# resistance_indicator = "genotype",
-# data_source = "Retail_Meats",
-# class_level = TRUE)
+tabulate_and_compare(df = Retail_Meats_Family_genotype_df, 
+rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
+measures_used = c("cosine", "jaccard", "kulczynski", "support"),
+resistance_indicator = "genotype",
+data_source = "Retail_Meats",
+class_level = FALSE)
 
 
-
-# tabulate_and_compare(df = cecal_phenotype_df, 
-# rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
-# measures_used = c("cosine", "jaccard", "kulczynski", "support"),
-# resistance_indicator = "phenotype",
-# data_source = "cecal",
-# class_level = FALSE)
-
-
-# tabulate_and_compare(df = cecal_Class_level_phenotype_df, 
-# rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
-# measures_used = c("cosine", "jaccard", "kulczynski", "support"),
-# resistance_indicator = "phenotype",
-# data_source = "cecal",
-# class_level = TRUE)
-
-
-# tabulate_and_compare(df = cecal_Family_genotype_df, 
-# rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
-# measures_used = c("cosine", "jaccard", "kulczynski", "support"),
-# resistance_indicator = "genotype",
-# data_source = "cecal",
-# class_level = FALSE)
+tabulate_and_compare(df = Retail_Meats_Class_level_genotype_df, 
+rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
+measures_used = c("cosine", "jaccard", "kulczynski", "support"),
+resistance_indicator = "genotype",
+data_source = "Retail_Meats",
+class_level = TRUE)
 
 
 
-# tabulate_and_compare(df = cecal_Class_level_genotype_df, 
-# rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
-# measures_used = c("cosine", "jaccard", "kulczynski", "support"),
-# resistance_indicator = "genotype",
-# data_source = "cecal",
-# class_level = TRUE)
+tabulate_and_compare(df = cecal_phenotype_df, 
+rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
+measures_used = c("cosine", "jaccard", "kulczynski", "support"),
+resistance_indicator = "phenotype",
+data_source = "cecal",
+class_level = FALSE)
+
+
+tabulate_and_compare(df = cecal_Class_level_phenotype_df, 
+rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
+measures_used = c("cosine", "jaccard", "kulczynski", "support"),
+resistance_indicator = "phenotype",
+data_source = "cecal",
+class_level = TRUE)
+
+
+tabulate_and_compare(df = cecal_Family_genotype_df, 
+rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
+measures_used = c("cosine", "jaccard", "kulczynski", "support"),
+resistance_indicator = "genotype",
+data_source = "cecal",
+class_level = FALSE)
+
+
+
+tabulate_and_compare(df = cecal_Class_level_genotype_df, 
+rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
+measures_used = c("cosine", "jaccard", "kulczynski", "support"),
+resistance_indicator = "genotype",
+data_source = "cecal",
+class_level = TRUE)
 
 
 

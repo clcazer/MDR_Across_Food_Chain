@@ -33,26 +33,26 @@ run_rule_mining_and_selection <- function(df, class_df = NULL, data_source, resi
 print("RULE MINING AND SELECTION STARTED")
 
     #get histogram of top pc1, pc2, pc3, and pc4 loadings
-     select_quality_measures(plothist = TRUE, resistance_indicator = resistance_indicator, 
-     df = df, target = "rules", data_source = data_source)
+    #  select_quality_measures(plothist = TRUE, resistance_indicator = resistance_indicator, 
+    #  df = df, target = "rules", data_source = data_source)
 print("1")
-     select_measure_cutoffs(selected_measures = c("cosine", "jaccard", "kulczynski", "support"), 
-     df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
+    #  select_measure_cutoffs(selected_measures = c("cosine", "jaccard", "kulczynski", "support"), 
+    #  df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
 
-print("2")
-     rarefaction_by_sample_size(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
+# print("2")
+#      rarefaction_by_sample_size(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
 
-print("3")
+# print("3")
 
-    rarefaction_rule_v_class(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
+#     rarefaction_rule_v_class(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
 
-print("4")
+# print("4")
 
-    unique_classes_represented(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
+#     unique_classes_represented(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
 
-print("5")
+# print("5")
 
-    rules_v_cutoffs(df = df, resistance_indicator = resistance_indicator, target = "rules", measures = c("cosine", "jaccard", "kulczynski", "support"), low = 0, high = 1, data_source = data_source)
+#     rules_v_cutoffs(df = df, resistance_indicator = resistance_indicator, target = "rules", measures = c("cosine", "jaccard", "kulczynski", "support"), low = 0, high = 1, data_source = data_source)
 
 print("6")
 
@@ -67,16 +67,16 @@ print("RULE MINING AND SELECTION DONE")
 
 
 # RUN THE FOLLOWING TWO LINES TO GET THE RULE MINING AND SELECTION DONE
-#run_rule_mining_and_selection(df = Retail_Meats_phenotype_df, class_df = Retail_Meats_Class_level_phenotype_df, data_source = "Retail_Meats", resistance_indicator = "phenotype")
-#run_rule_mining_and_selection(df = Retail_Meats_Family_genotype_df, class_df = Retail_Meats_Class_level_genotype_df, data_source = "Retail_Meats", resistance_indicator = "genotype")
+run_rule_mining_and_selection(df = Retail_Meats_phenotype_df, class_df = Retail_Meats_Class_level_phenotype_df, data_source = "Retail_Meats", resistance_indicator = "phenotype")
+run_rule_mining_and_selection(df = Retail_Meats_Family_genotype_df, class_df = Retail_Meats_Class_level_genotype_df, data_source = "Retail_Meats", resistance_indicator = "genotype")
 
 
 
 
 
 #create all vs best rules plots
-#plot_all_vs_best_rules(df = Retail_Meats_phenotype_df, resistance_indicator = "phenotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats")
-#plot_all_vs_best_rules(df = Retail_Meats_Family_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats")
+# plot_all_vs_best_rules(df = Retail_Meats_phenotype_df, resistance_indicator = "phenotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats")
+# plot_all_vs_best_rules(df = Retail_Meats_Family_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats")
 
 
 
@@ -85,20 +85,24 @@ print("RULE MINING AND SELECTION DONE")
 
 
 #phenotype (not class level)
-# graph_rules(df = Retail_Meats_phenotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "phenotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats", rules_selected = "best", agg = FALSE)
+graph_rules(df = Retail_Meats_phenotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "phenotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats", rules_selected = "best", agg = FALSE)
 #genotype (not class level)
-# graph_rules(df = Retail_Meats_Family_genotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "genotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats", rules_selected = "best", agg = FALSE)
+graph_rules(df = Retail_Meats_Family_genotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "genotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats", rules_selected = "best", agg = FALSE)
 
 #phenotype (class level)
-# graph_rules(df = Retail_Meats_Class_level_phenotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "phenotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats", rules_selected = "best", agg = TRUE)
+graph_rules(df = Retail_Meats_Class_level_phenotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "phenotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats", rules_selected = "best", agg = TRUE)
 #genotype (class level)
-# graph_rules(df = Retail_Meats_Class_level_genotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "genotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats", rules_selected = "best", agg = TRUE)
+graph_rules(df = Retail_Meats_Class_level_genotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "genotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats", rules_selected = "best", agg = TRUE)
 
 
 
 #plot all vs best rules
-# plot_all_vs_best_rules(df = Retail_Meats_phenotype_df, resistance_indicator = "phenotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats")
-# plot_all_vs_best_rules(df = Retail_Meats_Family_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats")
+plot_all_vs_best_rules(df = Retail_Meats_phenotype_df, resistance_indicator = "phenotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats")
+plot_all_vs_best_rules(df = Retail_Meats_Family_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats")
 
-# plot_all_vs_best_rules(df = Retail_Meats_Class_level_phenotype_df, resistance_indicator = "phenotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats", class_level = TRUE)
-# plot_all_vs_best_rules(df = Retail_Meats_Class_level_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats", class_level = TRUE)
+plot_all_vs_best_rules(df = Retail_Meats_Class_level_phenotype_df, resistance_indicator = "phenotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats", class_level = TRUE)
+plot_all_vs_best_rules(df = Retail_Meats_Class_level_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "Retail_Meats", class_level = TRUE)
+
+
+
+print("DONE")

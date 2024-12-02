@@ -13,7 +13,7 @@ source(here("function_scripts", "rule_analysis.R"))
 
 
 
-graph_rules <- function(df, target, cut_off, resistance_indicator, measures_used, data_source, rules_selected, agg = FALSE){
+graph_rules <- function(df, target, cut_off, resistance_indicator, measures_used, data_source, rules_selected, agg = FALSE, save_legend = TRUE){
     #gsub BETA.LACTAM with BETA-LACTAM in df colnames
     colnames(df) <- gsub("BETA.LACTAM", "BETA-LACTAM", colnames(df))
     #gsub FOLATE.PATHWAY.INHIBITOR with FOLATE-PATHWAY-INHIBITOR in df colnames
@@ -21,7 +21,7 @@ graph_rules <- function(df, target, cut_off, resistance_indicator, measures_used
 
 
     # Create a custom layout function
-    custom_circular_layout <- function(graph) {
+    custom_circular_layout <- function(graph, scale = 0.6) {
         node_colors <- V(graph)$color
         node_names <- V(graph)$name
         n <- vcount(graph)
@@ -32,9 +32,9 @@ graph_rules <- function(df, target, cut_off, resistance_indicator, measures_used
         # Sort the data frame by color
         nodes_df_sorted <- nodes_df[order(nodes_df$color),]
         
-        # Create circular coordinates
+        # Create circular coordinates 
         theta <- seq(0, 2*pi, length.out = n+1)[-1]
-        layout <- cbind(cos(theta), sin(theta))
+        layout <- cbind(cos(theta) * scale, sin(theta) * scale)
         
         # Create a named matrix for the layout, with rows ordered by color
         layout_sorted <- matrix(0, nrow = n, ncol = 2)
@@ -217,7 +217,7 @@ graph_rules <- function(df, target, cut_off, resistance_indicator, measures_used
 
         # Set edge attributes
        
-        E(rules_graph)$width <- log(decomposed_rules$count) * 1.5 + 1  # Edge thickness proportional to rule count (normalized)    
+        E(rules_graph)$width <- log(decomposed_rules$count) * 1.1 + 1  # Edge thickness proportional to rule count (normalized)    
         E(rules_graph)$color <- "lightblue"
 
         # Set vertex attributes
@@ -227,11 +227,30 @@ graph_rules <- function(df, target, cut_off, resistance_indicator, measures_used
                                fixed_class_colors[V(rules_graph)$name], 
                                "gray")
         } else {
-            # When agg is FALSE, use the previous method
+            # When agg is FALSE, use the previous method for coloring
             V(rules_graph)$color <- ifelse(!is.na(match(V(rules_graph)$name, item_classes$item)), 
                                fixed_class_colors[item_classes$class[match(V(rules_graph)$name, item_classes$item)]], 
                                "gray")
+            
+            # If genotype, check for sub_classes and modify labels
+            if (resistance_indicator == "genotype") {
+                V(rules_graph)$name <- sapply(V(rules_graph)$name, function(x) {
+                    # Match node label to Gene_family
+                    match_row <- which(genotype_class_mappings$Gene_family_original == x)
+                    if (length(match_row) > 0) {
+                        corrected_class <- genotype_class_mappings$corrected_class[match_row[1]]
+                        sub_class <- genotype_class_mappings$sub_class[match_row[1]]
+                        if (!is.na(sub_class) && !is.na(corrected_class) && sub_class != corrected_class) {
+                            # Replace forward slashes with newlines in sub_class
+                            sub_class <- gsub("/", "\n", sub_class)
+                            return(paste0(x, "\n(", sub_class, ")"))
+                        }
+                    }
+                    return(x)
+                })
+            }
         }
+
         # Node size proportional to degree (log normalized)
         node_degrees <- degree(rules_graph)
         V(rules_graph)$size <- (log(node_degrees) * 2 + 1) * 5
@@ -245,15 +264,16 @@ graph_rules <- function(df, target, cut_off, resistance_indicator, measures_used
 
         # Open a PNG device
         png(filename = str_glue("{data_source}/figures/network_graphs/{resistance_indicator}/{rules_selected}/agg{agg}/{data_source}_{resistance_indicator}_{target}_network_{year}_agg{agg}.png"), 
-            width = 1500, height = 1000, res = 150)
+            width = 1800, height = 1800, res = 200)
 
         # Plot the graph
-        par(mar=c(1,1,4,4))
+        par(mar=c(0,0,1,0))
         tryCatch({
             if (agg) {
-                layout <- layout_in_circle(rules_graph)
+                layout_info <- custom_circular_layout(rules_graph, scale = 0.85)
+                layout <- layout_info$layout
             } else {
-                layout_info <- custom_circular_layout(rules_graph)
+                layout_info <- custom_circular_layout(rules_graph, scale = 0.85)
                 layout <- layout_info$layout
                 new_order <- layout_info$order
                 rules_graph <- permute(rules_graph, match(V(rules_graph)$name, new_order))
@@ -262,8 +282,9 @@ graph_rules <- function(df, target, cut_off, resistance_indicator, measures_used
             if (vcount(rules_graph) > 0) {
                 plot(rules_graph, 
                      layout = layout,
+                     rescale = FALSE,
                      vertex.label.cex = 0.8,
-                     vertex.label.font = 2,
+                     vertex.label.font = 4,
                      vertex.label.color = "black",
                      vertex.label.family = "sans",
                      edge.arrow.size = 0.5,
@@ -334,15 +355,15 @@ save_legend_image <- function(filename,
   
 
   # Draw a line in the legend
-#segments(x0 = 0.0, x1 = 0.1, y0 = 1.02, y1 = 1.1, lty = 1, col = "lightblue", lwd = 2)
+  #segments(x0 = 0.0, x1 = 0.1, y0 = 1.02, y1 = 1.1, lty = 1, col = "lightblue", lwd = 2)
 
   # Close the PNG device
   dev.off()
 }
-
+if (save_legend == TRUE) {
 save_legend_image(filename = "legend.png", 
                   all_possible_classes = all_possible_classes, 
-                  fixed_class_colors = fixed_class_colors)
+                  fixed_class_colors = fixed_class_colors)}
 
 }
 

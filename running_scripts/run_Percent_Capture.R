@@ -14,7 +14,7 @@ library(here)
 source(here("function_scripts", "data_wrangling.R"))
 source(here("function_scripts", "rule_mining_and_selection.R"))
 source(here("function_scripts", "rule_analysis.R"))
-source(here("function_scripts", "network_graphs.R"))
+#source(here("function_scripts", "network_graphs.R"))
 
 
 
@@ -36,7 +36,32 @@ run_all_percent_captured_analyses <- function(data_partition,
                                             Retail_Meats_Class_phenotype_df,
 
                                             Retail_Meats_Family_genotype_df,
-                                            Retail_Meats_Class_genotype_df
+                                            Retail_Meats_Class_genotype_df,
+
+
+
+
+                                            cecal_2017_phenotype_df, 
+                                            cecal_2017_Class_phenotype_df,
+
+                                            cecal_2017_Family_genotype_df ,
+                                            cecal_2017_Class_genotype_df,
+
+                                            Retail_2017_Meats_phenotype_df,
+                                            Retail_2017_Meats_Class_phenotype_df,
+
+                                            Retail_2017_Meats_Family_genotype_df,
+                                            Retail_2017_Meats_Class_genotype_df,
+
+
+
+                                            NAHLN_phenotype_df, 
+                                            NAHLN_Class_phenotype_df,
+
+                                            NAHLN_Family_genotype_df ,
+                                            NAHLN_Class_genotype_df
+
+
                                                 ) {
 
     #####################################
@@ -44,22 +69,26 @@ run_all_percent_captured_analyses <- function(data_partition,
 #####################################
 phenotype_datasets <- list(
     "Cecal Phenotype" = cecal_phenotype_df,
-    "Retail Meats Phenotype" = Retail_Meats_phenotype_df
+    "Retail Meats Phenotype" = Retail_Meats_phenotype_df,
+    "NAHLN Phenotype" = NAHLN_phenotype_df
 )
 
 class_phenotype_datasets <- list(
     "Cecal Class Phenotype" = cecal_Class_phenotype_df,
-    "Retail Meats Class Phenotype" = Retail_Meats_Class_phenotype_df
+    "Retail Meats Class Phenotype" = Retail_Meats_Class_phenotype_df,
+    "NAHLN Class Phenotype" = NAHLN_Class_phenotype_df
 )
 
 genotype_datasets <- list(
     "Cecal Genotype" = cecal_Family_genotype_df,
-    "Retail Meats Genotype" = Retail_Meats_Family_genotype_df
+    "Retail Meats Genotype" = Retail_Meats_Family_genotype_df,
+    "NAHLN Genotype" = NAHLN_Family_genotype_df
 )
 
 class_genotype_datasets <- list(
     "Cecal Class Genotype" = cecal_Class_genotype_df,
-    "Retail Meats Class Genotype" = Retail_Meats_Class_genotype_df
+    "Retail Meats Class Genotype" = Retail_Meats_Class_genotype_df,
+    "NAHLN Class Genotype" = NAHLN_Class_genotype_df
 )
 
  nonclass_plot <- cumulative_proportion_captured_multi(
@@ -89,7 +118,7 @@ class_genotype_datasets <- list(
 
 
 
-format_and_combine_plots <- function(plot_list, title_text, labels, ncol = 2, nrow =1, title = TRUE) {
+format_and_combine_plots <- function(plot_list, title_text, labels, ncol = 2, nrow =1, title = TRUE, legend_size = 12) {
     # Format individual plots
     formatted_plots <- lapply(seq_along(plot_list), function(i) {
         p <- plot_list[[i]]
@@ -99,6 +128,7 @@ format_and_combine_plots <- function(plot_list, title_text, labels, ncol = 2, nr
                 axis.text.x = element_text(angle = 45, hjust = 1, size = 15),
                 axis.title.x = element_text(margin = margin(t = 10)),
                 axis.title.y = element_text(margin = margin(r = 10)),
+                legend.text = element_text(size = legend_size),
                 #plot.background = element_rect(color = "black", fill = NA), # Add border to individual plots
                 #panel.border = element_rect(color = "black", fill = NA)
             ) +
@@ -183,26 +213,100 @@ IDMathced_Retail_Meats_Class_genotype_df <- Retail_Meats_Class_genotype_df[Retai
 IDMathced_cecal_Class_phenotype_df <- cecal_Class_phenotype_df[cecal_Class_phenotype_df$ID %in% cecal_Class_genotype_df$ID, ]
 IDMathced_cecal_Class_genotype_df <- cecal_Class_genotype_df[cecal_Class_genotype_df$ID %in% IDMathced_cecal_Class_phenotype_df$ID, ]
 
-indicator_comparison_plot <- gene_vs_phenotype_cumulative_percent_captured_multi(
-     genotype_df1 = IDMathced_Retail_Meats_Class_genotype_df, 
-     phenotype_df1 = IDMathced_Retail_Meats_Class_phenotype_df, 
-     genotype_df2 = IDMathced_cecal_Class_genotype_df, 
-     phenotype_df2 = IDMathced_cecal_Class_phenotype_df, 
+# Repeat the process for the 2017 data frames
+IDMathced_Retail_2017_Meats_Class_phenotype_df <- Retail_2017_Meats_Class_phenotype_df[Retail_2017_Meats_Class_phenotype_df$ID %in% Retail_2017_Meats_Class_genotype_df$ID, ]
+IDMathced_Retail_2017_Meats_Class_genotype_df <- Retail_2017_Meats_Class_genotype_df[Retail_2017_Meats_Class_genotype_df$ID %in% IDMathced_Retail_2017_Meats_Class_phenotype_df$ID, ]
+
+IDMathced_cecal_2017_Class_phenotype_df <- cecal_2017_Class_phenotype_df[cecal_2017_Class_phenotype_df$ID %in% cecal_2017_Class_genotype_df$ID, ]
+IDMathced_cecal_2017_Class_genotype_df <- cecal_2017_Class_genotype_df[cecal_2017_Class_genotype_df$ID %in% IDMathced_cecal_2017_Class_phenotype_df$ID, ]
+
+# Get common columns between genotype and phenotype dataframes for each source
+retail_common_cols <- intersect(colnames(IDMathced_Retail_Meats_Class_genotype_df), 
+                              colnames(IDMathced_Retail_Meats_Class_phenotype_df))
+cecal_common_cols <- intersect(colnames(IDMathced_cecal_Class_genotype_df),
+                             colnames(IDMathced_cecal_Class_phenotype_df))
+
+# Keep only common columns for retail dataframes
+IDMathced_Retail_Meats_Class_genotype_df <- IDMathced_Retail_Meats_Class_genotype_df[, retail_common_cols]
+IDMathced_Retail_Meats_Class_phenotype_df <- IDMathced_Retail_Meats_Class_phenotype_df[, retail_common_cols]
+
+# Keep only common columns for cecal dataframes  
+IDMathced_cecal_Class_genotype_df <- IDMathced_cecal_Class_genotype_df[, cecal_common_cols]
+IDMathced_cecal_Class_phenotype_df <- IDMathced_cecal_Class_phenotype_df[, cecal_common_cols]
+
+# Repeat for 2017 data
+retail_2017_common_cols <- intersect(colnames(IDMathced_Retail_2017_Meats_Class_genotype_df),
+                                   colnames(IDMathced_Retail_2017_Meats_Class_phenotype_df))
+cecal_2017_common_cols <- intersect(colnames(IDMathced_cecal_2017_Class_genotype_df),
+                                  colnames(IDMathced_cecal_2017_Class_phenotype_df))
+
+IDMathced_Retail_2017_Meats_Class_genotype_df <- IDMathced_Retail_2017_Meats_Class_genotype_df[, retail_2017_common_cols]
+IDMathced_Retail_2017_Meats_Class_phenotype_df <- IDMathced_Retail_2017_Meats_Class_phenotype_df[, retail_2017_common_cols]
+
+IDMathced_cecal_2017_Class_genotype_df <- IDMathced_cecal_2017_Class_genotype_df[, cecal_2017_common_cols]
+IDMathced_cecal_2017_Class_phenotype_df <- IDMathced_cecal_2017_Class_phenotype_df[, cecal_2017_common_cols]
+
+
+
+
+
+# Create the dataset lists
+genotype_datasets <- list(
+    "Cecal Genotype" = IDMathced_cecal_Class_genotype_df,
+    "Retail Meats Genotype" = IDMathced_Retail_Meats_Class_genotype_df,
+    "NAHLN Genotype" = NAHLN_Class_genotype_df
+)
+
+phenotype_datasets <- list(
+    "Cecal Phenotype" = IDMathced_cecal_Class_phenotype_df,
+    "Retail Meats Phenotype" = IDMathced_Retail_Meats_Class_phenotype_df,
+    "NAHLN Phenotype" = NAHLN_Class_phenotype_df
+)
+
+genotype2017_datasets <- list(
+    "Cecal Genotype" = IDMathced_cecal_2017_Class_genotype_df,
+    "Retail Meats Genotype" = IDMathced_Retail_2017_Meats_Class_genotype_df
+)
+
+phenotype2017_datasets <- list(
+    "Cecal Phenotype" = IDMathced_cecal_2017_Class_phenotype_df,
+    "Retail Meats Phenotype" = IDMathced_Retail_2017_Meats_Class_phenotype_df
+)
+
+
+
+
+indicator_comparison_plot <- gene_vs_phenotype_cumulative_percent_captured_multi_v2(
+     datasets_geno = genotype_datasets,
+     datasets_pheno = phenotype_datasets,
      target = "rules", 
      rules_selected = "best", 
      cut_off = c(0.5, 0, 0.5, 0), 
      measures_used = c("cosine", "jaccard", "kulczynski", "support"), 
-     data_source1 = "Retail_Meats",
-     data_source2 = "Cecal",
-     data_partition = data_partition
+     data_partition = data_partition,
+     title = "Excluding Streptomycin"
  )
 
 
+indicator_2017_comparison_plot <- gene_vs_phenotype_cumulative_percent_captured_multi_v3(
+     datasets_geno = genotype2017_datasets,
+     datasets_pheno = phenotype2017_datasets,
+     target = "rules", 
+     rules_selected = "best", 
+     cut_off = c(0.5, 0, 0.5, 0), 
+     measures_used = c("cosine", "jaccard", "kulczynski", "support"), 
+     data_partition = data_partition,
+     title = "Including Streptomycin"
+ )
+
+
+
+
 indicator_comparison_plot <- format_and_combine_plots(
-    plot_list = list(indicator_comparison_plot),
+    plot_list = list(indicator_comparison_plot, indicator_2017_comparison_plot),
     title_text = "Rule Set Comparison Between Indicators",
-    labels = c("E"),
-    ncol = 1,
+    labels = c("E", "F"),
+    ncol = 2,
     nrow = 1,
     #title = FALSE
 )
@@ -226,43 +330,53 @@ cecal_Class_genotype_df <- cecal_Class_genotype_df[cecal_Class_genotype_df$Year 
 Retail_Meats_Class_genotype_df <- Retail_Meats_Class_genotype_df[Retail_Meats_Class_genotype_df$Year %in% cecal_Class_genotype_df$Year, ]
 
 
+phenotype_datasets <- list(
+    "Cecal Phenotype" = cecal_Class_phenotype_df,
+    "Retail Meats Phenotype" = Retail_Meats_Class_phenotype_df,
+    "NAHLN Phenotype" = NAHLN_Class_phenotype_df
+)
 
-data_source_nonclass_plot <- cecal_vs_retail_cumulative_percent_captured_multi(
-    cecal_genotype_df = cecal_Family_genotype_df, 
-    cecal_phenotype_df = cecal_phenotype_df, 
-    retail_genotype_df = Retail_Meats_Family_genotype_df, 
-    retail_phenotype_df = Retail_Meats_phenotype_df, 
+between_sources_phenotype_plot <- phenotype_cumulative_percent_captured_multi(
+    datasets_pheno = phenotype_datasets,
     target = "rules", 
     rules_selected = "best", 
     cut_off = c(0.5, 0, 0.5, 0), 
     measures_used = c("cosine", "jaccard", "kulczynski", "support"), 
-    data_source1 = "Cecal",
-    data_source2 = "Retail Meats",
     data_partition = data_partition,
-    class_level = FALSE
+    class_level = TRUE
 )
 
 
-data_source_class_plot <- cecal_vs_retail_cumulative_percent_captured_multi(
-    cecal_genotype_df = cecal_Class_genotype_df, 
-    cecal_phenotype_df = cecal_Class_phenotype_df, 
-    retail_genotype_df = Retail_Meats_Class_genotype_df, 
-    retail_phenotype_df = Retail_Meats_Class_phenotype_df, 
+
+
+
+# Create the dataset lists
+genotype_datasets <- list(
+    "Cecal Genotype" = cecal_Class_genotype_df,
+    "Retail Meats Genotype" = Retail_Meats_Class_genotype_df,
+    "NAHLN Genotype" = NAHLN_Class_genotype_df
+)
+
+
+
+
+
+between_sources_genotype_plot <- genotype_cumulative_percent_captured_multi(
+    datasets_geno = genotype_datasets,
     target = "rules", 
     rules_selected = "best", 
     cut_off = c(0.5, 0, 0.5, 0), 
     measures_used = c("cosine", "jaccard", "kulczynski", "support"), 
-    data_source1 = "Cecal",
-    data_source2 = "Retail Meats",
     data_partition = data_partition,
     class_level = TRUE
 )
 
 
 between_data_sources_plot <- format_and_combine_plots(
-    plot_list = list(data_source_nonclass_plot, data_source_class_plot),
+    plot_list = list(between_sources_phenotype_plot, between_sources_genotype_plot),
     title_text = "Rule Set Comparison Between Sources",
-    labels = c("C", "D")
+    labels = c("C", "D"),
+    legend_size = 10
 )
 
 # Save the final plot with increased dimensions
@@ -317,6 +431,7 @@ ggsave(
 #####################################################################################################################################################
 
 #load in the data
+#cecal and retail meats
 cecal_phenotype_df <- read.csv("cecal/cecal_wide_resStatus_phenotype.csv")
 cecal_Class_phenotype_df <- read.csv("cecal/cecal_wide_class_level_phenotype.csv")
 
@@ -328,6 +443,26 @@ Retail_Meats_Class_phenotype_df <- read.csv("Retail_Meats/Retail_Meats_wide_clas
 
 Retail_Meats_Family_genotype_df <- read.csv("Retail_Meats/Retail_Meats_wide_family_level_genotype.csv")
 Retail_Meats_Class_genotype_df <- read.csv("Retail_Meats/Retail_Meats_wide_class_level_genotype.csv")
+
+
+cecal_2017_phenotype_df <- read.csv("cecal_2017Onward/cecal_2017Onward_wide_resStatus_phenotype.csv")
+cecal_2017_Class_phenotype_df <- read.csv("cecal_2017Onward/cecal_2017Onward_wide_class_level_phenotype.csv")
+
+cecal_2017_Family_genotype_df <- read.csv("cecal_2017Onward/cecal_2017Onward_wide_family_level_genotype.csv")
+cecal_2017_Class_genotype_df <- read.csv("cecal_2017Onward/cecal_2017Onward_wide_class_level_genotype.csv")
+
+Retail_2017_Meats_phenotype_df <- read.csv("Retail_Meats_2017Onward/Retail_Meats_2017Onward_wide_resStatus_phenotype.csv")
+Retail_2017_Meats_Class_phenotype_df <- read.csv("Retail_Meats_2017Onward/Retail_Meats_2017Onward_wide_class_level_phenotype.csv")
+
+Retail_2017_Meats_Family_genotype_df <- read.csv("Retail_Meats_2017Onward/Retail_Meats_2017Onward_wide_family_level_genotype.csv")
+Retail_2017_Meats_Class_genotype_df <- read.csv("Retail_Meats_2017Onward/Retail_Meats_2017Onward_wide_class_level_genotype.csv")
+
+#NAHLN
+NAHLN_phenotype_df <- read.csv("NAHLN/NAHLN_wide_resStatus_phenotype.csv")
+NAHLN_Class_phenotype_df <- read.csv("NAHLN/NAHLN_wide_class_level_phenotype.csv")
+
+NAHLN_Family_genotype_df <- read.csv("NAHLN/NAHLN_wide_family_level_genotype.csv")
+NAHLN_Class_genotype_df <-read.csv("NAHLN/NAHLN_wide_class_level_genotype.csv")
 
 
 run_all_percent_captured_analyses(data_partition = "full_date_range",
@@ -342,7 +477,30 @@ run_all_percent_captured_analyses(data_partition = "full_date_range",
                                             Retail_Meats_Class_phenotype_df,
 
                                             Retail_Meats_Family_genotype_df,
-                                            Retail_Meats_Class_genotype_df
+                                            Retail_Meats_Class_genotype_df,
+
+
+                                            cecal_2017_phenotype_df, 
+                                            cecal_2017_Class_phenotype_df,
+
+                                            cecal_2017_Family_genotype_df ,
+                                            cecal_2017_Class_genotype_df,
+
+                                            Retail_2017_Meats_phenotype_df,
+                                            Retail_2017_Meats_Class_phenotype_df,
+
+                                            Retail_2017_Meats_Family_genotype_df,
+                                            Retail_2017_Meats_Class_genotype_df,
+
+
+                                            
+                                            NAHLN_phenotype_df, 
+                                            NAHLN_Class_phenotype_df,
+
+                                            NAHLN_Family_genotype_df ,
+                                            NAHLN_Class_genotype_df
+
+
                                             )
 
 
@@ -358,34 +516,22 @@ run_all_percent_captured_analyses(data_partition = "full_date_range",
 
 
 
-#load in the data
-cecal_phenotype_df2017 <- read.csv("cecal_2017Onward/cecal_2017Onward_wide_resStatus_phenotype.csv")
-cecal_Class_phenotype_df2017 <- read.csv("cecal_2017Onward/cecal_2017Onward_wide_class_level_phenotype.csv")
-
-cecal_Family_genotype_df2017 <- read.csv("cecal_2017Onward/cecal_2017Onward_wide_family_level_genotype.csv")
-cecal_Class_genotype_df2017 <- read.csv("cecal_2017Onward/cecal_2017Onward_wide_class_level_genotype.csv")
-
-Retail_Meats_phenotype_df2017 <- read.csv("Retail_Meats_2017Onward/Retail_Meats_2017Onward_wide_resStatus_phenotype.csv")
-Retail_Meats_Class_phenotype_df2017 <- read.csv("Retail_Meats_2017Onward/Retail_Meats_2017Onward_wide_class_level_phenotype.csv")
-
-Retail_Meats_Family_genotype_df2017 <- read.csv("Retail_Meats_2017Onward/Retail_Meats_2017Onward_wide_family_level_genotype.csv")
-Retail_Meats_Class_genotype_df2017 <- read.csv("Retail_Meats_2017Onward/Retail_Meats_2017Onward_wide_class_level_genotype.csv")
 
 
-run_all_percent_captured_analyses(data_partition = "2017_onward",
+# run_all_percent_captured_analyses(data_partition = "2017_onward",
 
-                                            cecal_phenotype_df = cecal_phenotype_df2017, 
-                                            cecal_Class_phenotype_df = cecal_Class_phenotype_df2017,
+#                                             cecal_phenotype_df = cecal_phenotype_df2017, 
+#                                             cecal_Class_phenotype_df = cecal_Class_phenotype_df2017,
 
-                                            cecal_Family_genotype_df = cecal_Family_genotype_df2017,
-                                            cecal_Class_genotype_df = cecal_Class_genotype_df2017,
+#                                             cecal_Family_genotype_df = cecal_Family_genotype_df2017,
+#                                             cecal_Class_genotype_df = cecal_Class_genotype_df2017,
 
-                                            Retail_Meats_phenotype_df = Retail_Meats_phenotype_df2017,
-                                            Retail_Meats_Class_phenotype_df = Retail_Meats_Class_phenotype_df2017,
+#                                             Retail_Meats_phenotype_df = Retail_Meats_phenotype_df2017,
+#                                             Retail_Meats_Class_phenotype_df = Retail_Meats_Class_phenotype_df2017,
 
-                                            Retail_Meats_Family_genotype_df = Retail_Meats_Family_genotype_df2017,
-                                            Retail_Meats_Class_genotype_df = Retail_Meats_Class_genotype_df2017
-                                            )
+#                                             Retail_Meats_Family_genotype_df = Retail_Meats_Family_genotype_df2017,
+#                                             Retail_Meats_Class_genotype_df = Retail_Meats_Class_genotype_df2017
+#                                             )
 
 
 
@@ -393,14 +539,5 @@ run_all_percent_captured_analyses(data_partition = "2017_onward",
 
 
 
-
-
-
-
-#####################################################################################################################################################
-#####################################################################################################################################################
-###################################### RUN ANALYSES FOR THE SOURCE ENCODINGS ADDED ##################################################################
-#####################################################################################################################################################
-#####################################################################################################################################################
 
 
