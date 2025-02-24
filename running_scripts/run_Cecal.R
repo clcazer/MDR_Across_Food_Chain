@@ -23,10 +23,12 @@ source(here("function_scripts", "network_graphs.R"))
 
 
 #get the data ready
-cecal_phenotype_df <- read.csv("cecal/cecal_wide_resStatus_phenotype.csv")
-cecal_Class_level_phenotype_df <- read.csv("cecal/cecal_wide_class_level_phenotype.csv")
+cecal_phenotype_df <- read.csv("cecal/NEW_cecal_wide_resStatus_phenotype.csv")
+cecal_Class_level_phenotype_df <- read.csv("cecal/NEW_cecal_wide_class_level_phenotype.csv")
 
 
+
+cecal_genotype_df <- read.csv("cecal/cecal_wide_corrected_genotype.csv")
 cecal_Family_genotype_df <- read.csv("cecal/cecal_wide_family_level_genotype.csv")
 cecal_Class_level_genotype_df <- read.csv("cecal/cecal_wide_class_level_genotype.csv")
 
@@ -43,20 +45,20 @@ print("RULE MINING AND SELECTION STARTED")
 #      select_measure_cutoffs(selected_measures = c("cosine", "jaccard", "kulczynski", "support"), 
 #      df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
 
-# print("2")
-#      rarefaction_by_sample_size(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
+print("2")
+    #  rarefaction_by_sample_size(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
 
-# print("3")
+print("3")
 
-#     rarefaction_rule_v_class(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
+    # rarefaction_rule_v_class(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
 
-# print("4")
+print("4")
 
-#     unique_classes_represented(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
+    unique_classes_represented(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
 
-# print("5")
+print("5")
 
-#     rules_v_cutoffs(df = df, resistance_indicator = resistance_indicator, target = "rules", measures = c("cosine", "jaccard", "kulczynski", "support"), low = 0, high = 1, data_source = data_source)
+    rules_v_cutoffs(df = df, resistance_indicator = resistance_indicator, target = "rules", measures = c("cosine", "jaccard", "kulczynski", "support"), low = 0, high = 1, data_source = data_source)
 
 print("6")
 
@@ -71,31 +73,39 @@ print("RULE MINING AND SELECTION DONE")
 
 
 # RUN THE FOLLOWING TWO LINES TO GET THE RULE MINING AND SELECTION DONE
-# run_rule_mining_and_selection(df = cecal_phenotype_df, class_df = cecal_Class_level_phenotype_df, data_source = "cecal", resistance_indicator = "phenotype")
-# run_rule_mining_and_selection(df = cecal_Family_genotype_df, class_df = cecal_Class_level_genotype_df, data_source = "cecal", resistance_indicator = "genotype")
+run_rule_mining_and_selection(df = cecal_phenotype_df, class_df = cecal_Class_level_phenotype_df, data_source = "cecal", resistance_indicator = "phenotype")
+run_rule_mining_and_selection(df = cecal_genotype_df, class_df = cecal_Class_level_genotype_df, data_source = "cecal", resistance_indicator = "genotype")
 
 
 
 
 
-#create all vs best rules plots
+# #create all vs best rules plots
+# print("phenotype best v all:")
 # plot_all_vs_best_rules(df = cecal_phenotype_df, resistance_indicator = "phenotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal")
-# plot_all_vs_best_rules(df = cecal_Family_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal")
+# plot_all_vs_best_rules(df = cecal_Class_level_phenotype_df, resistance_indicator = "phenotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", class_level = TRUE)
+
+# print("genotype best v all:")
+# plot_all_vs_best_rules(df = cecal_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal")
+# plot_all_vs_best_rules(df = cecal_Class_level_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", class_level = TRUE)
 
 
 
 
-#create Network Graphs
+# #create Network Graphs
 
+# print("phenotype (not class level):")
+# #phenotype (not class level)
+# graph_rules(df = cecal_phenotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "phenotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", rules_selected = "best", agg = FALSE)
+# #genotype (not class level)
+# # print("genotype (not class level):")
+# # graph_rules(df = cecal_Family_genotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "genotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", rules_selected = "best", agg = FALSE)
 
-#phenotype (not class level)
-graph_rules(df = cecal_phenotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "phenotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", rules_selected = "best", agg = FALSE)
-#genotype (not class level)
-graph_rules(df = cecal_Family_genotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "genotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", rules_selected = "best", agg = FALSE)
-
-#phenotype (class level)
-graph_rules(df = cecal_Class_level_phenotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "phenotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", rules_selected = "best", agg = TRUE)
-#genotype (class level)
-graph_rules(df = cecal_Class_level_genotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "genotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", rules_selected = "best", agg = TRUE)
+# #phenotype (class level)
+# print("phenotype (class level)")
+# graph_rules(df = cecal_Class_level_phenotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "phenotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", rules_selected = "best", agg = TRUE)
+# #genotype (class level)
+# print("genotype (class level)")
+# graph_rules(df = cecal_Class_level_genotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "genotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "cecal", rules_selected = "best", agg = TRUE)
 
 print("DONE")

@@ -20,9 +20,8 @@ library(lubridate)
 ##########NAHLN PHENOTYPE DATA WRANGLING###############
 #######################################################
 
-wrangle_NAHLN_phenotype <- function() {
-    df <- read_excel("NAHLN_CattleEcoli_PPY1-PPY5_10-12-2023.xlsx")
-    break_points_df <- read_excel("EcoliBreakPoints.xlsx")
+wrangle_NAHLN_phenotype <- function(df, break_points_df) {
+
     #replace spaces in colnames with periods
     colnames(df) <- gsub(" ", ".", colnames(df))
     
@@ -125,100 +124,6 @@ wrangle_NAHLN_phenotype <- function() {
 
 
 
-wrangle_NAHLN_genotype <- function() {
-    df <- read_excel("Isolate+BioSample.xlsx")
-    df_time <- read_excel("NAHLN_CattleEcoli_PPY1-PPY5_10-12-2023.xlsx")
-    #replace spaces in colnames with periods
-    colnames(df) <- gsub(" ", ".", colnames(df))
-
-    # Convert TestDate to Date type and extract year
-    df_time$Year <- lubridate::year(as.Date(df_time$TestDate))
-    
-    # Print sample of data for debugging
-    cat("Sample of df$Isolate.identifiers:\n")
-    print(head(df$Isolate.identifiers))
-    cat("\nSample of df_time$UniqueID:\n")
-    print(head(df_time$UniqueID))
-    
-    # Create a mapping of IDs to years and UniqueIDs
-    id_to_year <- numeric(length = nrow(df))
-    id_to_uniqueid <- character(length = nrow(df))
-    
-    for (i in 1:nrow(df)) {
-        # Find which UniqueID from df_time appears in this Isolate.identifiers
-        matching_row <- which(sapply(df_time$UniqueID, function(id) {
-            # Ensure both strings are character type and use fixed=TRUE for exact matching
-            grepl(as.character(id), as.character(df$Isolate.identifiers[i]), fixed=TRUE)
-        }))
-        
-        if (length(matching_row) > 0) {
-            id_to_year[i] <- df_time$Year[matching_row[1]]
-            id_to_uniqueid[i] <- df_time$UniqueID[matching_row[1]]
-            cat(sprintf("Matched: %s with %s\n", df$Isolate.identifiers[i], df_time$UniqueID[matching_row[1]]))
-        } else {
-            warning(paste("No matching UniqueID found for Isolate.identifiers:", df$Isolate.identifiers[i]))
-        }
-    }
-    
-    # Add Year and UniqueID to df
-    df$Year <- id_to_year
-    df$UniqueID <- id_to_uniqueid
-    
-    # Remove rows where Year is 0 instead of reassigning them
-    df <- df[df$Year != 0, ]
-
-    # Print summary of year assignments
-    cat("\nYear distribution:\n")
-    print(table(df$Year))
-    
-    #replace spaces in colnames with periods
-    colnames(df) <- gsub(" ", ".", colnames(df))
-    
-    df <- df[, c("Isolate.identifiers", "UniqueID", "Year", "AMR.genotypes")]
-    
-    # Create new column with clean gene names, only keeping COMPLETE genes
-    df$clean_genotypes <- sapply(df$AMR.genotypes, function(x) {
-        # Split by comma
-        genes <- unlist(strsplit(x, ","))
-        # Keep only genes with COMPLETE status
-        genes <- genes[grepl("=COMPLETE$", genes)]
-        # Clean remaining genes and join with spaces
-        clean_genes <- gsub("=.*$", "", genes)
-        paste(clean_genes, collapse = " ")
-    })
-    
-    # Get all unique genes
-    all_genes <- unique(unlist(strsplit(df$clean_genotypes, " ")))
-    
-    # Create incidence matrix
-    incidence_matrix <- matrix(0, 
-                             nrow = nrow(df), 
-                             ncol = length(all_genes),
-                             dimnames = list(df$Isolate.identifiers, all_genes))
-    
-    # Fill matrix with 1s where genes are present
-    for(i in 1:nrow(df)) {
-        sample_genes <- unlist(strsplit(df$clean_genotypes[i], " "))
-        incidence_matrix[i, sample_genes] <- 1
-    }
-    
-    # Convert to dataframe and add year
-    incidence_df <- as.data.frame(incidence_matrix)
-    incidence_df$Year <- df$Year
-    incidence_df$ID <- df$Isolate.identifiers
-    incidence_df$UniqueID <- df$UniqueID
-    
-    #Reorder columns to put ID first and Year second
-    incidence_df <- incidence_df[, c("UniqueID", "ID", "Year", setdiff(names(incidence_df), c("UniqueID","ID", "Year")))]
-    
-    # Write to CSV
-    write.csv(incidence_df, "NAHLN/NAHLN_genotype_wide.csv", row.names = FALSE)
-    
-    return(incidence_df)
-}
-
-
-
 
 keep_top_genes <- function(df, top_genes_df) {
 
@@ -239,8 +144,203 @@ keep_top_genes <- function(df, top_genes_df) {
 }
 
 
-# df <- read.csv("NAHLN/NAHLN_wide_family_level_genotype.csv")
-
-# top_genes_df <- read.csv("NAHLN_topGenes.csv")
 
 
+NAHLN_process_genotype_data <- function(gene_df, Year_lookup_df, ID_lookup_df, data_source, output_level = 'gene') {
+    gene_df <- gene_df[gene_df$meta == "NAHLN", ]
+        #replace spaces in colnames with periods
+    colnames(ID_lookup_df) <- gsub(" ", ".", colnames(ID_lookup_df))
+    
+
+    print("number of unique SAMNS")
+    print(length(unique(gene_df$SAMN)))
+    # Debug print for Year_lookup_df
+    print("Sample of Year_lookup_df:")
+    print(head(Year_lookup_df[, c("UniqueID", "TestDate")]))
+    
+
+    colnames(ID_lookup_df) <- gsub(" ", ".", colnames(ID_lookup_df))
+    gene_df <- merge(gene_df,
+                    ID_lookup_df[, c("BioSample", "Isolate.identifiers")],
+                    by.x = "SAMN",
+                    by.y = "BioSample",
+                    all.x = TRUE)
+    
+
+
+    
+   # Modified find_matching_id function to handle EC-Cow- prefix
+   find_matching_id <- function(isolate_ids, unique_ids) {
+       # Split isolate_ids into individual identifiers
+       ids <- strsplit(isolate_ids, ",")[[1]]
+       # Look specifically for pattern containing PPY
+       ppy_ids <- ids[grep("PPY", ids)]
+       # Clean up any quotes, whitespace, and remove EC-Cow- prefix
+       ppy_ids <- gsub('"', '', trimws(ppy_ids))
+       ppy_ids <- gsub("EC-Cow-", "", ppy_ids)
+       # Return matching ID if found
+       matching_id <- unique_ids[unique_ids %in% ppy_ids]
+       if(length(matching_id) > 0) return(matching_id[1])
+       return(NA)
+   }
+    
+    
+    # Convert TestDate to Year with error checking
+    Year_lookup_df$Year <- tryCatch({
+        year(as.Date(Year_lookup_df$TestDate, format = "%m/%d/%Y"))
+    }, error = function(e) {
+        print("Error converting dates. Trying alternative format...")
+        year(as.Date(Year_lookup_df$TestDate, format = "%Y-%m-%d"))
+    })
+    
+    # Create matched_unique_id column
+    gene_df$matched_unique_id <- sapply(gene_df$Isolate.identifiers, 
+                                      find_matching_id, 
+                                      unique_ids = Year_lookup_df$UniqueID)
+
+    
+    # Try cleaning both columns before merge
+    gene_df$matched_unique_id <- trimws(gene_df$matched_unique_id)
+    Year_lookup_df$UniqueID <- trimws(Year_lookup_df$UniqueID)
+    
+    # Standardize encoding for both columns
+    gene_df$matched_unique_id <- iconv(gene_df$matched_unique_id, to = "ASCII//TRANSLIT")
+    Year_lookup_df$UniqueID <- iconv(Year_lookup_df$UniqueID, to = "ASCII//TRANSLIT")
+    
+    # Debug: Check a specific ID that should match
+    print("Sample comparison:")
+    sample_id <- gene_df$matched_unique_id[1]
+    print(paste("Sample ID from gene_df:", sample_id))
+    print("Matching rows in Year_lookup_df:")
+    print(Year_lookup_df[Year_lookup_df$UniqueID == sample_id, ])
+    
+    # Create Year column from TestDate before merge
+    Year_lookup_df$Year <- as.numeric(format(as.Date(Year_lookup_df$TestDate), "%Y"))
+    
+
+    
+    # Merge with Year_lookup_df
+    gene_df <- merge(gene_df,
+                    Year_lookup_df[, c("UniqueID", "Year")],
+                    by.x = "matched_unique_id",
+                    by.y = "UniqueID",
+                    all.x = TRUE)
+    
+
+    
+
+    
+    # Use the matched UniqueID as the final ID
+    gene_df$ID <- gene_df$matched_unique_id
+    
+    # Print diagnostic information
+    print(paste("Number of successful ID matches:", sum(!is.na(gene_df$matched_unique_id))))
+    print(paste("Number of rows with ID/Year:", sum(!is.na(gene_df$ID) & !is.na(gene_df$Year))))
+
+
+
+if (output_level == "gene") {
+    # Remove duplicate gene entries for each isolate
+    gene_df <- gene_df %>%
+        distinct(ID, Element.symbol, .keep_all = TRUE)
+    
+    # Create the incidence matrix
+    # First create a presence indicator
+    gene_df$present <- 1
+    
+
+    
+    # Pivot wider to create the incidence matrix
+    incidence_matrix <- pivot_wider(gene_df,
+                                  id_cols = c(ID, Year),
+                                  names_from = Element.symbol,
+                                  values_from = present,
+                                  values_fill = 0)
+
+    } else if (output_level == "class") {
+    # Split entries in the Class column that contain multiple classes separated by /
+    gene_df <- gene_df %>%
+        separate_rows(Class, sep = "/")
+
+
+        # Remove duplicate gene entries for each isolate
+    gene_df <- gene_df %>%
+        distinct(ID, Class, .keep_all = TRUE)
+
+
+    # Create the incidence matrix
+    # First create a presence indicator
+    gene_df$present <- 1
+    
+
+    
+    # Pivot wider to create the incidence matrix
+    incidence_matrix <- pivot_wider(gene_df,
+                                  id_cols = c(ID, Year),
+                                  names_from = Class,
+                                  values_from = present,
+                                  values_fill = 0)
+
+    } else if (output_level == "subclass") {
+    # Split entries in the Class column that contain multiple classes separated by /
+    gene_df <- gene_df %>%
+        separate_rows(Subclass, sep = "/")
+
+
+        # Remove duplicate gene entries for each isolate
+    gene_df <- gene_df %>%
+        distinct(ID, Subclass, .keep_all = TRUE)
+
+
+    # Create the incidence matrix
+    # First create a presence indicator
+    gene_df$present <- 1
+    
+
+    
+    # Pivot wider to create the incidence matrix
+    incidence_matrix <- pivot_wider(gene_df,
+                                  id_cols = c(ID, Year),
+                                  names_from = Subclass,
+                                  values_from = present,
+                                  values_fill = 0)
+
+    }
+
+    
+    incidence_matrix <- incidence_matrix %>%
+        drop_na(ID, Year)
+
+
+    # # Drop any column that has "cya" in it
+    # incidence_matrix <- incidence_matrix %>%
+    #     select(-matches("cya"))
+
+
+    # Reorder columns to ensure ID and Year are first, followed by the rest in alphabetical order
+    incidence_matrix <- incidence_matrix %>%
+        select(ID, Year, sort(names(incidence_matrix)[-(1:2)]))
+
+    if (output_level == "gene") {
+    
+    write.csv(incidence_matrix, file = str_glue("{data_source}/{data_source}_wide_corrected_genotype.csv"), row.names = FALSE)
+    
+    } else if (output_level == "class") {
+    
+    write.csv(incidence_matrix, file = str_glue("{data_source}/{data_source}_wide_class_level_genotype.csv"), row.names = FALSE)
+    
+    } else if (output_level == "subclass") {
+    
+    write.csv(incidence_matrix, file = str_glue("{data_source}/{data_source}_wide_Subclass_level_genotype.csv"), row.names = FALSE)
+    
+    }
+    
+    return(incidence_matrix)
+}
+
+
+# gene_df <- read.csv("Gene_Data/amrfinder_results-AMR-CORE.point-muts-included.csv")
+# ID_lookup_df <- read_excel("NAHLN_Data/Isolate+BioSample.xlsx")
+# Year_lookup_df <- read.csv("NAHLN_Data/NAHLN_CattleEcoli_PPY1-PPY5_10-12-2023.csv")
+# incidence_matrix <- NAHLN_process_genotype_data(gene_df = gene_df, Year_lookup_df = Year_lookup_df, ID_lookup_df = ID_lookup_df, data_source = "NAHLN", output_level = "gene")
+# print(incidence_matrix)

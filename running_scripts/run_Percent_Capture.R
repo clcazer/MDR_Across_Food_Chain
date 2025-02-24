@@ -67,6 +67,9 @@ run_all_percent_captured_analyses <- function(data_partition,
     #####################################
 #RUN THE WITHIN INDICATORS COMPARISON
 #####################################
+
+print("STARTED WITHIN INDICATORS PLOT")
+
 phenotype_datasets <- list(
     "Cecal Phenotype" = cecal_phenotype_df,
     "Retail Meats Phenotype" = Retail_Meats_phenotype_df,
@@ -91,7 +94,7 @@ class_genotype_datasets <- list(
     "NAHLN Class Genotype" = NAHLN_Class_genotype_df
 )
 
- nonclass_plot <- cumulative_proportion_captured_multi(
+ nonclass_plot <- cumulative_proportion_captured_multi_v2(
     datasets_geno = genotype_datasets,
     datasets_pheno = phenotype_datasets,
     class_level = FALSE,
@@ -102,7 +105,7 @@ class_genotype_datasets <- list(
     data_partition = data_partition
 )
 
- class_plot <- cumulative_proportion_captured_multi(
+ class_plot <- cumulative_proportion_captured_multi_v2(
     datasets_geno = class_genotype_datasets,
     datasets_pheno = class_phenotype_datasets,
     class_level = TRUE,
@@ -118,19 +121,18 @@ class_genotype_datasets <- list(
 
 
 
-format_and_combine_plots <- function(plot_list, title_text, labels, ncol = 2, nrow =1, title = TRUE, legend_size = 12) {
+format_and_combine_plots <- function(plot_list, title_text, labels, ncol = 2, nrow =1, title = FALSE, legend_size = 12) {
     # Format individual plots
     formatted_plots <- lapply(seq_along(plot_list), function(i) {
         p <- plot_list[[i]]
         p <- p + 
             theme(
-                plot.title = element_text(size = 15, face = "bold", hjust = 0.5, margin = margin(b = 10)),
+                plot.title = element_blank(),  # Remove individual plot titles
                 axis.text.x = element_text(angle = 45, hjust = 1, size = 15),
                 axis.title.x = element_text(margin = margin(t = 10)),
                 axis.title.y = element_text(margin = margin(r = 10)),
                 legend.text = element_text(size = legend_size),
-                #plot.background = element_rect(color = "black", fill = NA), # Add border to individual plots
-                #panel.border = element_rect(color = "black", fill = NA)
+                legend.key.width = unit(2, "cm")
             ) +
             scale_x_continuous(breaks = function(x) seq(floor(min(x)), ceiling(max(x)), by = 1))
         
@@ -142,7 +144,7 @@ format_and_combine_plots <- function(plot_list, title_text, labels, ncol = 2, nr
         return(p)
     })
     
-    # Create panel of plots
+    # Create panel of plots without title
     combined_plot <- plot_grid(
         plotlist = formatted_plots,
         ncol = ncol,
@@ -154,48 +156,16 @@ format_and_combine_plots <- function(plot_list, title_text, labels, ncol = 2, nr
         rel_widths = c(1.05, 1)
     )
 
-    # Add border to combined plot
-   # combined_plot <- ggdraw(combined_plot) + 
-      #  draw_plot_label(label = "", size = 11, fontface = "bold") +
-     #   theme(
-      #  plot.background = element_rect(color = "black", fill = NA, linewidth = 1),
-       # plot.margin = margin(20, 20, 20, 20)
-       # )
-
-    if (title == TRUE) {
-        # Add title
-        title <- ggdraw() + 
-            draw_label(title_text,
-                      fontface = "bold",
-                      size = 25,
-                      colour = "black")
-        
-        # Combine title and plots
-        final_plot <- plot_grid(
-            title, combined_plot,
-            ncol = 1,
-            rel_heights = c(0.1, 1)
-        )
-        
-        # Add border to final plot
-       # final_plot <- ggdraw(final_plot) +
-         #   theme(
-       # plot.background = element_rect(color = "black", fill = NA, linewidth = 1),
-        #plot.margin = margin(20, 20, 20, 20)  # Add padding around the plot
-        #)
-        
-        return(final_plot)
-    } else {
-        return(combined_plot)
-    }
+    return(combined_plot)
 }
 
 within_indicators_plot <- format_and_combine_plots(
     plot_list = list(nonclass_plot, class_plot),
-    title_text = "Rule Set Comparison Within Indicators",
+    title_text = "",  # Remove title
     labels = c("A", "B")
 )
 
+print("DONE WITH WITHIN INDICATORS PLOT")
 # Save the final plot with increased dimensions
 ggsave(plot = within_indicators_plot, filename = str_glue("combined_percent_captured/{data_partition}/figures/shared_rules_analysis/within_indicators/rule_set_comparison_within_indicators.png"), 
        width = 18, height = 10, dpi = 300)
@@ -204,6 +174,8 @@ ggsave(plot = within_indicators_plot, filename = str_glue("combined_percent_capt
 #####################################
 #RUN THE BETWEEN INDICATORS COMPARISON
 #####################################
+print("STARTED BETWEEN INDICATORS PLOT")
+
 #since we're comparing between indicators, data has to be at the class level
 
 #Include only rows where the ID matches in both dataframes for each data source
@@ -304,16 +276,18 @@ indicator_2017_comparison_plot <- gene_vs_phenotype_cumulative_percent_captured_
 
 indicator_comparison_plot <- format_and_combine_plots(
     plot_list = list(indicator_comparison_plot, indicator_2017_comparison_plot),
-    title_text = "Rule Set Comparison Between Indicators",
+    title_text = "",  # Remove title
     labels = c("E", "F"),
     ncol = 2,
-    nrow = 1,
-    #title = FALSE
+    nrow = 1
 )
+print("DONE WITH BETWEEN INDICATORS PLOT")
 
 #####################################
 #RUN THE BETWEEN DATASETS COMPARISON
 #####################################
+print("STARTED BETWEEN SOURCES PLOT")
+
 #only keep years in phenotype dfs that are present in both cecal and retail
 cecal_phenotype_df <- cecal_phenotype_df[cecal_phenotype_df$Year %in% Retail_Meats_phenotype_df$Year, ]
 Retail_Meats_phenotype_df <- Retail_Meats_phenotype_df[Retail_Meats_phenotype_df$Year %in% cecal_phenotype_df$Year, ]
@@ -374,16 +348,21 @@ between_sources_genotype_plot <- genotype_cumulative_percent_captured_multi(
 
 between_data_sources_plot <- format_and_combine_plots(
     plot_list = list(between_sources_phenotype_plot, between_sources_genotype_plot),
-    title_text = "Rule Set Comparison Between Sources",
+    title_text = "",  # Remove title
     labels = c("C", "D"),
     legend_size = 10
 )
+print("DONE WITH BETWEEN SOURCES PLOT")
 
 # Save the final plot with increased dimensions
 ggsave(plot = between_data_sources_plot, filename = str_glue("combined_percent_captured/{data_partition}/figures/shared_rules_analysis/between_data_sources/rule_set_comparison_between_data_sources.png"), 
        width = 18, height = 10, dpi = 300)
 
 
+
+#################################
+####### MAKE FINAL PANEL ########
+#################################
 
 
 #stack three plots (within_indicators_plot, between_data_sources_plot, and indicator_comparison_plot) on top of each other to make one big panel
@@ -400,11 +379,11 @@ final_panel <- plot_grid(
     axis = "lr"
 )
 
-# Add border to final panel with padding
+# Add border to final panel with padding (no title)
 final_panel <- ggdraw(final_panel) +
     theme(
         plot.background = element_rect(color = "black", fill = NA, linewidth = 3),
-        plot.margin = margin(20, 20, 20, 20)  # Add padding around the plot
+        plot.margin = margin(20, 20, 20, 20)
     )
 
 # Save with larger dimensions to accommodate the border
@@ -424,44 +403,77 @@ ggsave(
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #####################################################################################################################################################
 #####################################################################################################################################################
-######################################### RUN ANALYSES FOR THE FULL DATE RANGE ######################################################################
+######################################### RUN ANALYSES  #############################################################################################
 #####################################################################################################################################################
 #####################################################################################################################################################
 
 #load in the data
-#cecal and retail meats
-cecal_phenotype_df <- read.csv("cecal/cecal_wide_resStatus_phenotype.csv")
-cecal_Class_phenotype_df <- read.csv("cecal/cecal_wide_class_level_phenotype.csv")
 
-cecal_Family_genotype_df <- read.csv("cecal/cecal_wide_family_level_genotype.csv")
+#cecal and retail meats
+cecal_phenotype_df <- read.csv("cecal/NEW_cecal_wide_resStatus_phenotype.csv")
+cecal_Class_phenotype_df <- read.csv("cecal/NEW_cecal_wide_class_level_phenotype.csv")
+
+cecal_Family_genotype_df <- read.csv("cecal/cecal_wide_corrected_genotype.csv")
 cecal_Class_genotype_df <- read.csv("cecal/cecal_wide_class_level_genotype.csv")
 
-Retail_Meats_phenotype_df <- read.csv("Retail_Meats/Retail_Meats_wide_resStatus_phenotype.csv")
-Retail_Meats_Class_phenotype_df <- read.csv("Retail_Meats/Retail_Meats_wide_class_level_phenotype.csv")
+Retail_Meats_phenotype_df <- read.csv("Retail_Meats/NEW_Retail_Meats_wide_resStatus_phenotype.csv")
+Retail_Meats_Class_phenotype_df <- read.csv("Retail_Meats/NEW_Retail_Meats_wide_class_level_phenotype.csv")
 
-Retail_Meats_Family_genotype_df <- read.csv("Retail_Meats/Retail_Meats_wide_family_level_genotype.csv")
+Retail_Meats_Family_genotype_df <- read.csv("Retail_Meats/Retail_Meats_wide_corrected_genotype.csv")
 Retail_Meats_Class_genotype_df <- read.csv("Retail_Meats/Retail_Meats_wide_class_level_genotype.csv")
 
+#cecal and retail meats 2017 onward
+cecal_2017_phenotype_df <- read.csv("cecal_2017Onward/NEW_cecal_2017Onward_wide_resStatus_phenotype.csv")
+cecal_2017_Class_phenotype_df <- read.csv("cecal_2017Onward/NEW_cecal_2017Onward_wide_class_level_phenotype.csv")
 
-cecal_2017_phenotype_df <- read.csv("cecal_2017Onward/cecal_2017Onward_wide_resStatus_phenotype.csv")
-cecal_2017_Class_phenotype_df <- read.csv("cecal_2017Onward/cecal_2017Onward_wide_class_level_phenotype.csv")
-
-cecal_2017_Family_genotype_df <- read.csv("cecal_2017Onward/cecal_2017Onward_wide_family_level_genotype.csv")
+cecal_2017_Family_genotype_df <- read.csv("cecal_2017Onward/cecal_2017Onward_wide_corrected_genotype.csv")
 cecal_2017_Class_genotype_df <- read.csv("cecal_2017Onward/cecal_2017Onward_wide_class_level_genotype.csv")
 
-Retail_2017_Meats_phenotype_df <- read.csv("Retail_Meats_2017Onward/Retail_Meats_2017Onward_wide_resStatus_phenotype.csv")
-Retail_2017_Meats_Class_phenotype_df <- read.csv("Retail_Meats_2017Onward/Retail_Meats_2017Onward_wide_class_level_phenotype.csv")
+Retail_2017_Meats_phenotype_df <- read.csv("Retail_Meats_2017Onward/NEW_Retail_Meats_2017Onward_wide_resStatus_phenotype.csv")
+Retail_2017_Meats_Class_phenotype_df <- read.csv("Retail_Meats_2017Onward/NEW_Retail_Meats_2017Onward_wide_class_level_phenotype.csv")
 
-Retail_2017_Meats_Family_genotype_df <- read.csv("Retail_Meats_2017Onward/Retail_Meats_2017Onward_wide_family_level_genotype.csv")
+Retail_2017_Meats_Family_genotype_df <- read.csv("Retail_Meats_2017Onward/Retail_Meats_2017Onward_wide_corrected_genotype.csv")
 Retail_2017_Meats_Class_genotype_df <- read.csv("Retail_Meats_2017Onward/Retail_Meats_2017Onward_wide_class_level_genotype.csv")
 
 #NAHLN
 NAHLN_phenotype_df <- read.csv("NAHLN/NAHLN_wide_resStatus_phenotype.csv")
 NAHLN_Class_phenotype_df <- read.csv("NAHLN/NAHLN_wide_class_level_phenotype.csv")
 
-NAHLN_Family_genotype_df <- read.csv("NAHLN/NAHLN_wide_family_level_genotype.csv")
+NAHLN_Family_genotype_df <- read.csv("NAHLN/NAHLN_wide_corrected_genotype.csv")
 NAHLN_Class_genotype_df <-read.csv("NAHLN/NAHLN_wide_class_level_genotype.csv")
 
 
@@ -502,42 +514,6 @@ run_all_percent_captured_analyses(data_partition = "full_date_range",
 
 
                                             )
-
-
-
-
-
-
-#####################################################################################################################################################
-#####################################################################################################################################################
-######################################### RUN ANALYSES FOR THE FULL 2017 ONWARD #####################################################################
-#####################################################################################################################################################
-#####################################################################################################################################################
-
-
-
-
-
-# run_all_percent_captured_analyses(data_partition = "2017_onward",
-
-#                                             cecal_phenotype_df = cecal_phenotype_df2017, 
-#                                             cecal_Class_phenotype_df = cecal_Class_phenotype_df2017,
-
-#                                             cecal_Family_genotype_df = cecal_Family_genotype_df2017,
-#                                             cecal_Class_genotype_df = cecal_Class_genotype_df2017,
-
-#                                             Retail_Meats_phenotype_df = Retail_Meats_phenotype_df2017,
-#                                             Retail_Meats_Class_phenotype_df = Retail_Meats_Class_phenotype_df2017,
-
-#                                             Retail_Meats_Family_genotype_df = Retail_Meats_Family_genotype_df2017,
-#                                             Retail_Meats_Class_genotype_df = Retail_Meats_Class_genotype_df2017
-#                                             )
-
-
-
-
-
-
 
 
 

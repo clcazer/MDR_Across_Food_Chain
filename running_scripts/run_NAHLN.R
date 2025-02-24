@@ -27,7 +27,11 @@ NAHLN_phenotype_df <- read.csv("NAHLN/NAHLN_wide_resStatus_phenotype.csv")
 NAHLN_Class_level_phenotype_df <- read.csv("NAHLN/NAHLN_wide_class_level_phenotype.csv")
 
 
+
+NAHLN_genotype_df <- read.csv("NAHLN/NAHLN_wide_corrected_genotype.csv")
+
 NAHLN_Family_genotype_df <- read.csv("NAHLN/NAHLN_wide_family_level_genotype.csv")
+
 NAHLN_Class_level_genotype_df <- read.csv("NAHLN/NAHLN_wide_class_level_genotype.csv")
 
 
@@ -70,7 +74,7 @@ print("RULE MINING AND SELECTION DONE")
 }
 
 
-# RUN THE FOLLOWING TWO LINES TO GET THE RULE MINING AND SELECTION DONE
+# # RUN THE FOLLOWING TWO LINES TO GET THE RULE MINING AND SELECTION DONE
 # run_rule_mining_and_selection(df = NAHLN_phenotype_df, class_df = NAHLN_Class_level_phenotype_df, data_source = "NAHLN", resistance_indicator = "phenotype")
 # run_rule_mining_and_selection(df = NAHLN_Family_genotype_df, class_df = NAHLN_Class_level_genotype_df, data_source = "NAHLN", resistance_indicator = "genotype")
 
@@ -78,20 +82,27 @@ print("RULE MINING AND SELECTION DONE")
 
 
 
-#create all vs best rules plots
-# plot_all_vs_best_rules(df = NAHLN_phenotype_df, resistance_indicator = "phenotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "NAHLN")
-# plot_all_vs_best_rules(df = NAHLN_Family_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "NAHLN")
+# create all vs best rules plots
+print("phenotype all vs best")
+plot_all_vs_best_rules(df = NAHLN_phenotype_df, resistance_indicator = "phenotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "NAHLN")
+plot_all_vs_best_rules(df = NAHLN_Class_level_phenotype_df, resistance_indicator = "phenotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "NAHLN", class_level = TRUE)
+
+print("genotype all vs best")
+plot_all_vs_best_rules(df = NAHLN_Class_level_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "NAHLN", class_level = TRUE)
+plot_all_vs_best_rules(df = NAHLN_Family_genotype_df, resistance_indicator = "genotype", target = "rules", cut_off = c(0.5, 0, 0.5, 0), measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "NAHLN")
 
 
 
 
-#create Network Graphs
+# # create Network Graphs
 
-
-#phenotype (not class level)
+# #phenotype (not class level)
 # graph_rules(df = NAHLN_phenotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "phenotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "NAHLN", rules_selected = "best", agg = FALSE)
-#genotype (not class level)
-graph_rules(df = NAHLN_Family_genotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "genotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "NAHLN", rules_selected = "best", agg = FALSE)
+# print("STARTING GENOTYPE NETWORK GRAPHS")
+
+
+# #genotype (not class level)
+# # graph_rules_optimized(df = NAHLN_Family_genotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "genotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "NAHLN", rules_selected = "best", agg = FALSE)
 
 # #phenotype (class level)
 # graph_rules(df = NAHLN_Class_level_phenotype_df, target = "rules", cut_off = c(0.5, 0, 0.5, 0), resistance_indicator = "phenotype", measures_used = c("cosine", "jaccard", "kulczynski", "support"), data_source = "NAHLN", rules_selected = "best", agg = TRUE)

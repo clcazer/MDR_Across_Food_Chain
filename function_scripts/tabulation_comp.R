@@ -79,7 +79,9 @@ tabulate_and_compare <- function(df, rules_selected, cut_off, measures_used, res
 
     
     # Process rules year by year
-    for (year in c(min(df$Year):max(df$Year))) {
+    # Replace min/max with unique years to handle gaps
+    unique_years <- sort(unique(df$Year))
+    for (year in unique_years) {
         tryCatch({
             if (rules_selected == "best") {
                 rules <- implement_cuts(df = df, resistance_indicator = resistance_indicator, 
@@ -256,68 +258,34 @@ tabulate_and_compare <- function(df, rules_selected, cut_off, measures_used, res
 
 # get all the data
 #retail
-Retail_Meats_phenotype_df <- read.csv('Retail_Meats/Retail_Meats_wide_resStatus_phenotype.csv')
-Retail_Meats_Class_level_phenotype_df <- read.csv("Retail_Meats/Retail_Meats_wide_class_level_phenotype.csv")
-Retail_Meats_Family_genotype_df <- read.csv("Retail_Meats/Retail_Meats_wide_family_level_genotype.csv")
-Retail_Meats_Class_level_genotype_df <- read.csv("Retail_Meats/Retail_Meats_wide_class_level_genotype.csv")
+Retail_Meats_phenotype_df <- read.csv('Retail_Meats/NEW_Retail_Meats_wide_resStatus_phenotype.csv')
 
 #cecal
-cecal_phenotype_df <- read.csv("cecal/cecal_wide_resStatus_phenotype.csv")
-cecal_Class_level_phenotype_df <- read.csv("cecal/cecal_wide_class_level_phenotype.csv")
-
-
-cecal_Family_genotype_df <- read.csv("cecal/cecal_wide_family_level_genotype.csv")
-cecal_Class_level_genotype_df <- read.csv("cecal/cecal_wide_class_level_genotype.csv")
-
-
-
+cecal_phenotype_df <- read.csv("cecal/NEW_cecal_wide_resStatus_phenotype.csv")
 
 #NAHLN
-NAHLN_Family_genotype_df <- read.csv("NAHLN/NAHLN_wide_family_level_genotype.csv")
-NAHLN_Class_level_genotype_df <- read.csv("NAHLN/NAHLN_wide_class_level_genotype.csv")
+NAHLN_phenotype_df <- read.csv("NAHLN/NAHLN_wide_resStatus_phenotype.csv")
 
 
-NAHLN_Family_genotype_df <- NAHLN_Family_genotype_df[NAHLN_Family_genotype_df$Year != 0, ]
-NAHLN_Class_level_genotype_df <- NAHLN_Class_level_genotype_df[NAHLN_Class_level_genotype_df$Year != 0, ]
-
-# print("structure of input data")
-# print(str(NAHLN_Family_genotype_df))
 
 
 #run tabulation function for each df
-tabulate_and_compare(df = Retail_Meats_phenotype_df, 
+retail_tab_comp <- tabulate_and_compare(df = Retail_Meats_phenotype_df, 
 rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
 measures_used = c("cosine", "jaccard", "kulczynski", "support"),
 resistance_indicator = "phenotype",
 data_source = "Retail_Meats",
 class_level = FALSE)
 
-tabulate_and_compare(df = Retail_Meats_Class_level_phenotype_df, 
-rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
-measures_used = c("cosine", "jaccard", "kulczynski", "support"),
-resistance_indicator = "phenotype",
-data_source = "Retail_Meats",
-class_level = TRUE)
-
-
-tabulate_and_compare(df = Retail_Meats_Family_genotype_df, 
-rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
-measures_used = c("cosine", "jaccard", "kulczynski", "support"),
-resistance_indicator = "genotype",
-data_source = "Retail_Meats",
-class_level = FALSE)
-
-
-tabulate_and_compare(df = Retail_Meats_Class_level_genotype_df, 
-rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
-measures_used = c("cosine", "jaccard", "kulczynski", "support"),
-resistance_indicator = "genotype",
-data_source = "Retail_Meats",
-class_level = TRUE)
 
 
 
-tabulate_and_compare(df = cecal_phenotype_df, 
+
+
+
+
+
+cecal_tab_comp <- tabulate_and_compare(df = cecal_phenotype_df, 
 rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
 measures_used = c("cosine", "jaccard", "kulczynski", "support"),
 resistance_indicator = "phenotype",
@@ -325,33 +293,14 @@ data_source = "cecal",
 class_level = FALSE)
 
 
-tabulate_and_compare(df = cecal_Class_level_phenotype_df, 
-rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
-measures_used = c("cosine", "jaccard", "kulczynski", "support"),
-resistance_indicator = "phenotype",
-data_source = "cecal",
-class_level = TRUE)
-
-
-tabulate_and_compare(df = cecal_Family_genotype_df, 
-rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
-measures_used = c("cosine", "jaccard", "kulczynski", "support"),
-resistance_indicator = "genotype",
-data_source = "cecal",
-class_level = FALSE)
 
 
 
-tabulate_and_compare(df = cecal_Class_level_genotype_df, 
-rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
-measures_used = c("cosine", "jaccard", "kulczynski", "support"),
-resistance_indicator = "genotype",
-data_source = "cecal",
-class_level = TRUE)
 
 
 
-tabulate_and_compare(df = NAHLN_Family_genotype_df, 
+
+NAHLN_tab_comp <- tabulate_and_compare(df = NAHLN_phenotype_df, 
 rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
 measures_used = c("cosine", "jaccard", "kulczynski", "support"),
 resistance_indicator = "genotype",
@@ -359,9 +308,32 @@ data_source = "NAHLN",
 class_level = FALSE)
 
 
-tabulate_and_compare(df = NAHLN_Class_level_genotype_df, 
-rules_selected = "best", cut_off = c(0.5, 0, 0.5, 0), 
-measures_used = c("cosine", "jaccard", "kulczynski", "support"),
-resistance_indicator = "genotype",
-data_source = "NAHLN",
-class_level = TRUE)
+
+
+
+
+
+# Combine all three dataframes
+# Add a 'Source' column to identify the origin of each row
+retail_tab_comp$Source <- "Retail Meats"
+cecal_tab_comp$Source <- "Cecal"
+NAHLN_tab_comp$Source <- "NAHLN"
+
+# Combine the dataframes
+combined_df <- rbind(retail_tab_comp, cecal_tab_comp, NAHLN_tab_comp)
+
+# Filter out patterns with less than two drugs
+combined_df <- combined_df[sapply(strsplit(combined_df$Resistance_Pattern, ", "), length) >= 2, ]
+
+
+# Sort by Frequency (descending) and keep top 20 rows
+combined_df <- combined_df[order(-combined_df$Frequency), ][1:20, ]
+
+# Round the average columns to 2 decimal places
+combined_df$avg_cosine <- round(combined_df$avg_cosine, 2)
+combined_df$avg_jaccard <- round(combined_df$avg_jaccard, 2)
+combined_df$avg_kulczynski <- round(combined_df$avg_kulczynski, 2)
+combined_df$avg_support <- round(combined_df$avg_support, 2)
+
+
+write.csv(combined_df, "combined_tabComp_top20.csv", row.names = FALSE)

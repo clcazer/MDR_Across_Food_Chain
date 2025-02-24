@@ -11,7 +11,12 @@ library(reshape2)
 library(gridExtra)
 library(grid)
 library(lubridate)
-
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(multcomp)
+library(MCMCglmm)
+library(coda)  # For convergence diagnostics
 
 #function to get a data frame that has genes in one column and corresponding gene classes in another column
 get_gene_classes <- function() {
@@ -59,7 +64,14 @@ write.csv(combined_class_df, file = "gene_class_mappings.csv", row.names = FALSE
 return(combined_class_df)
 }
 
-#get_gene_classes()
+
+
+
+
+
+
+
+
 
 
 #function to get data into a format that can be used by the apriori algorithm
@@ -148,6 +160,12 @@ get_transactions <- function(df, resistance_indicator, year, agg = FALSE) {
 
 
 
+
+
+
+
+
+
 #function that gets rules and fequent itemsets by running the apriori algorithm
 get_rules_or_itemsets <- function(df, resistance_indicator, year, target, agg = FALSE) {
 
@@ -174,7 +192,7 @@ get_rules_or_itemsets <- function(df, resistance_indicator, year, target, agg = 
         trans <- get_transactions(df = df, resistance_indicator = resistance_indicator, year = year, agg = agg)
         year_df <- df[df$Year == year, ]
         minsupp <- (1 / length(c(unique(year_df$ID)))) #get minimum support
-        print(year)
+        
        
         #get rules
         rules_or_itemsets <- apriori(trans,
@@ -201,9 +219,11 @@ get_rules_or_itemsets <- function(df, resistance_indicator, year, target, agg = 
 
 #function to add breakpoints if needed
 add_break_points <- function(df, data_source) {
-
+print("STARTING BP ADDITION")
 break_points <- as.data.frame(read_excel("EcoliBreakPoints.xlsx"))
 
+# Ensure df is a data frame
+df <- as.data.frame(df)
 
 df <- df %>% mutate(across(where(is.character), str_trim)) # get rid of extra white space
 df$Drugcode <- toupper(df$Drugcode) # make everything uppercase
@@ -231,7 +251,7 @@ return(df)
 #function to add resistance status based on susceptibility breakpoints
 add_resistance_status <- function(df, data_source) {
     
-
+print("STARTING RES STATUS ADDITION")
 
     #fix the min and max where NULL
     #df$Maximum <- df$Maximum %>% replace(.=="NULL", 99999)
@@ -286,10 +306,15 @@ df <- pivot_wider(data = df, id_cols = c(ID, Year), names_from = Drugcode, value
 
 
 
-write.csv(df, file = str_glue("{data_source}/{data_source}_wide_resStatus_phenotype.csv"), row.names = FALSE)
+write.csv(df, file = str_glue("{data_source}/NEW_{data_source}_wide_resStatus_phenotype.csv"), row.names = FALSE)
+print("DONE ADDING RES STATUS")
 return(df) #return the df with a  isResistant column filled, in wide format
 
 }
+
+
+
+
 
 
 #function to check and see if there are any uninterpretable MIC values in the dataset
@@ -303,354 +328,59 @@ get_uninterpretable <- function(path) {
 
 }
 
-get_genes_wide <- function(df, data_source) {
-    df <- df[, c("ID","Year","SOURCE","CORRECTED_GENOTYPE")] #only want certain columns
-    
-    print("Before processing:")
-    print(str(df$CORRECTED_GENOTYPE))
-    print(head(df$CORRECTED_GENOTYPE, 20))
-    
-    # Split the genes
-    len <- sapply(gregexpr("\\S+", df$CORRECTED_GENOTYPE), length)
-    df$len <- len
-    df_new <- data.frame(cbind(df, str_split_fixed(df$CORRECTED_GENOTYPE, " ", max(len))))
-    names(df_new) <- c("ID", "Year", "SOURCE", "CORRECTED_GENOTYPE", "length", paste0("GENE", 1:max(len)))
 
 
-    df_new <- subset(df_new, select = -c(SOURCE, CORRECTED_GENOTYPE, length)) #delete unneeded 
-    df_new <- pivot_longer(df_new, cols = 3:ncol(df_new)) # pivot to long format
-    df_new <- df_new[df_new$value != "", ]
-    df_new[, "isPresent"] <- 1
 
-    df_new <- pivot_wider(data = df_new, id_cols = c(ID, Year), names_from = value, values_from = isPresent, values_fill = list(isPresent = 0))
-
-    #drop "name" column if it exists
-    if("name" %in% colnames(df_new)) {
-        df_new <- df_new[, !colnames(df_new) %in% "name"]
-    }
-
-    # Remove "NA" column if it exists
-    if("NA" %in% colnames(df_new)) {
-        df_new <- df_new[, !colnames(df_new) %in% "NA"]
-    }
-
-    #drop NULL column if it exists
-    if("NULL" %in% colnames(df_new)) {
-        df_new <- df_new[, !colnames(df_new) %in% "NULL"]
-    }
-
-
-
-# Function to clean column names and merge duplicates
-clean_and_merge_columns <- function(df) {
-  # Clean column names
-  colnames(df) <- gsub(" NA$", "", colnames(df))
-  
-  # Identify duplicate columns
-  col_names <- colnames(df)
-  duplicates <- col_names[duplicated(col_names) | duplicated(col_names, fromLast = TRUE)]
-  
-  # Merge duplicate columns
-  for (col in unique(duplicates)) {
-    cols_to_merge <- which(col_names == col)
-    df[[col]] <- do.call(pmax, c(df[cols_to_merge], na.rm = TRUE))
-    df <- df[, -cols_to_merge[-1]]  # Remove all but the first occurrence
-  }
-  
-  return(df)
-}
-
-
-
-df_new <- clean_and_merge_columns(df_new)
-
-#check length of unique IDs for each year
-    for (year in unique(df_new$Year)) {
-        df <- df_new[df_new$Year == year, ]
-        print(length(unique(df$ID)))
-    }
-
-    #remove rows with duplicate IDs
-    #df_new <- df_new[!duplicated(df_new$ID), ]
-
-    print("Final column names:")
-    print(colnames(df_new))
-    write.csv(df_new, file = str_glue("{data_source}/{data_source}_wide_corrected_genotype.csv"), row.names = FALSE)
-}
-
-
-#corrected_retail_meats_df <- read.csv("Retail_Meats/Retail_Meats_corrected_genotype.csv")
-#get_genes_wide(corrected_retail_meats_df, "Retail_Meats")
-
-
-#this function is needed because there are sometimes genes in the genotype column that are not in the class labeled columns and vice versa
-fix_genotype <- function(df, data_source) {
-
-#replace all spaces, dashes, and periods in column names with underscores
-colnames(df) <- gsub(pattern = " ", replacement = "_", x = colnames(df))
-colnames(df) <- gsub(pattern = "-", replacement = "_", x = colnames(df))
-colnames(df) <- gsub(pattern = "\\.", replacement = "_", x = colnames(df))
-
-
-# Filter out rows with empty or NA BIOSAMPLE_ID and SRA_ACCESSION_NUMBER only if GENOTYPE is blank
-df <- df[!(df$GENOTYPE == "" | is.na(df$GENOTYPE)) | 
-          (!is.na(df$BIOSAMPLE_ID) & df$BIOSAMPLE_ID != "") | 
-          (!is.na(df$SRA_ACCESSION_NUMBER) & df$SRA_ACCESSION_NUMBER != ""), ]
-
-
-#only get the data we want to analyze
-df <- df[df$GROWTH == "YES", ]
-df <- df[df$GENUS == "EC", ]
-df <- df[df$SPECIES == "coli", ]
-df <- df[df$HOST_SPECIES == "Cattle", ]
-df <- df[df$Year != 2020, ]
-df <- df[df$Year >= 2017, ]
-
-
-#put "NULL" in all blank cells in the df
-#df <- df %>% mutate(across(where(is.character), ~replace(., is.na(.), "NULL")))
-print(head(df))
-
-df$CORRECTED_GENOTYPE <- NA #create a corrected genotype column that will be added to later
-
-# these next several lines of code are to delete spaces within a single gene. This is necessary because I'm 
-#using spaces to split the genes and if a single gene contains a space it will be split into multiple genes
-
-
-# Function to process gene names
-process_gene_names <- function(text) {
-  # Step 1: Join parentheses with preceding word
-  text <- gsub("(\\w+)\\s+(\\([^)]+\\))", "\\1\\2", text)
-  
-  # Step 2: Handle cases like "GyrA (S83L), (D87N)"
-  text <- gsub("(\\w+\\([^)]+\\)),\\s*(\\([^)]+\\))", "\\1 \\1\\2", text)
-  
-  # Step 3: Split combined genes into separate genes
-  text <- gsub("(\\w+\\([^)]+\\))\\([^)]+\\)", "\\1 \\1\\2", text)
-  
-  # Step 4: Remove any remaining commas
-  text <- gsub(",", "", text)
-  
-  return(text)
-}
-
-# Apply the function to relevant columns
-gene_columns <- colnames(df)[which(colnames(df) == "Aminoglycoside_Resist_Genes"):which(colnames(df) == "Other_Classes_Resist_Genes")]
-
-for (col in gene_columns) {
-  df[, col] <- sapply(df[, col], process_gene_names)
-}
-
-# Apply to GENOTYPE column as well
-df[, "GENOTYPE"] <- sapply(df[, "GENOTYPE"], process_gene_names)
-
-
-
-#sometimes genes that are classified elsewhere (i.e., for other isolates in the dataset) are not classified for a
-#particular isolate (i.e., the gene only appears in the GENOTYPE column)
-#in this case, I do not want to add that gene to the other_resistant_genes column
-#these next few lines of code get a vector of all the classified genes so that I can check to see if a gene
-#should be added to the other_resistant_genes column or not
-not_other_genes_list <- list()
-for (row in 1:nrow(df)) {
-not_other_genes <- str_split(df[row, which(colnames(df) == "Aminoglycoside_Resist_Genes"):which(colnames(df) == "Phenicol_Resist_Genes")], " ")
-not_other_genes_list <- list.append(not_other_genes_list, not_other_genes)
-}
-not_other_genes_vec <- unique(unlist(not_other_genes_list))
-    
-
-for (row in 1:nrow(df)) {
-
-    #get all the genes from each of the gene class columns
-    genes_vec <- unlist(str_split(df[row, which(colnames(df) == "Aminoglycoside_Resist_Genes"):which(colnames(df) == "Other_Classes_Resist_Genes")], " "))
-    
-    #get all the genes from the GENOTYPE column
-    genotype_vec <- unlist(str_split(df[row, "GENOTYPE"], " "))
-
-    #find which genes need to go into the other resistant genes column
-    diff <- paste(unique(genotype_vec[! genotype_vec %in% genes_vec]), collapse = " ")
-    if (! diff %in% not_other_genes_vec) {
-    df[row, "Other_Classes_Resist_Genes"] <- diff
-    }
-
-    #get all the genes that need to go into the corrected genotype column
-    unique_vec <- unique(c(genes_vec, genotype_vec))
-    if (length(unique_vec) > 1) {
-        unique_vec<- unique_vec[!(unique_vec == "NULL")] #delete null if there is at least one gene present
-        }
-
-    #add genes to the corrected genotype column
-    unique_vec <- paste(unique_vec, collapse = " ")
-    df[row, "CORRECTED_GENOTYPE"] <- unique_vec
-}
-if (FALSE) {
-# Remove "NA" from the corrected genotype column unless that is the only value present
-df$CORRECTED_GENOTYPE <- sapply(df$CORRECTED_GENOTYPE, function(x) {
-  genes <- unlist(strsplit(x, " "))
-  genes <- genes[genes != ""]  # Remove empty strings
-  if (length(genes) == 1 && genes == "NA") {
-    return("NA")
-  } else {
-    genes <- genes[genes != "NA"]
-    return(paste(genes, collapse = " "))
-  }
-})
-}
-
-
-
-print(head(df$CORRECTED_GENOTYPE))
-write.csv(df, file = str_glue("{data_source}/{data_source}_corrected_genotype.csv"), row.names = FALSE )
-return(df)
-
-}
-
-
-#retail_meats_df <- read.csv("CVM-2020-NARMS-RetailMeatsData.csv")
-#fix_genotype(retail_meats_df, "retail_meats")
-
-
-
-
-
-
-MIC_to_interval <- function(df, data_source) {
-
-    #only get the data we want to analyze
-    df <- df[df$GROWTH == "YES", ]
-    df <- df[df$GENUS == "EC", ]
-    df <- df[df$SPECIES == "coli", ]
-    df <- df[df$HOST_SPECIES == "Cattle", ]
-    df <- df[df$Year != 2020, ]
-    #only get 2017 onward
-    df <- df[df$Year >= 2017, ]
-
-    print(colnames(df))
-    #split the df into a sign df and an MIC df (will make pivoting easier)
-    sign_df <- df[, c("ID", "Year", "SOURCE",
-    "AMC.Sign",
-    "AMP.Sign",
-    "AXO.Sign",
-    "AZI.Sign",
-    "CHL.Sign",
-    "CIP.Sign",
-    "COT.Sign",
-    "FIS.Sign",
-    "FOX.Sign",
-    "GEN.Sign",
-    "MER.Sign",
-    "NAL.Sign",
-    "SMX.Sign",
-    "TET.Sign",
-    "STR.Sign")]
-
-
-
-
-    MIC_df <- df[, c("ID", "Year", "SOURCE",
-    "AMC",
-    "AMP",
-    "AXO",
-    "AZI",
-    "CHL",
-    "CIP",
-    "COT",
-    "FIS",
-    "FOX",
-    "GEN",
-    "MER",
-    "NAL",
-    "SMX",
-    "TET",
-    "STR")]
-    #check to see if MIC_df and sign df are empty
-    if (nrow(sign_df) == 0) {
-        print("sign_df is empty")
-    }
-    if (nrow(MIC_df) == 0) {
-        print("MIC_df is empty")
-    }
-
-
-
-    #pivot the sign_df to long format delete the .Sign from the Drugcode column so we are just left with drug code that will match that on the MIC_df
-    sign_df <- pivot_longer(sign_df, cols = ends_with("Sign"), names_to = "Drugcode", values_to = c("MIC_SIGN"), values_drop_na = TRUE)# pivot to long format
-    sign_df$Drugcode  <- substr(sign_df$Drugcode , 0, 3)
-
-
-    #pivot the MIC_df to long format
-    MIC_df <- pivot_longer(MIC_df, cols = -c(ID, Year, SOURCE), names_to = "Drugcode", values_to = c("MIC"), values_drop_na = TRUE)# pivot to long format
-
-
-
-    #now merge both long formatted dataframes
-    merged_df <- merge(x = sign_df, y = MIC_df, fill = NA)
-
-
-    #add Minimum and Maximum columns to the merged_df
-    merged_df$Minimum <- NA
-    merged_df$Maximum <- NA
-
-
-    #loop through merged_df and add values to min and max columns based on MIC_SIGN and MIC column values
-    for (row in 1:nrow(merged_df)) {
-
-        if (merged_df[row, "MIC_SIGN"] == "="){
-
-            merged_df[row, "Maximum"] <- merged_df[row, "MIC"]
-            merged_df[row, "Minimum"] <- merged_df[row, "MIC"]
-        }
-        else if (merged_df[row, "MIC_SIGN"] == "<") {
-
-            merged_df[row, "Maximum"] <- as.numeric(merged_df[row, "MIC"]) - 0.1
-            merged_df[row, "Minimum"] <- 0
-        }
-        else if (merged_df[row, "MIC_SIGN"] == ">") {
-
-            merged_df[row, "Maximum"] <- 99999
-            merged_df[row, "Minimum"] <- as.numeric(merged_df[row, "MIC"]) + 0.1
-        }
-        else if (merged_df[row, "MIC_SIGN"] == "<=") {
-
-            merged_df[row, "Maximum"] <- merged_df[row, "MIC"]
-            merged_df[row, "Minimum"] <- 0
-        }
-        else if (merged_df[row, "MIC_SIGN"] == ">=") {
-
-            merged_df[row, "Maximum"] <- 99999
-            merged_df[row, "Minimum"] <- merged_df[row, "MIC"]
-        }
-
-    }
-
-
-    write.csv(merged_df, file = str_glue("{data_source}/{data_source}_phenotype_data.csv"), row.names = FALSE)
-
-    return(merged_df)
-
-}
 
 
 
 
 prevalence_descriptives <- function(df, data_source, resistance_indicator, class_level = FALSE) {
+    # If this is genotype data, create a mapping of original to sanitized names
+    original_names_lookup <- read.csv("gene_class_mappings.csv")
+    original_names_lookup <- original_names_lookup$Genes
+
+   original_names <- NULL
+    if (resistance_indicator == "genotype") {
+        # Create sanitized versions of the lookup names to match with df column names
+        sanitized_lookup <- make.names(original_names_lookup)
+        # Create mapping from sanitized to original names
+        name_mapping <- setNames(original_names_lookup, sanitized_lookup)
+    }
+
+
+
     year_list <- list()
     sample_size_list <- list()
     df_list <- list()
-    for (year in c(min(df[, "Year"]):(max(df[, "Year"])))){
-        year_df <- df[df$Year == year,]
-        year_list <- list.append(year_list, unique(year_df$Year))
-        sample_size_list <- list.append(sample_size_list, length(unique(year_df$ID)))
-        year_df <- subset(year_df, select = -c(ID, Year))
+    
+    # Get all possible years in the range
+    all_years <- seq(min(df[, "Year"]), max(df[, "Year"]))
+    
+    for (year in all_years) {
+        year_df <- df[df$Year == year, ]
         
-        means_df <- round(x = colMeans(year_df, na.rm = TRUE), digits = 4)
+        # If there's no data for this year, add NA values
+        if (nrow(year_df) == 0) {
+            year_list <- list.append(year_list, year)
+            sample_size_list <- list.append(sample_size_list, 0)
+            # Create a row of NAs for this year
+            means_df <- rep(NA, ncol(df) - 2)  # -2 for ID and Year columns
+            names(means_df) <- colnames(df)[!colnames(df) %in% c("ID", "Year")]
+        } else {
+            year_list <- list.append(year_list, unique(year_df$Year))
+            sample_size_list <- list.append(sample_size_list, length(unique(year_df$ID)))
+            year_df <- subset(year_df, select = -c(ID, Year))
+            means_df <- round(x = colMeans(year_df, na.rm = TRUE), digits = 4)
+        }
+        
         df_list <- list.append(df_list, means_df)
     }
 
     prevalence_df <- bind_rows(df_list)
     prevalence_df <- prevalence_df * 100
     
-    # Sort the drug columns alphabetically
+    # Sort the columns alphabetically (using sanitized names for genotype data)
     drug_cols <- sort(colnames(prevalence_df))
     prevalence_df <- prevalence_df[, drug_cols]
     
@@ -661,12 +391,72 @@ prevalence_descriptives <- function(df, data_source, resistance_indicator, class
         prevalence_df
     )
 
+    # Calculate summary statistics
+    drug_cols <- colnames(prevalence_df)[!(colnames(prevalence_df) %in% c("Year", "N"))]
+    
+    # Create two summary rows
+    mean_row <- data.frame(
+        Year = paste(min(prevalence_df$Year), "-", max(prevalence_df$Year)),
+        N = sum(prevalence_df$N),
+        matrix(NA, nrow = 1, ncol = length(drug_cols), 
+               dimnames = list(NULL, drug_cols))
+    )
+    
+    sd_row <- data.frame(
+        Year = "SD",
+        N = NA,
+        matrix(NA, nrow = 1, ncol = length(drug_cols), 
+               dimnames = list(NULL, drug_cols))
+    )
+    
+    # Calculate mean and SD for each drug column
+    for (col in drug_cols) {
+        mean_val <- round(mean(prevalence_df[[col]], na.rm = TRUE), 2)
+        sd_val <- round(sd(prevalence_df[[col]], na.rm = TRUE), 2)
+        mean_row[[col]] <- sprintf("%.2f", mean_val)
+        sd_row[[col]] <- sprintf("%.2f", sd_val)
+    }
+    
+    # Add both summary rows to prevalence_df
+    prevalence_df <- rbind(prevalence_df, mean_row, sd_row)
+
+    # If this is genotype data, restore the original column names
+    if (resistance_indicator == "genotype") {
+        # Get the current column names (excluding Year and N)
+        current_cols <- colnames(prevalence_df)[!(colnames(prevalence_df) %in% c("Year", "N"))]
+        
+        # Map sanitized names back to original names
+        new_cols <- c("Year", "N")
+        for (col in current_cols) {
+            if (col %in% names(name_mapping)) {
+                new_cols <- c(new_cols, name_mapping[col])
+            } else {
+                new_cols <- c(new_cols, col)  # Keep original if no mapping found
+            }
+        }
+        colnames(prevalence_df) <- new_cols
+    }
+
     if (class_level == FALSE) {
         write.csv(prevalence_df, str_glue("{data_source}/prevalence_descriptives/{data_source}_{resistance_indicator}_prevalence_descriptives.csv"), row.names = FALSE)
     } else if (class_level == TRUE) {
         write.csv(prevalence_df, str_glue("{data_source}/prevalence_descriptives/{data_source}_{resistance_indicator}_class_level_prevalence_descriptives.csv"), row.names = FALSE)
     }
+    
+    return(prevalence_df)
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -727,7 +517,8 @@ class_level_prevalence_descriptives <- function(df, data_source, resistance_indi
                 # Then, merge the duplicated columns
                 for (class in genotype_duplicated_classes) {
                     cols_to_merge <- names(df)[grepl(paste0("^", class, "(\\.|$)"), names(df))]
-                    
+                    print(paste("For class:", class))
+                    print(paste("Columns to merge:", paste(cols_to_merge, collapse=", ")))
                     if (length(cols_to_merge) > 1) {
                         df <- merge_columns(df, cols_to_merge)
                     }
@@ -772,6 +563,13 @@ class_level_prevalence_descriptives <- function(df, data_source, resistance_indi
 
     write.csv(prevalence_df, str_glue("{data_source}/prevalence_descriptives/{data_source}_{resistance_indicator}_class_level_prevalence_descriptives.csv"), row.names = FALSE)
 }
+
+
+
+
+
+
+
 
 
 #function to get the number of isolates that have a gene that is not represented in the phenotype data at the class level
@@ -936,6 +734,14 @@ dev.off()
 
 
 
+
+
+
+
+
+
+
+
 compare_dataframes <- function(df1, df2) {
   # Check if dimensions are the same
   if (!all(dim(df1) == dim(df2))) {
@@ -976,22 +782,24 @@ if (!are_equivalent) {
 
 }
 
-dfcecal1 <- read.csv("C:/Users/jg2527/Downloads/NARMS_PROJ-master/NARMS_PROJ-master/cecal/cecal_wide_class_level_genotype.csv")
-dfcecal2 <- read.csv("C:/Users/jg2527/NARMS_PROJ/cecal/cecal_wide_class_level_genotype.csv")
-dfcecal3 <- read.csv("C:/Users/jg2527/NARMS_PROJ/cecal/wrongcecal_wide_class_level_genotype.csv")
 
-dfretail1 <- read.csv("C:/Users/jg2527/Downloads/NARMS_PROJ-master/NARMS_PROJ-master/Retail_Meats/Retail_Meats_wide_family_level_genotype.csv")
-dfretail2 <- read.csv("C:/Users/jg2527/NARMS_PROJ/Retail_Meats/Retail_Meats_wide_family_level_genotype.csv")
 
-gene1 <- read.csv("C:/Users/jg2527/Downloads/NARMS_PROJ-master/NARMS_PROJ-master/gene_class_mappings.csv")
-gene2 <- read.csv("C:/Users/jg2527/NARMS_PROJ/gene_class_mappings.csv")
-# compare_dataframes(df1 = dfcecal3, df2 = dfcecal2)
+
+
+
+
+
+
+
+
 
 #function to match the gene family from refgenes with genes from NARMS data
-match_to_refgenes <- function(narms_df, refgenes_df) {
-#get rid of rows where the Genes column is duplicated
-narms_df <- narms_df[!duplicated(narms_df$Genes), ]
-  
+match_to_refgenes <- function(AMRFinder_df, refgenes_df) {
+ # Initialize data frame with the correct number of rows
+ narms_df <- data.frame(
+   Genes = unique(AMRFinder_df$Element.symbol),
+   stringsAsFactors = FALSE
+ )
   # Get rid of rows where the Gene.family column is duplicated
   refgenes_df <- refgenes_df[!duplicated(refgenes_df$Gene.family), ]
   
@@ -1073,119 +881,76 @@ for (row in 1:nrow(narms_df)) {
   for (original in names(non_exact_matches)) {
     cat(sprintf("%s -> %s\n", original, non_exact_matches[[original]]))
   }
-  write.csv(narms_df, file = "wNAHLN_gene_class_mappings.csv", row.names = FALSE)
+  write.csv(narms_df, file = "gene_class_mappings.csv", row.names = FALSE)
   #return(result_df)
 }
-#narms_df <- read.csv("wNAHLN_gene_class_mappings.csv")
-#refgenes_df <- read.csv("refgenes.csv")
+# AMRFinder_df <- read.csv("Gene_Data/amrfinder_results-AMR-CORE.point-muts-included.csv")
+# refgenes_df <- read.csv("refgenes.csv")
 
-#match_to_refgenes(narms_df, refgenes_df)
+# match_to_refgenes(AMRFinder_df, refgenes_df)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 convert_gene_to_gene_family <- function(df, genotype_class_mappings, data_source) {
-  # Function to merge case-insensitive duplicate columns
-  merge_case_insensitive_columns <- function(df) {
-  # Get all column names
-  col_names <- names(df)
-  
-  # Create a list to store columns to be merged
-  to_merge <- list()
-  
-  # Identify columns to be merged
-  for (name in col_names) {
-    lower_name <- tolower(name)
-    if (!(lower_name %in% names(to_merge))) {
-      to_merge[[lower_name]] <- col_names[tolower(col_names) == lower_name]
-    }
+  # Create helper function to standardize names for matching
+  standardize_name <- function(name) {
+    # Replace any character that isn't a letter or number with a period
+    # Also converts to lowercase for case-insensitive matching
+    gsub("[^A-Za-z0-9]", ".", tolower(name))
   }
   
-  # Merge identified columns
-  for (lower_name in names(to_merge)) {
-    cols <- to_merge[[lower_name]]
-    if (length(cols) > 1) {
-      # Keep the capitalization that appears first
-      kept_name <- cols[1]
-      df[[kept_name]] <- apply(df[, cols, drop = FALSE], 1, max, na.rm = TRUE)
-      df <- df[, !(names(df) %in% cols[-1])]
-    }
-  }
+  # Standardize names in both dataframes for matching
+  std_df_cols <- standardize_name(names(df))                # Standardize column names from input df
+  std_genes <- standardize_name(genotype_class_mappings$Genes)  # Standardize genes from mapping file
   
-  return(df)
-}
-  
-  # Merge case-insensitive duplicate columns
-  df <- merge_case_insensitive_columns(df)
-
-  # Function to create a consistent representation for matching
-  create_matching_name <- function(name) {
-    gsub("[^A-Za-z0-9]", "", tolower(name))
-  }
-
-  # Create matching names for both the dataframe columns and the mapping file
-  df_matching_names <- create_matching_name(names(df))
-  mapping_matching_names <- create_matching_name(genotype_class_mappings$Genes)
-
-  # Create a named vector for renaming, using original names but matching based on the consistent representation
-  genotype_class_names <- setNames(
-    make.unique(genotype_class_mappings$Gene_family),
-    names(df)[match(mapping_matching_names, df_matching_names)]
+  # Create mapping dictionary from standardized gene names to gene families
+  # setNames creates a named vector where:
+  # - The values are the gene families
+  # - The names are the standardized gene names
+  gene_to_family <- setNames(
+    genotype_class_mappings$Gene_family,
+    std_genes
   )
-
-  print("Gene mappings:")
-  print(genotype_class_names)
-
-  genotype_duplicated_classes <- names(which(table(genotype_class_mappings$Gene_family) > 1))
-
-  # Function to merge duplicated columns keeping the largest value
-  merge_columns <- function(df, cols) {
-    col_name <- unique(gsub("\\.\\d+$", "", cols[1]))
-    df[[col_name]] <- apply(df[, cols, drop = FALSE], 1, max, na.rm = TRUE)
-    df <- df[, !(names(df) %in% cols)]
-    df[[col_name]] <- df[[col_name]]  # Add the new column
-    return(df)
-  }
-
-
-  #merge any columns in df that are currently duplicated
-  for (col in colnames(df)) {
-    cols_to_merge <- names(df)[grepl(paste0("^", col, "(\\.|$)"), names(df))]
+  
+  # Initialize result dataframe with just ID and Year columns
+  result <- df[, c("ID", "Year")]
+  
+  # Process each gene family one at a time
+  for (family in unique(genotype_class_mappings$Gene_family)) {
+    # Find all standardized gene names that map to this family
+    family_genes <- names(gene_to_family)[gene_to_family == family]
     
-    if (length(cols_to_merge) > 1) {
-      df <- merge_columns(df, cols_to_merge)
-    }
-  }
-
-  # Rename and merge columns
-  for (old_name in names(genotype_class_names)) {
-    new_name <- genotype_class_names[old_name]
-    if (old_name %in% names(df)) {
-      names(df)[names(df) == old_name] <- new_name
+    # Find which columns in the input df correspond to these genes
+    matching_cols <- which(std_df_cols %in% family_genes)
+    
+    if (length(matching_cols) > 0) {
+      # For this gene family:
+      # 1. Select all columns that correspond to genes in this family
+      # 2. Calculate rowSums to see if ANY gene is present (sum > 0)
+      # 3. Convert to numeric to get 1/0 instead of TRUE/FALSE
+      result[[family]] <- as.numeric(rowSums(df[, matching_cols, drop = FALSE]) > 0)
     }
   }
   
-  for (class in genotype_duplicated_classes) {
-    cols_to_merge <- names(df)[grepl(paste0("^", class, "(\\.|$)"), names(df))]
-    if (length(cols_to_merge) > 1) {
-      df <- merge_columns(df, cols_to_merge)
-    }
-  }
+  # Reorder columns to ensure ID and Year are first, followed by the rest in alphabetical order
+  result <- result[, c("ID", "Year", sort(names(result)[-(1:2)]))]
 
-  # Remove trailing dot and number from column names in genotype_df
-  colnames(df) <- gsub("\\.\\d+$", "", colnames(df))
-
-  # Check for unmapped genes
-  unmapped_genes <- setdiff(names(df), c("ID", "Year", unique(genotype_class_mappings$Gene_family)))
-  if (length(unmapped_genes) > 0) {
-    warning("The following genes were not mapped to any class: ", paste(unmapped_genes, collapse = ", "))
-  }
-
-  # Debugging: Print the final column names
-  print("Final column names:")
-  print(colnames(df))
-  write.csv(df, file = str_glue("{data_source}/{data_source}_wide_family_level_genotype.csv"), row.names = FALSE)
+  # Save the result to a CSV file
+  write.csv(result, file = str_glue("{data_source}/{data_source}_wide_family_level_genotype.csv"), row.names = FALSE)
   
-  return(df)
+  return(result)
 }
 
 
@@ -1193,141 +958,9 @@ convert_gene_to_gene_family <- function(df, genotype_class_mappings, data_source
 
 
 
-convert_gene_to_class <- function(df, genotype_class_mappings, data_source) {
-  # Function to merge case-insensitive duplicate columns
-  merge_case_insensitive_columns <- function(df) {
-  # Get all column names
-  col_names <- names(df)
-  
-  # Create a list to store columns to be merged
-  to_merge <- list()
-  
-  # Identify columns to be merged
-  for (name in col_names) {
-    lower_name <- tolower(name)
-    if (!(lower_name %in% names(to_merge))) {
-      to_merge[[lower_name]] <- col_names[tolower(col_names) == lower_name]
-    }
-  }
-  
-  # Merge identified columns
-  for (lower_name in names(to_merge)) {
-    cols <- to_merge[[lower_name]]
-    if (length(cols) > 1) {
-      # Keep the capitalization that appears first
-      kept_name <- cols[1]
-      df[[kept_name]] <- apply(df[, cols, drop = FALSE], 1, max, na.rm = TRUE)
-      df <- df[, !(names(df) %in% cols[-1])]
-    }
-  }
-  
-  return(df)
-}
-  
-  # Merge case-insensitive duplicate columns
-  df <- merge_case_insensitive_columns(df)
-print("original column names:")
-print(colnames(df))
-
- #genotype_class_mappings <- read.csv("gene_class_mappings.csv")
-        genotype_class_mappings$Genes <- gsub(pattern = "[^A-Za-z0-9]", replacement = ".", genotype_class_mappings$Genes)
-        #get rid of duplicate duplicates in Genes column
-        genotype_class_mappings <- genotype_class_mappings[!duplicated(genotype_class_mappings$Genes), ]
-
-        genotype_class_names <- setNames(make.unique(genotype_class_mappings$corrected_class), genotype_class_mappings$Genes)
-        print("Gene class mappings:")
-        print(genotype_class_names)
-        genotype_duplicated_classes <- names(which(table(genotype_class_mappings$corrected_class) > 1))
-
-        # Function to merge duplicated columns keeping the largest value
-        merge_columns <- function(df, cols) {
-            col_name <- unique(gsub("\\.\\d+$", "", cols[1]))
-            df %>% 
-                mutate(!!col_name := pmax(!!!rlang::syms(cols), na.rm = TRUE)) %>%
-                select(-all_of(cols), !!col_name)
-        }
-
-      #merge any columns in df that are currently duplicated
-      for (col in colnames(df)) {
-                    cols_to_merge <- names(df)[grepl(paste0("^", col, "(\\.|$)"), names(df))]
-                    
-                    if (length(cols_to_merge) > 1) {
-                        df <- merge_columns(df, cols_to_merge)
-                    }
-                }
-
-
-        df <- df %>%
-            # First, rename the columns
-            rename_with(~ genotype_class_names[.x], .cols = intersect(names(.), names(genotype_class_names))) %>%
-            {   
-                df <- .
-                # Then, merge the duplicated columns
-                for (class in genotype_duplicated_classes) {
-                    cols_to_merge <- names(df)[grepl(paste0("^", class, "(\\.|$)"), names(df))]
-                    
-                    if (length(cols_to_merge) > 1) {
-                        df <- merge_columns(df, cols_to_merge)
-                    }
-                }
-                df
-            }
-
-        # Remove trailing dot and number from column names in genotype_df
-        colnames(df) <- gsub("\\.\\d+$", "", colnames(df))
-
-        #Check for unmapped genes and remove them from the dataframe
-        unmapped_genes <- setdiff(names(df), c("ID", "Year", unique(genotype_class_mappings$corrected_class)))
-        if (length(unmapped_genes) > 0) {
-            warning("The following genes were not mapped to any class: ", paste(unmapped_genes, collapse = ", "))
-            # Remove unmapped genes from the dataframe
-            df <- df[, !(names(df) %in% unmapped_genes)]
-        }
-
-        # Function to split columns with "/"
-        split_slash_columns <- function(df) {
-            slash_cols <- grep("/", names(df), value = TRUE)
-            for (col in slash_cols) {
-                parts <- strsplit(col, "/")[[1]]
-                for (part in parts) {
-                    if (!part %in% names(df)) {
-                        df[[part]] <- df[[col]]
-                    } else {
-                        df[[part]] <- pmax(df[[part]], df[[col]], na.rm = TRUE)
-                    }
-                }
-                df[[col]] <- NULL
-            }
-            return(df)
-        }
-
-        # Apply the split_slash_columns function
-        df <- split_slash_columns(df)
-
-        # Debugging: Print the final column names
-        print("Final column names:")
-        print(colnames(df))
-        write.csv(df, file = str_glue("{data_source}/{data_source}_wide_class_level_genotype.csv"), row.names = FALSE)
-        
-        return(df)
-    }
 
 
 
-
-
-
-
-# df <- read.csv("NAHLN/NAHLN_wide_Family_level_genotype.csv")
-# genotype_class_mappings <- read.csv("wNAHLN_gene_class_mappings.csv")
-# convert_gene_to_class(df, genotype_class_mappings, data_source = "NAHLN")
-
-
-# cecal_df <- read.csv("cecal_2017Onward/cecal_2017Onward_wide_corrected_genotype.csv")
-# retail_meats_df <- read.csv("Retail_Meats_2017Onward/Retail_Meats_2017Onward_wide_corrected_genotype.csv")
-# genotype_class_mappings <- read.csv("gene_class_mappings.csv")
-# convert_gene_to_class(cecal_df, genotype_class_mappings, data_source = "cecal_2017Onward")
-# convert_gene_to_class(retail_meats_df, genotype_class_mappings, data_source = "Retail_Meats_2017Onward")
 
 
 
@@ -1446,21 +1079,371 @@ print(colnames(df))
         # Debugging: Print the final column names
         print("Final column names:")
         print(colnames(df))
-        write.csv(df, file = str_glue("{data_source}/{data_source}_wide_class_level_phenotype.csv"), row.names = FALSE)
+        write.csv(df, file = str_glue("{data_source}/NEW_{data_source}_wide_class_level_phenotype.csv"), row.names = FALSE)
         
         return(df)
     }
 
 
-  # cecal_phenotype_df <- read.csv("cecal_2017Onward/cecal_2017Onward_wide_resStatus_phenotype.csv")
-#  retail_meats_phenotype_df <- read.csv("Retail_Meats_2017Onward/Retail_Meats_2017Onward_wide_resStatus_phenotype.csv")
-
-# retail_meats_phenotype_df <- read.csv("Retail_Meats_2017Onward/Retail_Meats_2017Onward_wide_resStatus_phenotype.csv")
-  # phenotype_class_mappings <- read_excel("EcoliBreakPoints.xlsx")
-  # convert_phenotype_to_class(cecal_phenotype_df, phenotype_class_mappings, data_source = "cecal_2017Onward")
-# convert_phenotype_to_class(retail_meats_phenotype_df, phenotype_class_mappings, data_source = "Retail_Meats_2017Onward")
 
 
+
+
+
+
+
+
+
+create_rarefaction_curves <- function(df, n_iterations = 100) {
+    require(ggplot2)
+    require(dplyr)
+    
+    # Get unique data sources
+    data_sources <- unique(df$meta)
+    
+    # Create list to store results for each data source
+    rarefaction_results <- list()
+    
+    for (source in data_sources) {
+        # Subset data for this source
+        source_df <- df[df$meta == source, ]
+        
+        # Get all isolates for this source
+        isolates <- unique(source_df$GCA)
+        max_samples <- length(isolates)
+        
+        # Define sample sizes to test (e.g., from 1 to max_samples)
+        # Using a logarithmic scale to get more points in the early part of the curve
+        sample_sizes <- unique(round(exp(seq(log(1), log(max_samples), length.out = 50))))
+        
+        # For each sample size, perform multiple iterations
+        results <- data.frame()
+        
+        for (size in sample_sizes) {
+            unique_genes_counts <- numeric(n_iterations)
+            
+            # Perform n_iterations random samples for each size
+            for (i in 1:n_iterations) {
+                # Randomly sample isolates
+                sampled_isolates <- sample(isolates, size, replace = FALSE)
+                
+                # Get genes for these isolates
+                sampled_genes <- unique(source_df$Element.symbol[source_df$GCA %in% sampled_isolates])
+                
+                # Store number of unique genes
+                unique_genes_counts[i] <- length(sampled_genes)
+            }
+            
+            # Calculate mean and standard deviation
+            results <- rbind(results, 
+                           data.frame(
+                               source = source,
+                               sample_size = size,
+                               mean_genes = mean(unique_genes_counts),
+                               sd_genes = sd(unique_genes_counts),
+                               lower_ci = mean(unique_genes_counts) - 1.96 * sd(unique_genes_counts)/sqrt(n_iterations),
+                               upper_ci = mean(unique_genes_counts) + 1.96 * sd(unique_genes_counts)/sqrt(n_iterations)
+                           ))
+        }
+        
+        rarefaction_results[[source]] <- results
+    }
+    
+    # Combine all results
+    all_results <- do.call(rbind, rarefaction_results)
+    
+    # Create plot
+    p <- ggplot(all_results, aes(x = sample_size, y = mean_genes, color = source, fill = source)) +
+        geom_line(linewidth = 1) +
+        geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2, color = NA) +
+        geom_point(size = 1) +
+        theme_minimal() +
+        labs(x = "Number of Isolates Sampled",
+             y = "Number of Unique Genes",
+             title = "Rarefaction Curves of Virulence Genes",
+             color = "Data Source",
+             fill = "Data Source") +
+        theme(
+            panel.background = element_rect(fill = "white"),  # White background
+            plot.background = element_rect(fill = "white"),   # White plot background
+            legend.position = "bottom",
+            plot.title = element_text(hjust = 0.5)  # Center the title
+            )
+    
+    # Save plot
+    ggsave("rarefaction_curves.png", p, width = 10, height = 6)
+    
+    # Save data
+    write.csv(all_results, "rarefaction_data.csv", row.names = FALSE)
+    
+    return(list(plot = p, data = all_results))
+}
+
+
+
+
+
+comp_rules_to_plasmids <- function(rules_df, cecal_plasmids_df, retail_plasmids_df, nahln_plasmids_df) {
+    # Add data source to each plasmid dataframe
+    cecal_plasmids_df$Data_Source <- "Cecal"
+    retail_plasmids_df$Data_Source <- "Retail_Meats"
+    nahln_plasmids_df$Data_Source <- "NAHLN"
+    
+    # Function to normalize combinations
+    normalize_combination <- function(combination) {
+        combination <- gsub("[{}'\"]", "", combination)
+        genes <- unlist(strsplit(combination, "[,|]"))
+        genes <- sort(trimws(genes))
+        genes <- genes[genes != ""]
+        return(paste(genes, collapse = ","))
+    }
+    
+    # Function to deduplicate plasmid dataframe
+    deduplicate_plasmids <- function(df) {
+        # Add normalized combinations
+        df$normalized_combination <- sapply(df$combination, normalize_combination)
+        
+        # Group by normalized combination and sum contigs
+        deduped <- aggregate(
+            num_contigs_with_combo ~ normalized_combination + Data_Source, 
+            data = df,
+            FUN = sum
+        )
+        
+        # Keep the original combination format (take first occurrence)
+        combinations <- df[!duplicated(df$normalized_combination), c("combination", "normalized_combination")]
+        deduped <- merge(deduped, combinations, by = "normalized_combination")
+        
+        return(deduped)
+    }
+    
+    # Deduplicate each plasmid dataset
+    cecal_plasmids_df <- deduplicate_plasmids(cecal_plasmids_df)
+    retail_plasmids_df <- deduplicate_plasmids(retail_plasmids_df)
+    nahln_plasmids_df <- deduplicate_plasmids(nahln_plasmids_df)
+    
+    # Combine the deduplicated dataframes
+    plasmids_df <- rbind(cecal_plasmids_df, retail_plasmids_df, nahln_plasmids_df)
+    
+    # Normalize rules dataframe
+    rules_df$normalized_combination <- sapply(rules_df$gene_combination, normalize_combination)
+    
+    # Create a result data frame with pre-allocated columns
+    results <- data.frame(
+        Data_Source = character(),
+        Year = numeric(),
+        rule_combination = character(),
+        class_combination = character(),
+        plasmid_combination = character(),
+        support = numeric(),
+        confidence = numeric(),
+        lift = numeric(),
+        num_contigs = numeric(),
+        mismatch_distance = numeric(),
+        stringsAsFactors = FALSE
+    )
+    
+    # Compare combinations, matching only within the same data source
+    for (i in 1:nrow(rules_df)) {
+        rule_combination <- rules_df$normalized_combination[i]
+        rule_genes <- unlist(strsplit(rule_combination, ","))
+        
+        # Filter plasmids_df to only include rows from the same data source
+        matching_plasmids <- plasmids_df[plasmids_df$Data_Source == rules_df$Data_Source[i], ]
+        
+        for (j in 1:nrow(matching_plasmids)) {
+            plasmid_combination <- matching_plasmids$normalized_combination[j]
+            plasmid_genes <- unlist(strsplit(plasmid_combination, ","))
+            
+            # Calculate Jaccard similarity
+            intersection <- length(intersect(rule_genes, plasmid_genes))
+            union <- length(unique(c(rule_genes, plasmid_genes)))
+            mismatch_distance <- 1 - (intersection / union)
+            
+            if (mismatch_distance <= 0.7) {
+                new_row <- data.frame(
+                    Data_Source = rules_df$Data_Source[i],
+                    Year = rules_df$Year[i],
+                    rule_combination = rules_df$gene_combination[i],
+                    class_combination = rules_df$class_combination[i],
+                    plasmid_combination = matching_plasmids$combination[j],
+                    support = rules_df$support[i],
+                    confidence = rules_df$confidence[i],
+                    lift = rules_df$lift[i],
+                    num_contigs = matching_plasmids$num_contigs_with_combo[j],
+                    mismatch_distance = mismatch_distance,
+                    stringsAsFactors = FALSE
+                )
+                results <- rbind(results, new_row)
+            }
+        }
+    }
+    
+    # Keep only the best match for each plasmid combination within each data source
+    if (nrow(results) > 0) {
+        # Create two copies of the results for different sorting
+        plasmid_best_matches <- results
+        rule_best_matches <- results
+        
+        # Best matches for each plasmid combination
+        plasmid_best_matches <- plasmid_best_matches[order(plasmid_best_matches$Data_Source, 
+                               plasmid_best_matches$plasmid_combination,
+                               plasmid_best_matches$mismatch_distance,
+                               -plasmid_best_matches$support,
+                               -plasmid_best_matches$confidence,
+                               -plasmid_best_matches$lift), ]
+        
+        plasmid_best_matches <- plasmid_best_matches[!duplicated(plasmid_best_matches[c("Data_Source", "plasmid_combination")]), ]
+        
+        # Best matches for each rule combination
+        rule_best_matches <- rule_best_matches[order(rule_best_matches$Data_Source, 
+                               rule_best_matches$rule_combination,
+                               rule_best_matches$mismatch_distance,
+                               -rule_best_matches$num_contigs), ]
+        
+        rule_best_matches <- rule_best_matches[!duplicated(rule_best_matches[c("Data_Source", "rule_combination")]), ]
+        
+        # Write both sets of results to separate files
+        write.csv(plasmid_best_matches, "Virulence_Plasmid_data/plasmid_rule_comp/plasmid_rule_comp_plasmid_best.csv", row.names = FALSE)
+        write.csv(rule_best_matches, "Virulence_Plasmid_data/plasmid_rule_comp/plasmid_rule_comp_rule_best.csv", row.names = FALSE)
+        
+        # Return both sets of results as a list
+        return(list(
+            plasmid_best_matches = plasmid_best_matches,
+            rule_best_matches = rule_best_matches
+        ))
+    } else {
+        return(data.frame(message = "No matches found"))
+    }
+}
+
+
+# rules_df <- read.csv("Unique_top_1000_rules_by_dataset_with_classes.csv")
+# cecal_plasmids <- read.csv("Virulence_Plasmid_data/plasmid-amr-NARMS_CECAL.csv")
+# retail_plasmids <- read.csv("Virulence_Plasmid_data/plasmid-amr-NARMS_MEAT.csv")
+# nahln_plasmids <- read.csv("Virulence_Plasmid_data/plasmid-amr-NAHLN.csv")
+
+# plasmid_comp_res <- comp_rules_to_plasmids(rules_df, cecal_plasmids, retail_plasmids, nahln_plasmids)
+
+
+
+plasmid_rule_match_summary <- function(matched_df, match_type = c("plasmid", "rule")) {
+    # Validate and process match_type parameter
+    match_type <- match.arg(match_type)
+    file_suffix <- ifelse(match_type == "plasmid", "plasmid_best", "rule_best")
+    
+    # Basic summaries by Data_Source
+    basic_summaries <- matched_df %>%
+        group_by(Data_Source) %>%
+        summarize(
+            n_matches = n(),
+            n_unique_plasmids = n_distinct(plasmid_combination),
+            n_unique_rules = n_distinct(rule_combination),
+            
+            # Mismatch distance statistics
+            avg_mismatch = mean(mismatch_distance, na.rm = TRUE),
+            sd_mismatch = sd(mismatch_distance, na.rm = TRUE),
+            
+            # Correlation between num_contigs and support
+            contig_support_cor = cor(num_contigs, support, method = "spearman", 
+                                   use = "complete.obs"),
+            
+            # Basic metrics
+            avg_support = mean(support, na.rm = TRUE),
+            sd_support = sd(support, na.rm = TRUE),
+            avg_confidence = mean(confidence, na.rm = TRUE),
+            avg_lift = mean(lift, na.rm = TRUE),
+            avg_contigs = mean(num_contigs, na.rm = TRUE),
+            pct_perfect_match = mean(mismatch_distance == 0, na.rm = TRUE) * 100
+        ) %>%
+        mutate(across(where(is.numeric), ~round(., 3)))
+
+    # Function to convert string combinations to character vectors
+    parse_combination <- function(combo_str) {
+        gsub("[{}]", "", combo_str) %>%
+            strsplit(",") %>%
+            unlist() %>%
+            trimws()
+    }
+
+    # Analyze mismatch types
+    mismatch_types <- matched_df %>%
+        mutate(
+            rule_genes = map(rule_combination, parse_combination),
+            plasmid_genes = map(plasmid_combination, ~strsplit(., "\\|")[[1]]),
+            mismatch_type = case_when(
+                mismatch_distance == 0 ~ "perfect_match",
+                map2_lgl(plasmid_genes, rule_genes, 
+                        ~all(.x %in% .y)) ~ "plasmid_subset_of_rule",
+                map2_lgl(rule_genes, plasmid_genes, 
+                        ~all(.x %in% .y)) ~ "rule_subset_of_plasmid",
+                TRUE ~ "pure_mismatch"
+            )
+        ) %>%
+        group_by(Data_Source) %>%
+        count(mismatch_type) %>%
+        pivot_wider(names_from = mismatch_type, 
+                   values_from = n, 
+                   values_fill = 0)
+
+    # Class-level analysis
+    class_summaries <- matched_df %>%
+        group_by(Data_Source, class_combination) %>%
+        summarize(
+            n = n(),
+            avg_support = mean(support),
+            avg_confidence = mean(confidence),
+            avg_mismatch = mean(mismatch_distance),
+            .groups = "drop"
+        ) %>%
+        arrange(Data_Source, desc(n)) %>%
+        group_by(Data_Source) %>%
+        slice_head(n = 5)  # Top 5 class combinations per source
+
+    # Gene-level analysis
+    gene_summaries <- matched_df %>%
+        mutate(rule_genes = map(rule_combination, parse_combination)) %>%
+        unnest(rule_genes) %>%
+        group_by(Data_Source, rule_genes) %>%
+        summarize(
+            frequency = n(),
+            avg_support = mean(support),
+            avg_confidence = mean(confidence),
+            .groups = "drop"
+        ) %>%
+        arrange(Data_Source, desc(frequency)) %>%
+        group_by(Data_Source) %>%
+        slice_head(n = 10)  # Top 10 genes per source
+
+    # Save all summaries to separate CSV files with appropriate suffixes
+    write.csv(basic_summaries, 
+              sprintf("Virulence_Plasmid_data/plasmid_rule_comp/%s_basic_summary.csv", file_suffix), 
+              row.names = FALSE)
+    write.csv(mismatch_types, 
+              sprintf("Virulence_Plasmid_data/plasmid_rule_comp/%s_mismatch_types.csv", file_suffix), 
+              row.names = FALSE)
+    write.csv(class_summaries, 
+              sprintf("Virulence_Plasmid_data/plasmid_rule_comp/%s_class_summary.csv", file_suffix), 
+              row.names = FALSE)
+    write.csv(gene_summaries, 
+              sprintf("Virulence_Plasmid_data/plasmid_rule_comp/%s_gene_summary.csv", file_suffix), 
+              row.names = FALSE)
+
+    # Return list of all summaries
+    return(list(
+        basic_summaries = basic_summaries,
+        mismatch_types = mismatch_types,
+        class_summaries = class_summaries,
+        gene_summaries = gene_summaries
+    ))
+}
+
+
+# best_plasmid_matches <- read.csv("Virulence_Plasmid_data/plasmid_rule_comp/plasmid_rule_comp_plasmid_best.csv")
+# best_rule_matches <- read.csv("Virulence_Plasmid_data/plasmid_rule_comp/plasmid_rule_comp_rule_best.csv")
+
+# plasmid_rule_match_summary(matched_df = best_plasmid_matches, match_type = "plasmid")
+# plasmid_rule_match_summary(matched_df = best_rule_matches, match_type = "rule")
 
 
 
