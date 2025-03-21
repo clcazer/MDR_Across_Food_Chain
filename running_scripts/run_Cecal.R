@@ -54,7 +54,7 @@ print("3")
 
 print("4")
 
-    unique_classes_represented(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
+    # unique_classes_represented(df = df, resistance_indicator = resistance_indicator, target = "rules", data_source = data_source)
 
 print("5")
 

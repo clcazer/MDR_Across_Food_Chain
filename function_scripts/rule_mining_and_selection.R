@@ -681,6 +681,7 @@ rules_v_cutoffs <- function(df, resistance_indicator, target, measures, low, hig
                                colour = year, fill=year)) +
       geom_line(linewidth = 2) +
       geom_point(size = 3) +
+      geom_hline(yintercept = 1000, linetype = "dotted", color = "red", linewidth = 1) +
       geom_vline(xintercept = case_when(
         measure == "cosine" ~ 0.5,
         measure == "jaccard" ~ 0.0,

@@ -1,0 +1,33 @@
+Class,Drug,Abbreviation,Resistant Breakpoint,In Dataset
+AMINOGLYCOSIDE,Gentamicin,GEN,>=16,Retail Meats; Cecal; NAHLN
+AMINOGLYCOSIDE,Streptomycin,STR,>=32,Retail Meats; Cecal
+AMINOGLYCOSIDE,Neomycin,NEO,NA,NAHLN
+AMINOGLYCOSIDE,Spectinomycin,SPE,NA,NAHLN
+BETA-LACTAM,Amoxicillin–Clavulanic Acid,AMC,>=32,Retail Meats; Cecal
+BETA-LACTAM,Meropenem,MER,>=4,Retail Meats; Cecal
+BETA-LACTAM,Cefoxitin,FOX,>=32,Retail Meats; Cecal
+BETA-LACTAM,Ceftriaxone,AXO,>=4,Retail Meats; Cecal
+BETA-LACTAM,Ampicillin,AMP,>=32,Retail Meats; Cecal; NAHLN
+BETA-LACTAM,Ceftiofur,TIO,>=8,NAHLN
+BETA-LACTAM,Penicillin,PEN,NA,NAHLN
+FOLATE-PATHWAY-INHIBITOR,Sulfisoxazole,FIS,>256,Retail Meats; Cecal
+FOLATE-PATHWAY-INHIBITOR,Sulfamethoxazole,SMX,>256,Retail Meats; Cecal
+FOLATE-PATHWAY-INHIBITOR,Trimethoprim/sulfamethoxazole,COT,>=4,Retail Meats; Cecal; NAHLN
+FOLATE-PATHWAY-INHIBITOR,Sulphadimethoxine,SUL,NA,NAHLN
+LINCOSAMIDE,Clindamycin,CLI,NA,NAHLN
+MACROLIDE,Azithromycin,AZI,>=32,Retail Meats; Cecal
+MACROLIDE,Gamithromycin,GAM,NA,NAHLN
+MACROLIDE,Tildipirosin,DIP,NA,NAHLN
+MACROLIDE,Tilmicosin,TIL,NA,NAHLN
+MACROLIDE,Tulathromycin,TUL,NA,NAHLN
+MACROLIDE,Tylosin,TYL,NA,NAHLN
+PHENICOL,Chloramphenicol,CHL,>=32,Retail Meats; Cecal
+PHENICOL,Florfenicol,FFN,NA,NAHLN
+PLEUROMUTILIN,Tiamulin,TIA,NA,NAHLN
+QUINOLONE,Ciprofloxacin,CIP,>=1,Retail Meats; Cecal
+QUINOLONE,Nalidixic acid,NAL,>=32,Retail Meats; Cecal
+QUINOLONE,Danofloxacin,DAN,NA,NAHLN
+QUINOLONE,Enrofloxacin,ENR,NA,NAHLN
+TETRACYCLINE,Tetracycline,TET,>=16,Retail Meats; Cecal; NAHLN
+TETRACYCLINE,Chlortetracycline,LOR,NA,NAHLN
+TETRACYCLINE,Oxytetracycline,OXY,NA,NAHLN

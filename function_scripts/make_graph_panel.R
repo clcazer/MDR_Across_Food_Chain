@@ -17,7 +17,7 @@ make_graph_panel <- function(png_files) {
   left_panel <- plot_grid(
     plot_grobs[[1]], plot_grobs[[2]],
     plot_grobs[[3]], plot_grobs[[4]],
-    labels = c("A", "B", "C", "D"),
+    labels = c("B", "C", "D", "E"),
     label_size = 20,
     ncol = 2
   )
@@ -27,7 +27,7 @@ make_graph_panel <- function(png_files) {
     NULL,
     plot_grobs[[5]],
     NULL,
-    labels = c("","E", ""),
+    labels = c("","A", ""),
     label_size = 20,
     ncol = 1,
     rel_heights = c(0.2, 0.6, 0.2)
@@ -35,9 +35,9 @@ make_graph_panel <- function(png_files) {
   
   # Combine the panels with more space between them
   panel <- plot_grid(
-    left_panel, right_panel,
+    right_panel, left_panel,
     ncol = 2,
-    rel_widths = c(1.8, 0.7),
+    rel_widths = c(0.7, 1.8),
     align = 'hv',
     axis = 'l',
     scale = c(1, 0.95)

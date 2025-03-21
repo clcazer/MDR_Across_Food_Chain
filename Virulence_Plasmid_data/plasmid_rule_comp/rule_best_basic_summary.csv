@@ -1,0 +1,4 @@
+"Data_Source","n_matches","n_unique_plasmids","n_unique_rules","avg_mismatch","sd_mismatch","contig_support_cor","avg_support","sd_support","avg_confidence","avg_lift","avg_contigs","pct_perfect_match"
+"Cecal",153,35,153,0.313,0.179,-0.033,0.285,0.154,0.854,1.825,58.065,15.686
+"NAHLN",274,23,274,0.433,0.161,0.166,0.337,0.02,0.995,2.923,27.912,5.109
+"Retail_Meats",112,28,112,0.345,0.183,0.095,0.051,0.022,0.732,9.444,26.33,13.393
