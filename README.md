@@ -119,7 +119,7 @@ This directory contains outputs for an analysis comparing the counts of virulenc
 ## Steps to Reproduce Analysis
 
 1. __Run Data Wrangling Code__
-    - _note:_ You must save the raw data for cecal and retail meats in .csv format- they are both currently in .xls format because the csvs were to large to push.
+    - _note:_ You must save the raw data for cecal and retail meats in .csv format- they are both currently in .xls format because the csv's were to large too push.
     - execute ```Scripts\running_scripts\run_Cecal_dw.R```
     - execute ```Scripts\running_scripts\run_Retail_Meats_dw.R```
     - execute ```Scripts\running_scripts\run_NAHLN_dw.R``` _Data not included, so will not run_
