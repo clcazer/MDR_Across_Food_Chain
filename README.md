@@ -91,8 +91,7 @@ This will automatically install all required packages with the exact versions us
 
 
 #### Data Directories
-- ```Raw_Data``` contains all shareable phenotypic and genotypic data (other than virulence gene and plasmid info).
-- ```Virulence_Plasmid_data``` contains data on vurulence genes and plasmid gene combinations. This directory also contains analysis outputs (within subdirectories ```Virulence_Plasmid_data\virulence_descriptives``` and ```Virulence_Plasmid_data\plasmid_rule_comp```)
+- ```Raw_Data``` contains all shareable phenotypic and genotypic data.
 
 #### Dataset Specific Output Directories
 - ```cecal```
@@ -105,16 +104,17 @@ _Cecal and retail meats datasets included the drug streptomycin; for which break
 - ```Retail_Meats_2017Onward```
 
 #### Combined Output Directories
-
+These are where all the combined outputs that are used in the manuscript can be found:
 - ```combined_csv_outputs```
-- ```combined_percent_captured```
+- ```combined_figures_outputs```
 
 #### Script Directories
 
-- ```function_scripts``` contains files several files. The files contain several functions. Each file is named based on the type of function it contains, such as ```function_scripts\data_wrangling.R``` or ```function_scripts\rule_mining_and_selection.R```
-- ```running_scripts``` contains scripts for running the functions that are defined in the files from the ```function_scripts``` directory. There are several different running scripts that accomplish different portions of the analysis- they are named for the task that they accomplish. For example, ```running_scripts\run_Retail_Meats_dw.R``` runs all the data wrangling functions necessary for the retail meats dataset, while ```running_scripts\run_Retail_Meats.R``` runs the actual analysis for the pre-processed retail meats dataset.
+- ```function_scripts``` contains files several files. The files contain several functions. Each file is named based on the type of function it contains, such as ```data_wrangling.R``` or ```rule_mining_and_selection.R```
+- ```running_scripts``` contains scripts for running the functions that are defined in the files from the ```function_scripts``` directory. There are several different running scripts that accomplish different portions of the analysis- they are named for the task that they accomplish. For example, ```run_Retail_Meats_dw.R``` runs all the data wrangling functions necessary for the retail meats dataset, while ```run_Retail_Meats.R``` runs the actual analysis for the pre-processed retail meats dataset.
 
-
+### Virulence and Plasmid Outputs
+This directory contains outputs for an analysis comparing the counts of virulence genes across each dataset, as well as outputs for analysis comparing gene rule combinations to gene combinations found on plasmids.
 
 ## Steps to Reproduce Analysis
 
